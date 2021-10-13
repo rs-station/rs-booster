@@ -10,4 +10,10 @@ setup(
     install_requires=[
         "reciprocalspaceship",
     ],
+    entry_points={
+        "console_scripts": [
+            "efxtools.extrapolate=efxtools.esf.extrapolate:main",
+        ]
+    },
+    
 )
