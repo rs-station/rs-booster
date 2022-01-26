@@ -7,9 +7,7 @@ setup(
     author_email="greisman@g.harvard.edu",
     packages=find_packages(),
     description="",
-    install_requires=[
-        "reciprocalspaceship",
-    ],
+    install_requires=["reciprocalspaceship", "matplotlib", "seaborn"],
     entry_points={
         "console_scripts": [
             "efxtools.extrapolate=efxtools.esf.extrapolate:main",
