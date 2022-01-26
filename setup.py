@@ -13,7 +13,8 @@ setup(
     entry_points={
         "console_scripts": [
             "efxtools.extrapolate=efxtools.esf.extrapolate:main",
+            "efxtools.scaleit=efxtools.scaleit.scaleit:main",
+            "efxtools.internal_diffmap=efxtools.diffmaps.internaldiffmap:main",
         ]
     },
-    
 )
