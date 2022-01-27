@@ -1,4 +1,4 @@
-def compute_weights(df, sigdf, alpha=0):
+def compute_weights(df, sigdf, alpha=0.0):
     """
     Compute weights for each structure factor based on DeltaF and its uncertainty.
 

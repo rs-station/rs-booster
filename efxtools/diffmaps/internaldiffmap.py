@@ -33,7 +33,8 @@ def parse_arguments():
         "-a",
         "--alpha",
         type=float,
-        help="alpha value for computing difference map weights",
+        default=0.0,
+        help="alpha value for computing difference map weights (default=0.0)",
     )
     parser.add_argument(
         "-sg",
