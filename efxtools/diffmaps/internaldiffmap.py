@@ -18,14 +18,36 @@ def parse_arguments():
     )
 
     # Required arguments
-    parser.add_argument("mtz1", help="MTZ containing data")
-    parser.add_argument("F", help="Column for |F| data in mtz1")
-    parser.add_argument("SigF", help="Column for SigF data in mtz1")
-    parser.add_argument("mtz2", help="MTZ containing phases")
-    parser.add_argument("Phi", help="Column for phase data in mtz2")
     parser.add_argument(
-        "op",
-        help="Symmetry operation to use to compute internal difference map. Can be given as ISYM if used with a `spacegroup` argument",
+        "-i",
+        "--inputmtz",
+        nargs=3,
+        metavar=("mtz", "data_col", "sig_col"),
+        required=True,
+        help=(
+            "MTZ to be used for internal difference map. "
+            "Specified as (filename, F, SigF)"
+        ),
+    )
+    parser.add_argument(
+        "-r",
+        "--refmtz",
+        nargs=2,
+        metavar=("ref", "phi_col"),
+        required=True,
+        help=(
+            "MTZ containing isomorphous phases to be used. "
+            "Specified as (filename, Phi)."
+        ),
+    )
+    parser.add_argument(
+        "-op",
+        "--symop",
+        required=True,
+        help=(
+            "Symmetry operation to use to compute internal difference map. "
+            "Can be given as ISYM if used with a `spacegroup` argument."
+        ),
     )
 
     # Optional arguments
@@ -52,15 +74,17 @@ def main():
 
     # Parse commandline arguments
     args = parse_arguments()
+    inputmtz, f_col, sigf_col = args.inputmtz
+    refmtz, phi_col = args.refmtz
 
     # Read MTZ files
-    mtz = rs.read_mtz(args.mtz1)
-    ref = rs.read_mtz(args.mtz2)
+    mtz = rs.read_mtz(inputmtz)
+    ref = rs.read_mtz(refmtz)
 
     # Canonicalize column names
-    mtz.rename(columns={args.F: "F", args.SigF: "SigF"}, inplace=True)
+    mtz.rename(columns={f_col: "F", sigf_col: "SigF"}, inplace=True)
     mtz = mtz[["F", "SigF"]]
-    ref.rename(columns={args.Phi: "Phi"}, inplace=True)
+    ref.rename(columns={phi_col: "Phi"}, inplace=True)
     ref = ref[["Phi"]]
 
     # Error checking of datatypes
@@ -79,11 +103,11 @@ def main():
 
     # Compare across symmetry operation
     try:
-        isym = int(args.op)
+        isym = int(args.symop)
         sg = gemmi.SpaceGroup(args.spacegroup)
         op = sg.operations().sym_ops[isym]
     except ValueError:
-        op = gemmi.Operation(args.op)
+        op = gemmi.Operation(args.symop)
 
     internal = mtz.merge(
         mtz.apply_symop(op).hkl_to_asu(), on=["H", "K", "L"], suffixes=("1", "2")
