@@ -9,6 +9,7 @@ import reciprocalspaceship as rs
 import gemmi
 
 from efxtools.diffmaps.weights import compute_weights
+from efxtools.utils.io import subset_to_FSigF
 
 
 def parse_arguments():
@@ -74,28 +75,19 @@ def main():
 
     # Parse commandline arguments
     args = parse_arguments()
-    inputmtz, f_col, sigf_col = args.inputmtz
     refmtz, phi_col = args.refmtz
 
     # Read MTZ files
-    mtz = rs.read_mtz(inputmtz)
+    mtz = subset_to_FSigF(
+        *args.inputmtz, {args.inputmtz[1]: "F", args.inputmtz[2]: "SigF"}
+    )
     ref = rs.read_mtz(refmtz)
 
     # Canonicalize column names
-    mtz.rename(columns={f_col: "F", sigf_col: "SigF"}, inplace=True)
-    mtz = mtz[["F", "SigF"]]
     ref.rename(columns={phi_col: "Phi"}, inplace=True)
     ref = ref[["Phi"]]
 
     # Error checking of datatypes
-    if not isinstance(mtz["F"].dtype, rs.StructureFactorAmplitudeDtype):
-        raise ValueError(
-            f"{args.F} is not a structure factor amplitude in {args.mtz1}. Try again."
-        )
-    if not isinstance(mtz["SigF"].dtype, rs.StandardDeviationDtype):
-        raise ValueError(
-            f"{args.SigF} is not a structure factor amplitude in {args.mtz1}. Try again."
-        )
     if not isinstance(ref["Phi"].dtype, rs.PhaseDtype):
         raise ValueError(
             f"{args.Phi} is not a phases column in {args.mtz2}. Try again."
