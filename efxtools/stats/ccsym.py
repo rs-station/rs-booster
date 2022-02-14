@@ -44,6 +44,13 @@ def parse_arguments():
             "(only necessary if `op` specifies an ISYM)."
         ),
     )
+    parser.add_argument(
+        "-m",
+        "--method",
+        default="spearman",
+        choices=["spearman", "pearson"],
+        help=("Method for computing correlation coefficient (spearman or pearson)"),
+    )
 
     return parser.parse_args()
 
@@ -75,7 +82,7 @@ def make_halves_ccsym(mtz, op, bins=10):
     return temp, labels
 
 
-def analyze_ccsym_mtz(mtzpath, op, bins=10, return_labels=True):
+def analyze_ccsym_mtz(mtzpath, op, bins=10, return_labels=True, method="spearman"):
     """Compute CCsym from 2-fold cross-validation"""
     if int(mtzpath[-5]) % 2 != 0:
         return
@@ -85,10 +92,7 @@ def analyze_ccsym_mtz(mtzpath, op, bins=10, return_labels=True):
 
     grouper = m.groupby(["bin", "repeat"])[["DF1", "DF2"]]
     result = (
-        grouper.corr(method="spearman")
-        .unstack()[("DF1", "DF2")]
-        .to_frame()
-        .reset_index()
+        grouper.corr(method=method).unstack()[("DF1", "DF2")].to_frame().reset_index()
     )
 
     result["delay"] = np.floor(int(mtzpath[-5]) / 2)
@@ -115,7 +119,7 @@ def main():
     results = []
     labels = None
     for m in args.mtz:
-        result = analyze_ccsym_mtz(m, op)
+        result = analyze_ccsym_mtz(m, op, method=args.method)
         if result is None:
             continue
         else:
@@ -133,7 +137,7 @@ def main():
         data=results, x="bin", y="CCsym", hue="delay", ci="sd", palette="viridis"
     )
     plt.xticks(range(10), labels, rotation=45, ha="right", rotation_mode="anchor")
-    plt.ylabel(r"$CC_{sym}$ (Spearman)")
+    plt.ylabel(r"$CC_{sym}$ " + f"({args.method})")
     plt.legend(loc="center left", bbox_to_anchor=(1, 0.5))
     plt.grid()
     plt.tight_layout()
