@@ -51,6 +51,11 @@ def parse_arguments():
         choices=["spearman", "pearson"],
         help=("Method for computing correlation coefficient (spearman or pearson)"),
     )
+    parser.add_argument(
+        "--mod2",
+        action="store_true",
+        help=("Use id % 2 to assign delays (use when employing spacegroup hack)"),
+    )
 
     return parser.parse_args()
 
@@ -82,10 +87,10 @@ def make_halves_ccsym(mtz, op, bins=10):
     return temp, labels
 
 
-def analyze_ccsym_mtz(mtzpath, op, bins=10, return_labels=True, method="spearman"):
+def analyze_ccsym_mtz(
+    mtzpath, op, bins=10, return_labels=True, method="spearman", mod2=False
+):
     """Compute CCsym from 2-fold cross-validation"""
-    if int(mtzpath[-5]) % 2 != 0:
-        return
 
     mtz = rs.read_mtz(mtzpath)
     m, labels = make_halves_ccsym(mtz, op)
@@ -95,7 +100,10 @@ def analyze_ccsym_mtz(mtzpath, op, bins=10, return_labels=True, method="spearman
         grouper.corr(method=method).unstack()[("DF1", "DF2")].to_frame().reset_index()
     )
 
-    result["delay"] = np.floor(int(mtzpath[-5]) / 2)
+    if mod2:
+        result["delay"] = np.floor(int(mtzpath[-5]) / 2)
+    else:
+        result["delay"] = int(mtzpath[-5])
 
     if return_labels:
         return result, labels
@@ -119,7 +127,7 @@ def main():
     results = []
     labels = None
     for m in args.mtz:
-        result = analyze_ccsym_mtz(m, op, method=args.method)
+        result = analyze_ccsym_mtz(m, op, method=args.method, mod2=args.mod2)
         if result is None:
             continue
         else:

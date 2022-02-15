@@ -14,6 +14,7 @@ setup(
             "efxtools.scaleit=efxtools.scaleit.scaleit:main",
             "efxtools.internal_diffmap=efxtools.diffmaps.internaldiffmap:main",
             "efxtools.ccsym=efxtools.stats.ccsym:main",
+            "efxtools.ccpred=efxtools.stats.ccpred:main",
             "efxtools.diffmap=efxtools.diffmaps.diffmap:main",
         ]
     },
