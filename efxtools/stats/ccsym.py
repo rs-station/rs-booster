@@ -122,7 +122,7 @@ def main():
         sg = gemmi.SpaceGroup(args.spacegroup)
         op = sg.operations().sym_ops[isym]
     except ValueError:
-        op = gemmi.Operation(args.op)
+        op = gemmi.Op(args.op)
 
     results = []
     labels = None
