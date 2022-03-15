@@ -58,6 +58,13 @@ def parse_arguments():
         help="alpha value for computing difference map weights (default=0.0)",
     )
     parser.add_argument(
+        "-d",
+        "--dmax",
+        type=float,
+        default=None,
+        help="If set, dmax to truncate difference map",
+    )
+    parser.add_argument(
         "-o", "--outfile", default="diffmap.mtz", help="Output MTZ filename"
     )
 
@@ -97,7 +104,12 @@ def main():
     diff = diff.loc[common]
     diff["Phi"] = ref.loc[common, "Phi"]
     diff.infer_mtz_dtypes(inplace=True)
-    diff.write_mtz(args.outfile)
+
+    if args.dmax is None:
+        diff.write_mtz(args.outfile)
+    else:
+        diff = diff.loc[diff.compute_dHKL()["dHKL"] < args.dmax]
+        diff.write_mtz(args.outfile)
 
 
 if __name__ == "__main__":

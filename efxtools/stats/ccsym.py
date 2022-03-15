@@ -54,7 +54,7 @@ def parse_arguments():
     parser.add_argument(
         "--mod2",
         action="store_true",
-        help=("Use id % 2 to assign delays (use when employing spacegroup hack)"),
+        help=("Use id mod 2 to assign delays (use when employing spacegroup hack)"),
     )
 
     return parser.parse_args()
