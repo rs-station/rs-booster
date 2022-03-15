@@ -60,6 +60,13 @@ def parse_arguments():
         help="alpha value for computing difference map weights (default=0.0)",
     )
     parser.add_argument(
+        "-d",
+        "--dmax",
+        type=float,
+        default=None,
+        help="If set, dmax to truncate difference map",
+    )
+    parser.add_argument(
         "-sg",
         "--spacegroup",
         help="Spacegroup to use for symmetry operation (only necessary if `op` specifies an ISYM).",
@@ -116,7 +123,12 @@ def main():
     internal = internal.loc[common]
     internal["Phi"] = ref.loc[common, "Phi"]
     internal.infer_mtz_dtypes(inplace=True)
-    internal.write_mtz(args.outfile)
+
+    if args.dmax is None:
+        internal.write_mtz(args.outfile)
+    else:
+        internal = internal.loc[internal.compute_dHKL()["dHKL"] < args.dmax]
+        internal.write_mtz(args.outfile)
 
 
 if __name__ == "__main__":
