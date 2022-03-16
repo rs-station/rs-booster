@@ -22,6 +22,10 @@ Notes
     - F_{off} and F_{calc} can be the same MTZ file, as done in Hekstra et al, 
       Nature (2016). In that case, the equation for SigF_{esf} is adjusted to
       use (f-1)**2 for SigF_{off} to avoid double-counting in the error propagation.
+    - After computing |F_{esf}|, any negative structure factor amplitudes are converted
+      to positive values. This is to ensure that they are handled correctly downstream in
+      phenix, and because they are technically amplitudes of complex numbers and the phase
+      should just be flipped by 180 degrees.
 """
 
 import argparse
@@ -141,6 +145,9 @@ def main():
         joined["SigF_esf"] = np.sqrt(
             (joined["SigF_esf"] ** 2) + (joined["SigF_calc"] ** 2)
         )
+
+    # Handle any negative values of |F_esf|
+    joined["F_esf"] = np.abs(joined["F_esf"])
 
     joined.infer_mtz_dtypes(inplace=True)
     joined.write_mtz(args.outfile)
