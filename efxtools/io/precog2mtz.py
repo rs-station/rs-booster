@@ -24,10 +24,11 @@ def parse_arguments():
     )
     parser.add_argument(
         "--cell",
-        type=str,
+        type=float,
         required=True,
-        help="The unit cell supplied as a comma separated list of floats. "
-        "For example, --spacegroup=34.,45.,98.,90.,90.,90.",
+        nargs=6,
+        help="The unit cell supplied as six floats. "
+        "For example, --spacegroup 34. 45. 98. 90. 90. 90.",
     )
     parser.add_argument(
         "ii_in",
@@ -36,10 +37,15 @@ def parse_arguments():
         help="Precognition `.ii` file(s)",
     )
     parser.add_argument(
-        "mtz_out", type=str, help="Name of the output mtz file."
+        "-o",
+        "--mtz-out",
+        type=str,
+        default="integrated.mtz",
+        help="Name of the output mtz file.",
     )
     parser = parser.parse_args()
     return parser
+
 
 def make_dataset(filenames, spacegroup, cell):
     """
@@ -66,18 +72,8 @@ def make_dataset(filenames, spacegroup, cell):
     return rs.concat(datasets)
 
 
-
 def main():
     parser = parse_arguments()
-
-    # Parse the cell constants
-    try:
-        cell = [float(i) for i in parser.cell.split(",")]
-        assert len(cell) == 6
-    except:
-        raise ValueError(
-            f"Expected 6 comma separated values for `--cell` but received {parser.cell}"
-        )
 
     # Parse the output filename(s)
     if isinstance(parser.ii_in, str):
@@ -85,11 +81,10 @@ def main():
     else:
         filenames = parser.ii_in
 
-
     # Parse simple arguments
+    cell = parser.cell
     spacegroup = parser.spacegroup
     outfile = parser.mtz_out
-
 
     ds = make_dataset(filenames, spacegroup, cell)
 
@@ -103,6 +98,6 @@ def main():
 
     ds.write_mtz(outfile)
 
-if __name__=="__main__":
-    main()
 
+if __name__ == "__main__":
+    main()
