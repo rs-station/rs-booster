@@ -103,4 +103,6 @@ def main():
 
     ds.write_mtz(outfile)
 
+if __name__=="__main__":
+    main()
 
