@@ -16,6 +16,7 @@ setup(
             "efxtools.ccsym=efxtools.stats.ccsym:main",
             "efxtools.ccpred=efxtools.stats.ccpred:main",
             "efxtools.diffmap=efxtools.diffmaps.diffmap:main",
+            "efxtools.precog2mtz=efxtools.io.precog2mtz:main",
         ]
     },
 )
