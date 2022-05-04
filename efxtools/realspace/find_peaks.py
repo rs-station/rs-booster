@@ -1,5 +1,6 @@
 import warnings
 import pandas as pd
+import reciprocalspaceship as rs
 import numpy as np
 import gemmi
 
@@ -191,6 +192,8 @@ def parse_args():
         help="the z-score cutoff for voxels to be included in the peak search.")
     parser.add_argument("-d", "--difference-map", action='store_true', 
         help="search for negative peaks as well as positive.")
+    parser.add_argument("-w", "--weight-key", type=str, 
+        required=False, default=None, help="column label of any weights you wish to apply to the map.")
 
     # More esoteric options
     parser.add_argument("--sample-rate", type=float, default=3.,
@@ -211,7 +214,16 @@ def parse_args():
 def main():
     parser = parse_args()
     structure = gemmi.read_pdb(parser.pdb_file)
-    mtz = gemmi.read_mtz_file(parser.mtz_file)
+    ds = rs.read_mtz(parser.mtz_file)
+    mtz = ds[[parser.phase_key]].copy()
+
+    if parser.weight_key is not None:
+        mtz[parser.structure_factor_key] = ds[parser.structure_factor_key] * ds[parser.weight_key]
+    else:
+        mtz[parser.structure_factor_key] = ds[parser.structure_factor_key] 
+
+    mtz = mtz.to_gemmi()
+
     grid = mtz.transform_f_phi_to_map(
         parser.structure_factor_key, parser.phase_key, sample_rate=parser.sample_rate
     )
