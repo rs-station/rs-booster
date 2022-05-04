@@ -1,16 +1,10 @@
 #!/user/bin/env python
 """
-Compute CCsym from careless output.
-
-Note: This method currently assumes that careless has been called using
-both the reduced-symmetry and the parent spacegroup
+Compute CCanom from careless output.
 """
 import argparse
-import numpy as np
-import reciprocalspaceship as rs
-import gemmi
-
 import matplotlib.pyplot as plt
+import reciprocalspaceship as rs
 import seaborn as sns
 
 
