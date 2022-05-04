@@ -40,12 +40,6 @@ def parse_arguments():
 def make_halves_ccanom(mtz, bins=10):
     """Construct half-datasets for computing CCanom"""
 
-    if "half" not in mtz.columns:
-        raise ValueError("Please provide MTZs from careless crossvalidation")
-
-    if "F(+)" not in mtz.columns:
-        raise ValueError("Please provide MTZs merged with `--anomalous` in careless")
-
     half1 = mtz.loc[mtz.half == 0].copy()
     half2 = mtz.loc[mtz.half == 1].copy()
 
@@ -64,6 +58,14 @@ def analyze_ccanom_mtz(mtzpath, bins=10, return_labels=True, method="spearman"):
     """Compute CCsym from 2-fold cross-validation"""
 
     mtz = rs.read_mtz(mtzpath)
+
+    # Error handling -- make sure MTZ file is appropriate
+    if "half" not in mtz.columns:
+        raise ValueError("Please provide MTZs from careless crossvalidation")
+
+    if "F(+)" not in mtz.columns:
+        raise ValueError("Please provide MTZs merged with `--anomalous` in careless")
+
     mtz = mtz.acentrics
     mtz = mtz.loc[(mtz["N(+)"] > 0) & (mtz["N(-)"] > 0)]
     m, labels = make_halves_ccanom(mtz)
@@ -91,6 +93,7 @@ def main():
         if result is None:
             continue
         else:
+            result[0]["filename"] = m
             results.append(result[0])
             labels = result[1]
 
@@ -101,7 +104,9 @@ def main():
 
     print(results)
 
-    sns.lineplot(data=results, x="bin", y="CCanom", ci="sd", palette="viridis")
+    sns.lineplot(
+        data=results, x="bin", y="CCanom", hue="filename", ci="sd", palette="viridis"
+    )
     plt.xticks(range(10), labels, rotation=45, ha="right", rotation_mode="anchor")
     plt.ylabel(r"$CC_{anom}$ " + f"({args.method})")
     plt.legend(loc="center left", bbox_to_anchor=(1, 0.5))
