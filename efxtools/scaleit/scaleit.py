@@ -6,7 +6,6 @@ Run CCP4's scaleit on the given data.
 from argparse import ArgumentParser, RawDescriptionHelpFormatter
 import shutil
 import subprocess
-import numpy as np
 from tempfile import NamedTemporaryFile
 
 import reciprocalspaceship as rs
@@ -81,14 +80,26 @@ def load_mtz(mtzpath, data_col, sig_col):
     return result
 
 
-def run_scaleit(joined, outfile):
-    """Run scaleit on given data"""
+def run_scaleit(joined, outfile, n_mtzs):
+    """
+    Run scaleit on given data
 
+    Parameters
+    ----------
+    joined : filepath, str
+        Path to MTZ file with input data
+    outfile : filename, str
+        Filename for scaled MTZ output
+    n_mtzs : int
+        Number of datasets being scaled to reference
+    """
+
+    columns = [f"FPH{i}=FPH{i} SIGFPH{i}=SIGFPH{i}" for i in range(1, n_mtzs + 1)]
+    labin = " ".join(columns)
     with NamedTemporaryFile(suffix=".mtz") as tmp:
         joined.write_mtz(tmp.name)
-        print(tmp.name)
         subprocess.call(
-            f"scaleit HKLIN {tmp.name} HKLOUT {outfile} <<EOF\nrefine anisotropic\nEOF",
+            f"scaleit HKLIN {tmp.name} HKLOUT {outfile} <<EOF\nrefine anisotropic\nLABIN FP=FP SIGFP=SIGFP {labin}\nEOF",
             shell=True,
         )
 
@@ -131,7 +142,7 @@ def main():
     joined = rs.concat([ref.loc[common]] + mtzs, axis=1)
 
     # Run scaleit
-    run_scaleit(joined, args.outfile)
+    run_scaleit(joined, args.outfile, len(mtzs))
 
 
 if __name__ == "__main__":
