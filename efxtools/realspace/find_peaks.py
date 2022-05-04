@@ -174,7 +174,7 @@ def parse_args():
     from argparse import ArgumentParser
 
     program_description = """
-    Search an electron density maps for
+    Search an electron density map for
     peaks in the vicinity of a structure.
     """
     parser = ArgumentParser(description=program_description)
