@@ -275,5 +275,3 @@ def main(difference_map=False, default_sigma_cutoff=1.5):
 
     print(out.to_csv())
 
-if __name__=="__main__":
-    main()
