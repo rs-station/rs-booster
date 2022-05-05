@@ -15,6 +15,7 @@ def peak_report(
         distance_cutoff = 4.,
         use_long_names = False,
         negate=False,
+        sort_by_key='peakz',
     ):
     """
     Build a report summarizing peaks in a map which are in the vicinity of atoms in the structure.
@@ -71,6 +72,8 @@ def peak_report(
     negate : bool (optional)
         Optionally find peaks in the negative electron density. This can be useful for difference maps.
         The default is False.
+    sort_by_key : str (optional)
+        Sort report by values in this column. the "peakz" column is used by default.
 
     Returns
     -------
@@ -166,6 +169,7 @@ def peak_report(
     }
 
     out = pd.DataFrame.from_records(peaks)
+    out = out.sort_values(sort_by_key)
 
     if use_long_names:
         out.rename(columns = long_names)
