@@ -18,6 +18,8 @@ setup(
             "efxtools.ccpred=efxtools.stats.ccpred:main",
             "efxtools.diffmap=efxtools.diffmaps.diffmap:main",
             "efxtools.precog2mtz=efxtools.io.precog2mtz:main",
+            "efxtools.find_peaks=efxtools.realspace.find_peaks:find_peaks",
+            "efxtools.find_difference_peaks=efxtools.realspace.find_peaks:find_difference_peaks",
         ]
     },
 )
