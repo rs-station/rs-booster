@@ -240,7 +240,7 @@ def main(difference_map=False):
         structure, grid, 
         sigma_cutoff=parser.sigma_cutoff,
     )
-    if parser.difference_map:
+    if difference_map:
         out = pd.concat((
             out,
             peak_report(structure, grid, sigma_cutoff=parser.sigma_cutoff, negate=True),
