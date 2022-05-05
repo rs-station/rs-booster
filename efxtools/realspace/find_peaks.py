@@ -209,7 +209,7 @@ def parse_args():
         help="the minimum score of peaks with default zero.")
     parser.add_argument("--min-peak", type=float, default=0.,
         help="the minimum peak value with default zero.")
-    parser.add_argument("--distance-cutoff", type=float, default=4.,
+    parser.add_argument("-d", "--distance-cutoff", type=float, default=4.,
         help="the distance cutoff of nearest neighbor search with default of 4 angstroms.")
     parser.add_argument("--use-long-names", action='store_true',
         help="use more verbose column names in the peak report.")
