@@ -5,6 +5,26 @@ import numpy as np
 import gemmi
 
 
+
+long_names = {
+    "chain"   : "Chain",
+    "seqid"   : "SeqID",
+    "residue" : "Residue",
+    "name"    : "Atom Name",
+    "dist"    : "Dist (Å)",
+    "peak"    : "Peak Value",
+    "peakz"   : "Peak Value (Z-score)",
+    "score"   : "Peak Score",
+    "scorez"  : "Peak Score (Z-score)",
+    "cenx"    : "Centroid (x)",
+    "ceny"    : "Centroid (y)",
+    "cenz"    : "Centroid (z)",
+    "coordx"  : "Coord (x)",
+    "coordy"  : "Coord (y)",
+    "coordz"  : "Coord (z)",
+}
+
+
 def peak_report(
         structure, 
         grid,
@@ -150,24 +170,6 @@ def peak_report(
                 record[k] = -record[k]
         peaks.append(record)
 
-    long_names = {
-        "chain"   : "Chain",
-        "seqid"   : "SeqID",
-        "residue" : "Residue",
-        "name"    : "Atom Name",
-        "dist"    : "Dist (Å)",
-        "peak"    : "Peak Value",
-        "peakz"   : "Peak Value (Z-score)",
-        "score"   : "Peak Score",
-        "scorez"  : "Peak Score (Z-score)",
-        "cenx"    : "Centroid (x)",
-        "ceny"    : "Centroid (y)",
-        "cenz"    : "Centroid (z)",
-        "coordx"  : "Coord (x)",
-        "coordy"  : "Coord (y)",
-        "coordz"  : "Coord (z)",
-    }
-
     out = pd.DataFrame.from_records(peaks)
 
     #In case there are no peaks we need to test the length
@@ -175,7 +177,7 @@ def peak_report(
         out = out.sort_values(sort_by_key, ascending=False)
 
     if use_long_names:
-        out.rename(columns = long_names)
+        out = out.rename(columns = long_names)
     return out
 
 def parse_args(default_sigma_cutoff=1.5):
@@ -204,7 +206,7 @@ def parse_args(default_sigma_cutoff=1.5):
     parser.add_argument("--sample-rate", type=float, default=3.,
         help="change fft oversampling from the default (3).")
     parser.add_argument("--min-volume", type=float, default=0.,
-        help="the minimum volume of peaks in voxels with default zero.")
+        help="the minimum volume of peaks with default zero.")
     parser.add_argument("--min-score", type=float, default=0.,
         help="the minimum score of peaks with default zero.")
     parser.add_argument("--min-peak", type=float, default=0.,
@@ -242,12 +244,31 @@ def main(difference_map=False, default_sigma_cutoff=1.5):
     out = peak_report(
         structure, grid, 
         sigma_cutoff=parser.sigma_cutoff,
+        min_volume = parser.min_volume,
+        min_score = parser.min_score,
+        min_peak = parser.min_peak,
+        distance_cutoff = parser.distance_cutoff,
+        use_long_names = parser.use_long_names,
+        negate=False,
     )
     if difference_map:
-        out = pd.concat((
-            out,
-            peak_report(structure, grid, sigma_cutoff=parser.sigma_cutoff, negate=True),
-        ))
+        out_neg = peak_report(
+            structure, grid, 
+            sigma_cutoff=parser.sigma_cutoff,
+            min_volume = parser.min_volume,
+            min_score = parser.min_score,
+            min_peak = parser.min_peak,
+            distance_cutoff = parser.distance_cutoff,
+            use_long_names = parser.use_long_names,
+            negate=True,
+        )
+        out = pd.concat((out, out_neg))
+
+        #For difference maps re-sort the concatenated list
+        peak_key = 'peakz' if 'peakz' in out else long_names['peakz']
+        out['_sort_key'] = out[peak_key].abs()
+        out = out.sort_values('_sort_key', ascending=False)
+        del(out['_sort_key'])
 
     if parser.csv_out is not None:
         out.to_csv(parser.csv_out)
