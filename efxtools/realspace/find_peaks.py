@@ -178,7 +178,7 @@ def peak_report(
         out.rename(columns = long_names)
     return out
 
-def parse_args():
+def parse_args(default_sigma_cutoff=1.5):
     from argparse import ArgumentParser
 
     program_description = """
@@ -195,8 +195,8 @@ def parse_args():
     parser.add_argument("mtz_file")
     parser.add_argument("pdb_file")
     parser.add_argument("-o", "--csv-out", type=str, default=None, help="output the report to a csv file")
-    parser.add_argument("-z", "--sigma-cutoff", required=True, type=float, 
-        help="the z-score cutoff for voxels to be included in the peak search.")
+    parser.add_argument("-z", "--sigma-cutoff", required=False, default=default_sigma_cutoff, type=float, 
+        help=f"the z-score cutoff for voxels to be included in the peak search. the default is {default_sigma_cutoff}")
     parser.add_argument("-w", "--weight-key", type=str, 
         required=False, default=None, help="column label of any weights you wish to apply to the map.")
 
@@ -217,13 +217,13 @@ def parse_args():
     return parser
 
 def find_peaks():
-    main(difference_map=False)
+    main(difference_map=False, default_sigma_cutoff=1.5)
 
 def find_difference_peaks():
-    main(difference_map=True)
+    main(difference_map=True, default_sigma_cutoff=3.0)
 
-def main(difference_map=False):
-    parser = parse_args()
+def main(difference_map=False, default_sigma_cutoff=1.5):
+    parser = parse_args(default_sigma_cutoff)
     structure = gemmi.read_pdb(parser.pdb_file)
     ds = rs.read_mtz(parser.mtz_file)
     mtz = ds[[parser.phase_key]].copy()
