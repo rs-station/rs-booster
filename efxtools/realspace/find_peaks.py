@@ -169,7 +169,10 @@ def peak_report(
     }
 
     out = pd.DataFrame.from_records(peaks)
-    out = out.sort_values(sort_by_key)
+
+    #In case there are no peaks we need to test the length
+    if len(out) > 0:
+        out = out.sort_values(sort_by_key, ascending=False)
 
     if use_long_names:
         out.rename(columns = long_names)
