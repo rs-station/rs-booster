@@ -152,6 +152,7 @@ def peak_report(
             "seqid"   :    cra.residue.seqid.num,
             "residue" :    cra.residue.name,
             "atom"    :    cra.atom.name,
+            "element" :    cra.atom.element.name,
             "dist"    :    dist,
             "peakz"   :    (blob.peak_value-mean)/sigma,
             "scorez"  :    (blob.score-mean)/sigma,
