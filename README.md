@@ -2,12 +2,22 @@
 Efxtools contains scripts for some important diffraction data analysis tasks. 
 
 
+### Installation
+
+For users who don't want to [configure ssh access](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/adding-a-new-ssh-key-to-your-github-account) to GitHub, 
+you may install from source without git. 
+
+ 1) [download the latest source code](https://github.com/Hekstra-Lab/efxtools/archive/refs/heads/main.zip)
+ 2) Unpack the `.zip` file from (1) using your system's archive tool. This can simply be done from the file browser on almost any modern operating system. 
+ 3) In a terminal, navigate to the extracted source code directory (for instance `cd /home/user/efxtools-main`)
+ 4) Type `python setup.py install` or `pip install -e .`. Use the latter if you would like to modify the source code in the future. 
+
 ### Design and usage
 
 Efxtools is designed primarily as a command line interface. 
 Applications from this package are prefixed with `efxtools.`.
 
-Users can **list available commands** by typing `efxtools` and double-pressing the `TAB` key. 
+Users can **list available commands** by typing `efxtools.` and double-pressing the `TAB` key. 
 Each subprogram is documented using the [argparse library](https://docs.python.org/3/library/argparse.html).
 To get usage info for a subprogram, use the `-h` or `--help` flag. 
 For instance,
