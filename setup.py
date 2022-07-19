@@ -15,6 +15,7 @@ setup(
             "efxtools.internal_diffmap=efxtools.diffmaps.internaldiffmap:main",
             "efxtools.ccsym=efxtools.stats.ccsym:main",
             "efxtools.ccanom=efxtools.stats.ccanom:main",
+            "efxtools.cchalf=efxtools.stats.cchalf:main",
             "efxtools.ccpred=efxtools.stats.ccpred:main",
             "efxtools.diffmap=efxtools.diffmaps.diffmap:main",
             "efxtools.precog2mtz=efxtools.io.precog2mtz:main",
