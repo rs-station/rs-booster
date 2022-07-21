@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 
 setup(
-    name="efxtools",
+    name="rs-booster",
     version="0.0.3",
     author="Jack B. Greisman",
     author_email="greisman@g.harvard.edu",
@@ -10,17 +10,17 @@ setup(
     install_requires=["reciprocalspaceship", "matplotlib", "seaborn"],
     entry_points={
         "console_scripts": [
-            "efxtools.extrapolate=efxtools.esf.extrapolate:main",
-            "efxtools.scaleit=efxtools.scaleit.scaleit:main",
-            "efxtools.internal_diffmap=efxtools.diffmaps.internaldiffmap:main",
-            "efxtools.ccsym=efxtools.stats.ccsym:main",
-            "efxtools.ccanom=efxtools.stats.ccanom:main",
-            "efxtools.cchalf=efxtools.stats.cchalf:main",
-            "efxtools.ccpred=efxtools.stats.ccpred:main",
-            "efxtools.diffmap=efxtools.diffmaps.diffmap:main",
-            "efxtools.precog2mtz=efxtools.io.precog2mtz:main",
-            "efxtools.find_peaks=efxtools.realspace.find_peaks:find_peaks",
-            "efxtools.find_difference_peaks=efxtools.realspace.find_peaks:find_difference_peaks",
+            "rs.extrapolate=rsbooster.esf.extrapolate:main",
+            "rs.scaleit=rsbooster.scaleit.scaleit:main",
+            "rs.internal_diffmap=rsbooster.diffmaps.internaldiffmap:main",
+            "rs.ccsym=rsbooster.stats.ccsym:main",
+            "rs.ccanom=rsbooster.stats.ccanom:main",
+            "rs.cchalf=rsbooster.stats.cchalf:main",
+            "rs.ccpred=rsbooster.stats.ccpred:main",
+            "rs.diffmap=rsbooster.diffmaps.diffmap:main",
+            "rs.precog2mtz=rsbooster.io.precog2mtz:main",
+            "rs.find_peaks=rsbooster.realspace.find_peaks:find_peaks",
+            "rs.find_difference_peaks=rsbooster.realspace.find_peaks:find_difference_peaks",
         ]
     },
 )
