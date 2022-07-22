@@ -10,8 +10,8 @@ import argparse
 import numpy as np
 import reciprocalspaceship as rs
 
-from efxtools.diffmaps.weights import compute_weights
-from efxtools.utils.io import subset_to_FSigF
+from rsbooster.diffmaps.weights import compute_weights
+from rsbooster.utils.io import subset_to_FSigF
 
 
 def parse_arguments():
