@@ -6,13 +6,19 @@ This package can be viewed as a "booster rocket" for [`reciprocalspaceship`](htt
 
 ### Installation
 
-For users who don't want to [configure ssh access](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/adding-a-new-ssh-key-to-your-github-account) to GitHub, 
-you may install from source without git with the following steps. 
+The fastest way to install `rs-booster` is using pip:
 
- 1) [download the latest source code](https://github.com/Hekstra-Lab/rs-booster/archive/refs/heads/main.zip)
- 2) Unpack the `.zip` file from (1) using your system's archive tool. You may do this in the file browser on most modern operating systems. 
- 3) In a terminal, navigate to the extracted source code directory (for instance `cd /home/user/rs-booster-main`).
- 4) Type `python setup.py install` or `pip install -e .`. Use the latter if you would like to modify the source code in the future. 
+```bash
+pip install rs-booster
+```
+
+If you are interested in getting access to new features that haven't yet made it into a release, you can install `rs-booster` from source:
+
+```bash
+git clone https://github.com/Hekstra-Lab/rs-booster.git
+cd rs-booster
+python -m pip install -e .
+```
 
 ### Design and usage
 
