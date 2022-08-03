@@ -105,6 +105,9 @@ def main():
     diff["Phi"] = ref.loc[common, "Phi"]
     diff.infer_mtz_dtypes(inplace=True)
 
+    # Useful for PyMOL
+    diff["wDF"] = (diff["DF"] * diff["W"]).astype("SFAmplitude")
+
     if args.dmax is None:
         diff.write_mtz(args.outfile)
     else:
