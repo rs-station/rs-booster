@@ -1,4 +1,6 @@
 # rs-booster
+[![PyPI](https://img.shields.io/pypi/v/rs-booster?color=blue)](https://pypi.org/project/rs-booster/)  
+
 `rs-booster` contains commandline scripts for diffraction data analysis tasks.
 
 This package can be viewed as a "booster rocket" for [`reciprocalspaceship`](https://github.com/Hekstra-Lab/reciprocalspaceship).
