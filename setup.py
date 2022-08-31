@@ -36,6 +36,8 @@ setup(
     project_urls=PROJECT_URLS,
     python_requires=">3.7",
     install_requires=["reciprocalspaceship", "matplotlib", "seaborn"],
+    setup_requires=["pytest-runner"],
+    tests_requires=["pytest", "pytest-xdist"],
     entry_points={
         "console_scripts": [
             "rs.extrapolate=rsbooster.esf.extrapolate:main",
