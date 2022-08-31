@@ -124,6 +124,9 @@ def main():
     internal["Phi"] = ref.loc[common, "Phi"]
     internal.infer_mtz_dtypes(inplace=True)
 
+    # Useful for PyMOL
+    internal["wDF"] = (internal["DF"] * internal["W"]).astype("SFAmplitude")
+
     if args.dmax is None:
         internal.write_mtz(args.outfile)
     else:
