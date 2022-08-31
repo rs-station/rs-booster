@@ -1,4 +1,5 @@
 # rs-booster
+![Build](https://github.com/Hekstra-Lab/rs-booster/workflows/Build/badge.svg)
 [![PyPI](https://img.shields.io/pypi/v/rs-booster?color=blue)](https://pypi.org/project/rs-booster/)  
 
 `rs-booster` contains commandline scripts for diffraction data analysis tasks.
