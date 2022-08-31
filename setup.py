@@ -21,6 +21,8 @@ PROJECT_URLS = {
     "Source Code": "https://github.com/Hekstra-Lab/rs-booster",
 }
 
+# Testing requirements
+tests_require = ["pytest", "pytest-xdist", "pytest-runner"]
 
 setup(
     name="rs-booster",
@@ -36,8 +38,7 @@ setup(
     project_urls=PROJECT_URLS,
     python_requires=">3.7",
     install_requires=["reciprocalspaceship", "matplotlib", "seaborn"],
-    setup_requires=["pytest-runner"],
-    tests_requires=["pytest", "pytest-xdist"],
+    extras_require={"dev": tests_require},
     entry_points={
         "console_scripts": [
             "rs.extrapolate=rsbooster.esf.extrapolate:main",
