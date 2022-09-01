@@ -1,10 +1,10 @@
 # rs-booster
-![Build](https://github.com/Hekstra-Lab/rs-booster/workflows/Build/badge.svg)
+![Build](https://github.com/rs-station/rs-booster/workflows/Build/badge.svg)
 [![PyPI](https://img.shields.io/pypi/v/rs-booster?color=blue)](https://pypi.org/project/rs-booster/)  
 
 `rs-booster` contains commandline scripts for diffraction data analysis tasks.
 
-This package can be viewed as a "booster rocket" for [`reciprocalspaceship`](https://github.com/Hekstra-Lab/reciprocalspaceship).
+This package can be viewed as a "booster rocket" for [`reciprocalspaceship`](https://github.com/rs-station/reciprocalspaceship).
 
 
 ### Installation
@@ -18,7 +18,7 @@ pip install rs-booster
 If you are interested in getting access to new features that haven't yet made it into a release, you can install `rs-booster` from source:
 
 ```bash
-git clone https://github.com/Hekstra-Lab/rs-booster.git
+git clone https://github.com/rs-station/rs-booster.git
 cd rs-booster
 python -m pip install -e .
 ```
