@@ -17,8 +17,8 @@ rs-booster contains commandline scripts for diffraction data analysis tasks.
 This package can be viewed as a "booster pack" for reciprocalspaceship.
 """
 PROJECT_URLS = {
-    "Bug Tracker": "https://github.com/Hekstra-Lab/rs-booster/issues",
-    "Source Code": "https://github.com/Hekstra-Lab/rs-booster",
+    "Bug Tracker": "https://github.com/rs-station/rs-booster/issues",
+    "Source Code": "https://github.com/rs-station/rs-booster",
 }
 
 # Testing requirements
@@ -34,7 +34,7 @@ setup(
     long_description=LONG_DESCRIPTION,
     author="Jack B. Greisman",
     author_email="greisman@g.harvard.edu",
-    url="https://github.com/Hekstra-Lab/rs-booster",
+    url="https://github.com/rs-station/rs-booster",
     project_urls=PROJECT_URLS,
     python_requires=">3.7",
     install_requires=["reciprocalspaceship", "matplotlib", "seaborn"],
