@@ -91,7 +91,6 @@ def main():
 
     make_rfree(args.outfile, args.cell, args.spacegroup, args.dmin, args.rfraction, args.seed)
 
-    print("rfree does stuff")
     return
 
 
