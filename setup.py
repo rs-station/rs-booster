@@ -52,6 +52,7 @@ setup(
             "rs.precog2mtz=rsbooster.io.precog2mtz:main",
             "rs.find_peaks=rsbooster.realspace.find_peaks:find_peaks",
             "rs.find_difference_peaks=rsbooster.realspace.find_peaks:find_difference_peaks",
+            "rs.write_rfree=rsbooster.utils.rfree:main",
         ]
     },
     classifiers=[
