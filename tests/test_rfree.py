@@ -1,4 +1,4 @@
-from rsbooster.utils import rfree
+from rsbooster.utils.rfree import rfree
 import pytest
 import numpy as np
 
