@@ -1,10 +1,9 @@
 #!/usr/bin/env python
 import argparse
-from re import S
 import reciprocalspaceship as rs
 
 
-def make_rfree(output_file, cell, sg, dmin, rfraction, seed):
+def rfree(cell, sg, dmin, rfraction, seed):
 
     h, k, l = rs.utils.generate_reciprocal_asu(cell, sg, dmin).T
 
@@ -23,20 +22,19 @@ def make_rfree(output_file, cell, sg, dmin, rfraction, seed):
     )
 
     ds = rs.utils.add_rfree(ds, rfraction, seed=seed)
-    ds.write_mtz(output_file)
 
-    return
+    return ds
 
 
 def parse_arguments():
     """Parse commandline arguments"""
     parser = argparse.ArgumentParser(
-        formatter_class=argparse.RawTextHelpFormatter, description=__doc__
+        formatter_class=argparse.RawTextHelpFormatter,
+        description="Create an mtz containing rfree flags",
     )
-
     # Required arguments
     parser.add_argument(
-        "-o", "--outfile", default="complete_with_rfree.mtz", help="Output MTZ filename"
+        "-o", "--outfile", default="rfree.mtz", help="Output MTZ filename"
     )
 
     parser.add_argument(
@@ -89,7 +87,11 @@ def parse_arguments():
 def main():
     args = parse_arguments()
 
-    make_rfree(args.outfile, args.cell, args.spacegroup, args.dmin, args.rfraction, args.seed)
+    flags = rfree(
+        args.cell, args.spacegroup, args.dmin, args.rfraction, args.seed
+    )
+
+    flags.write_mtz(args.outfile)
 
     return
 
