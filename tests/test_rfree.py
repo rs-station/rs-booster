@@ -26,10 +26,12 @@ def test_rfree():
 
 
 @pytest.mark.parametrize("rfraction", [0.01, 0.05, 0.1, 0.2])
-def test_rfree_fraction(rfraction, cell=(30, 40, 90, 90, 90, 90), sg=19, dmin=1.2, seed=None):
+@pytest.mark.parametrize("dmin", [1.8, 2.0, 3.0])
+def test_rfree_fraction(rfraction, dmin, cell=(30, 40, 90, 90, 90, 90), sg=19, seed=None):
 
     flags = rfree(cell=cell, sg=sg, dmin=dmin, rfraction=rfraction, seed=seed)
 
-    assert np.isclose(np.mean(flags["R-free-flags"].to_numpy()), rfraction, rtol=0.1)
+    x = flags["R-free-flags"].to_numpy()
+    assert abs(x.sum() - len(x) * rfraction) / len(x) <= 0.01
 
     return
