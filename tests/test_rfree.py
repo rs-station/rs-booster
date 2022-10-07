@@ -32,6 +32,6 @@ def test_rfree_fraction(rfraction, dmin, cell=(30, 40, 90, 90, 90, 90), sg=19, s
     flags = rfree(cell=cell, sg=sg, dmin=dmin, rfraction=rfraction, seed=seed)
 
     x = flags["R-free-flags"].to_numpy()
-    assert abs(x.sum() - len(x) * rfraction) / len(x) <= 0.01
+    assert abs(x.sum() - len(x) * rfraction) / len(x) <= 0.02
 
     return
