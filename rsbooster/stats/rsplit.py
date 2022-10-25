@@ -145,7 +145,7 @@ def make_halves_rsplit(mtz, bins=10,generate_I=True):
 def analyze_rsplit_mtz(mtzpath, bins=10, generate_I=True, return_labels=True, by_bin=True, overall=False):
     """Compute Rsplit from 2-fold cross-validation
        
-       mtzpath -- string specifying the path to the MTZ to be analyzed.
+       mtzpath -- string specifying the path to the MTZ to be analyzed OR an rs.DataSet object.
        bins -- number of resolution bins (integer, default: 10)
        type -- string specifying intensities (I) or structure factor amplitudes (F) (default: I)
        return_labels -- boolean indicating whether to return resolution bin labels (default: True)
@@ -153,9 +153,12 @@ def analyze_rsplit_mtz(mtzpath, bins=10, generate_I=True, return_labels=True, by
 
        As written, this function assumes Careless output with F and SigF columns present.
     """
-
-    mtz = rs.read_mtz(mtzpath)
-
+    
+    if type(mtzpath) is rs.dataset.DataSet:
+        mtz=mtzpath
+    else:
+        mtz = rs.read_mtz(mtzpath)
+    
     # Error handling -- make sure MTZ file is appropriate
     if "half" not in mtz.columns:
         raise ValueError("Please provide MTZs from careless crossvalidation or generate an\
