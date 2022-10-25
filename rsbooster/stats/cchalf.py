@@ -54,7 +54,10 @@ def make_halves_cchalf(mtz, bins=10):
 def analyze_cchalf_mtz(mtzpath, bins=10, return_labels=True, method="spearman"):
     """Compute CChalf from 2-fold cross-validation"""
 
-    mtz = rs.read_mtz(mtzpath)
+    if type(mtzpath) is rs.dataset.DataSet:
+        mtz=mtzpath
+    else:
+        mtz = rs.read_mtz(mtzpath)
 
     # Error handling -- make sure MTZ file is appropriate
     if "half" not in mtz.columns:
