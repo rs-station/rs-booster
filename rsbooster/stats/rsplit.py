@@ -36,14 +36,14 @@ def parse_arguments():
         type=int,
         help=("Number of bins for scaling (default: 10)")
     )
-    parser.add_argument(
-        "-o",
-        "--overall", 
-        dest='overall', 
-        action='store_true', 
-        default=False,
-        help=("Reports by bin unless this flag is used.") 
-    )
+    # parser.add_argument(
+    #     "-o",
+    #     "--overall", 
+    #     dest='overall', 
+    #     action='store_true', 
+    #     default=False,
+    #     help=("Reports by bin unless this flag is used.") 
+    # )
     parser.add_argument(
         "-f",
         "--amplitudes",
@@ -68,7 +68,7 @@ def estimate_rsplit_scaling_coefficient(I1, I2):
     return p.x
 
 
-def rsplit_from_dataset(ds, key_1, key_2, by_bin=True, overall=False):
+def rsplit_from_dataset(ds, key_1, key_2, by_bin=True):
     """
     Calculate Rsplit for (key_1, key_2), with a linear scale per bin (if by_bin) or otherwise globally.
     Report Rsplit by bin (if overall=False) or overall.
@@ -77,38 +77,47 @@ def rsplit_from_dataset(ds, key_1, key_2, by_bin=True, overall=False):
     
     ds["k"]=1.
     
-    if by_bin:
-        for bin in bins:
+    if "repeat" not in ds.columns:
+        ds["repeat"]=0
+    repeats=ds.repeat.unique()
+    
+    # there is probably a more pandas-esque way to do this with .apply() or so.
+    for repeat in repeats:
+        if by_bin:
+            for bin in bins:
+                k = estimate_rsplit_scaling_coefficient(
+                    ds.loc[(ds.bin==bin) & (ds.repeat==repeat), key_1].to_numpy(),
+                    ds.loc[(ds.bin==bin) & (ds.repeat==repeat), key_2].to_numpy(),
+                )
+                # print(f"k: {k}")
+                ds.loc[(ds.bin==bin) & (ds.repeat==repeat), "k"]=k[0]
+        else:
             k = estimate_rsplit_scaling_coefficient(
-                ds.loc[ds.bin==bin, key_1].to_numpy(),
-                ds.loc[ds.bin==bin, key_2].to_numpy(),
+                ds.loc[ds.repeat==repeat, key_1].to_numpy(),
+                ds.loc[ds.repeat==repeat, key_2].to_numpy(),
             )
-            # print(f"k: {k}")
-            ds.loc[ds.bin==bin, "k"]=k[0]
-    else:
-        k = estimate_rsplit_scaling_coefficient(
-            ds[key_1].to_numpy(),
-            ds[key_2].to_numpy(),
-        )
-        ds["k"]=k[0]
+            ds.loc[ds.repeat==repeat, "k"]=k[0]
         
 
-    result=[]
-    if overall:
-        rsplit = calculate_rsplit(
-            ds[key_1].to_numpy(),
-            ds[key_2].to_numpy(),
-            ds["k"].to_numpy(),
-        )
-        result=rsplit
-    else:
+    result={}
+    for repeat in repeats:
+        rsplit_list=[]
         for bin in bins:
             rsplit = calculate_rsplit(
-                ds.loc[ds.bin==bin, key_1].to_numpy(),
-                ds.loc[ds.bin==bin, key_2].to_numpy(),
-                ds.loc[ds.bin==bin, "k"].to_numpy(),
+                ds.loc[(ds.bin==bin) & (ds.repeat==repeat), key_1].to_numpy(),
+                ds.loc[(ds.bin==bin) & (ds.repeat==repeat), key_2].to_numpy(),
+                ds.loc[(ds.bin==bin) & (ds.repeat==repeat),   "k"].to_numpy(),
             )
-            result.append(rsplit)
+            rsplit_list.append(rsplit)
+        result[repeat]=rsplit_list
+    # Let's append the overall Rsplit too
+    for repeat in repeats:
+        rsplit = calculate_rsplit(
+            ds.loc[ds.repeat==repeat, key_1].to_numpy(),
+            ds.loc[ds.repeat==repeat, key_2].to_numpy(),
+            ds.loc[ds.repeat==repeat,   "k"].to_numpy(),
+        )
+        result[repeat].append(rsplit)
     return result
 
 
@@ -120,7 +129,7 @@ def make_halves_rsplit(mtz, bins=10,generate_I=True):
     bins -- integer specifying the number of resolution bins to assign
     generate_I -- boolean, specifies whether to generate merged intensity estimates from F and sigF
     """
-
+      
     half1 = mtz.loc[mtz.half == 0].copy()
     half2 = mtz.loc[mtz.half == 1].copy()
 
@@ -134,15 +143,15 @@ def make_halves_rsplit(mtz, bins=10,generate_I=True):
     )
     temp, labels = temp.assign_resolution_bins(bins)
 
-    # print(temp.info())
-    if generate_I:
+    if generate_I and "I1" not in temp.columns and "I2" not in temp.columns:
         temp["I1"]=temp["F1"]**2 + temp["SigF1"]**2 
         temp["I2"]=temp["F2"]**2 + temp["SigF2"]**2 
+    temp.dropna(inplace=True)
 
     return temp, labels
 
 
-def analyze_rsplit_mtz(mtzpath, bins=10, generate_I=True, return_labels=True, by_bin=True, overall=False):
+def analyze_rsplit_mtz(mtzpath, bins=10, generate_I=True, return_labels=True, by_bin=True):
     """Compute Rsplit from 2-fold cross-validation
        
        mtzpath -- string specifying the path to the MTZ to be analyzed OR an rs.DataSet object.
@@ -166,7 +175,7 @@ def analyze_rsplit_mtz(mtzpath, bins=10, generate_I=True, return_labels=True, by
         half-dataset origin (e.g., 0/1)")
 
     m, labels = make_halves_rsplit(mtz, bins, generate_I)
-
+    
     if generate_I:
         key_1="I1"
         key_2="I2"
@@ -174,8 +183,15 @@ def analyze_rsplit_mtz(mtzpath, bins=10, generate_I=True, return_labels=True, by
         key_1="F1"
         key_2="F2"
 
-    result = rsplit_from_dataset(m, key_1=key_1, key_2=key_2, by_bin=by_bin, overall=overall)
-
+    result = rsplit_from_dataset(m, key_1=key_1, key_2=key_2, by_bin=by_bin)
+    # print(result)
+    
+    result = pd.DataFrame(data=result)#.transpose()
+    result = result.stack()
+    result = result.reset_index()
+    result = result.rename(columns={"level_0":"bin", "level_1":"repeat",0: "Rsplit"})
+    # print(result)
+    
     if return_labels:
         return result, labels
     else:
@@ -205,32 +221,32 @@ def main():
     if not args.overall:
         plt.figure(figsize=(6,4))
         for m in args.mtz:
-            result = analyze_rsplit_mtz(m, bins=args.bins, generate_I=(not args.amplitudes), return_labels=True, by_bin=by_bin, overall=args.overall)
+            result,labels = analyze_rsplit_mtz(m, bins=args.bins, generate_I=(not args.amplitudes), return_labels=True, by_bin=by_bin, overall=args.overall)
             if result is None:
                 continue
             else:
-                # result is a list of two lists: Rsplit and labels
-                df=pd.DataFrame(data=result[0],columns=[m])
-                results.append(df)
-                labels = result[1]
-                plt.plot(result[0],label=m)
-        df["res. range"]=labels #assumes they are the same for all input MTZs
+                results.append(result)
+                plt.plot(results,label=m)
+        results["res. range"]=labels #assumes they are the same for all input MTZs
 
+        
         results = pd.concat(results,axis=1)
+        print("Rsplit results by res bin (rows) and repeat (cols):\n")
         print(results)
 
         plt.xticks(range(args.bins), labels, rotation=45, ha="right", rotation_mode="anchor")
-        plt.ylabel(r"$R_{split }" + f"({args.method})")
+        plt.ylabel(r"$R_{split}$" + f"({args.method})")
         # plt.legend(loc="center left", bbox_to_anchor=(1, 0.5))
         plt.legend()
         plt.grid()
         plt.tight_layout()
-        plt.savefig("Rsplit.png")
+        plt.show()
     else:
-        print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
-        print("Note that if by_bin=True, scaling still happens by bin even if reporting an overall Rsplit.")
+        print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
+        print("Note that if by_bin=True, scaling still happens by bin.")
+        print("even if reporting an overall Rsplit.")
         for m in args.mtz:
-            result = analyze_rsplit_mtz(m, bins=args.bins, generate_I=(not args.amplitudes), return_labels=True, by_bin=by_bin, overall=args.overall)
+            result = analyze_rsplit_mtz(m, bins=args.bins, generate_I=(not args.amplitudes), return_labels=False, by_bin=by_bin, overall=args.overall)
             print(m)
             print(f"Rsplit = {result[0]:.5} over resolution range {result[1]}.")
             print("")

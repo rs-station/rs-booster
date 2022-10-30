@@ -92,7 +92,10 @@ def analyze_ccsym_mtz(
 ):
     """Compute CCsym from 2-fold cross-validation"""
 
-    mtz = rs.read_mtz(mtzpath)
+    if type(mtzpath) is rs.dataset.DataSet:
+        mtz=mtzpath
+    else:
+        mtz = rs.read_mtz(mtzpath)
     m, labels = make_halves_ccsym(mtz, op)
 
     grouper = m.groupby(["bin", "repeat"])[["DF1", "DF2"]]

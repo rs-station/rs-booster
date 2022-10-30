@@ -51,7 +51,10 @@ def make_halves_ccanom(mtz, bins=10):
 def analyze_ccanom_mtz(mtzpath, bins=10, return_labels=True, method="spearman"):
     """Compute CCsym from 2-fold cross-validation"""
 
-    mtz = rs.read_mtz(mtzpath)
+    if type(mtzpath) is rs.dataset.DataSet:
+        mtz=mtzpath
+    else:
+        mtz = rs.read_mtz(mtzpath)
 
     # Error handling -- make sure MTZ file is appropriate
     if "half" not in mtz.columns:
@@ -68,6 +71,14 @@ def analyze_ccanom_mtz(mtzpath, bins=10, return_labels=True, method="spearman"):
     result = (
         grouper.corr(method=method).unstack()[("DF1", "DF2")].to_frame().reset_index()
     )
+    # DH addition: 
+    grouper = m.groupby(["repeat"])[["DF1", "DF2"]]
+    result_overall = (
+        grouper.corr(method=method).unstack()[("DF1", "DF2")].to_frame().reset_index()
+    )
+    result_overall["bin"]=bins
+    result = rs.concat([result, result_overall],check_isomorphous=False,ignore_index=True)
+    labels = labels + ["Overall"]
 
     if return_labels:
         return result, labels

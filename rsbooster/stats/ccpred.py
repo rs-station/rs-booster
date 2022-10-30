@@ -50,30 +50,34 @@ def compute_ccpred(
     mtzpath, overall=False, bins=10, return_labels=True, method="spearman", mod2=False
 ):
     """Compute CCsym from 2-fold cross-validation"""
+    #I stopped using the 'overall' flag and including the overall result by default
 
-    mtz = rs.read_mtz(mtzpath)
-
-    if overall:
-        grouper = mtz.groupby(["test"])[["Iobs", "Ipred"]]
+    if type(mtzpath) is rs.dataset.DataSet:
+        from_path=False
+        mtz=mtzpath
     else:
-        mtz, labels = mtz.assign_resolution_bins(bins)
-        grouper = mtz.groupby(["bin", "test"])[["Iobs", "Ipred"]]
+        from_path=True
+        mtz=rs.read_mtz(mtzpath)
 
-    result = (
-        grouper.corr(method=method)
-        .unstack()[("Iobs", "Ipred")]
-        .to_frame()
-        .reset_index()
-    )
+    mtz, labels = mtz.assign_resolution_bins(bins)
+    grouper     = mtz.groupby(["bin", "test"])[["Iobs", "Ipred"]]
+    result      = grouper.corr(method=method).unstack()[("Iobs", "Ipred")].to_frame().reset_index()
 
-    result["id"] = mtzpath.split("/")[0]
-    if mod2:
-        result["delay"] = np.floor(int(mtzpath[-5]) / 2)
-    else:
-        result["delay"] = int(mtzpath[-5])
-    result["spacegroup"] = mtz.spacegroup.xhm()
+    grouper     = mtz.groupby(["test"])[["Iobs", "Ipred"]]
+    result_all  = grouper.corr(method=method).unstack()[("Iobs", "Ipred")].to_frame().reset_index()
+    result_all["bin"]=bins
+    result = rs.concat([result, result_all],check_isomorphous=False,ignore_index=True)
+    labels = labels + ["Overall"]
 
-    if return_labels and not overall:
+    if from_path:
+        result["id"] = mtzpath.split("/")[0]
+        if mod2:
+            result["delay"] = np.floor(int(mtzpath[-5]) / 2)
+        else:
+            result["delay"] = int(mtzpath[-5])
+        result["spacegroup"] = mtz.spacegroup.xhm()
+    
+    if return_labels:
         return result, labels
     else:
         return result
