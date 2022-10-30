@@ -1,5 +1,32 @@
 import reciprocalspaceship as rs
+import pandas as pd
 import numpy as np
+
+
+def parse_xval_stats(xval_stats, labels, nbins, name="CChalf"):
+    if name=="CChalf":
+        xval_stats[name] = xval_stats[("F1", "F2")].astype('float')
+        xval_stats.drop(columns=[("F1", "F2")], inplace=True)
+    if name=="CCanom":
+        xval_stats[name] = xval_stats[("DF1", "DF2")].astype('float')
+        xval_stats.drop(columns=[("DF1", "DF2")], inplace=True)
+
+    xval_stats_repeat_avg=xval_stats.groupby(by=["bin"]).mean().drop(columns=["repeat"]).rename({name:name+" (avg)"})
+
+    xval_stats_by_repeat={}
+    for repeat in xval_stats.repeat.unique():
+        xval_stats_by_repeat[repeat]=xval_stats.loc[xval_stats.repeat==repeat,]
+        xval_stats_by_repeat[repeat].set_index(keys=["bin"],inplace=True)
+        xval_stats_by_repeat[repeat]=xval_stats_by_repeat[repeat].drop(columns=["repeat"])
+    xval_stats_by_repeat["avg"]=xval_stats_repeat_avg
+    xval_stats_by_repeat_all=rs.concat(xval_stats_by_repeat,check_isomorphous=False,axis=1)
+
+    labels=pd.DataFrame(data={"Res. bin (A)": labels})
+    labels.loc[nbins, "Res. bin (A)"]="Overall"
+    xval_stats_all=pd.concat([labels, xval_stats_by_repeat_all.reset_index(drop=True)],axis=1)
+    xval_stats_all.set_index(keys=["Res. bin (A)"],inplace=True)
+    
+    return xval_stats_all
 
 
 def calculate_multiplicity(merged):
@@ -19,6 +46,7 @@ def calculate_multiplicity(merged):
     
     return multiplicity
 
+
 def calculate_FsigF(merged):
     """
     Compute average F/SigF for Careless output by bin (bins must exist already).
@@ -37,6 +65,7 @@ def calculate_FsigF(merged):
     f_sigf.loc[nbins] = merged["F/SigF"].mean()
     
     return f_sigf
+
 
 def cc_star_from_cchalf(cchalf):
     

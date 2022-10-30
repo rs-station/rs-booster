@@ -3,7 +3,7 @@ import glob
 import numpy as np
 import pandas as pd
 import reciprocalspaceship as rs
-from rsbooster.stats import cchalf, ccanom, ccpred, rsplit, careless_summary_stats 
+from rsbooster.stats import cchalf, ccanom, ccpred, rsplit, summary_stats 
 
 
 def parse_arguments():
@@ -60,30 +60,6 @@ def parse_arguments():
 
     return parser.parse_args()
 
-def parse_xval_stats(xval_stats, labels, nbins, name="CChalf"):
-    if name=="CChalf":
-        xval_stats[name] = xval_stats[("F1", "F2")].astype('float')
-        xval_stats.drop(columns=[("F1", "F2")], inplace=True)
-    if name=="CCanom":
-        xval_stats[name] = xval_stats[("DF1", "DF2")].astype('float')
-        xval_stats.drop(columns=[("DF1", "DF2")], inplace=True)
-
-    xval_stats_repeat_avg=xval_stats.groupby(by=["bin"]).mean().drop(columns=["repeat"]).rename({name:name+" (avg)"})
-
-    xval_stats_by_repeat={}
-    for repeat in xval_stats.repeat.unique():
-        xval_stats_by_repeat[repeat]=xval_stats.loc[xval_stats.repeat==repeat,]
-        xval_stats_by_repeat[repeat].set_index(keys=["bin"],inplace=True)
-        xval_stats_by_repeat[repeat]=xval_stats_by_repeat[repeat].drop(columns=["repeat"])
-    xval_stats_by_repeat["avg"]=xval_stats_repeat_avg
-    xval_stats_by_repeat_all=rs.concat(xval_stats_by_repeat,check_isomorphous=False,axis=1)
-
-    labels=pd.DataFrame(data={"Res. bin (A)": labels})
-    labels.loc[nbins, "Res. bin (A)"]="Overall"
-    xval_stats_all=pd.concat([labels, xval_stats_by_repeat_all.reset_index(drop=True)],axis=1)
-    xval_stats_all.set_index(keys=["Res. bin (A)"],inplace=True)
-    
-    return xval_stats_all
 
 def main():
     # Parse commandline arguments
@@ -126,8 +102,8 @@ def main():
         print(completeness.head(nbins+1))
         
         # MULTIPLICITY & F/sigF
-        multiplicity = careless_summary_stats.calculate_multiplicity(ds)
-        FsigF        = careless_summary_stats.calculate_FsigF(ds)
+        multiplicity = summary_stats.calculate_multiplicity(ds)
+        FsigF        = summary_stats.calculate_FsigF(ds)
         results=pd.concat([labels, multiplicity,FsigF],axis=1)
         print("\n\nMultiplicity & F/sigF:\n")
         print(results.head(nbins+1))
@@ -144,7 +120,7 @@ def main():
         
         # CC1/2
         cc_half, _ =cchalf.analyze_cchalf_mtz(ds_xval, bins=nbins, method=args.method)
-        cc_half_all=parse_xval_stats(cc_half, labels, nbins, name="CChalf")
+        cc_half_all=summary_stats.parse_xval_stats(cc_half, labels, nbins, name="CChalf")
         
         print("\n\nCC1/2 for each repeat & averaged over repeats; across resolution bins and overall:\n")
         print(cc_half_all.head(nbins+1))
@@ -152,7 +128,7 @@ def main():
         
         # Rsplit
         r_split, _ = rsplit.analyze_rsplit_mtz(ds_xval, bins=nbins, by_bin=True)
-        r_split_all= parse_xval_stats(r_split, labels, nbins, name="Rsplit")
+        r_split_all= summary_stats.parse_xval_stats(r_split, labels, nbins, name="Rsplit")
         
         print("\n\nRsplit for each repeat & averaged over repeats; across resolution bins and overall:\n")
         print(r_split_all.head(nbins+1))
@@ -160,7 +136,7 @@ def main():
         # CCanom
         if anomalous:
             cc_anom, _ = ccanom.analyze_ccanom_mtz(ds_xval, bins=nbins, method=args.method)
-            cc_anom_all=parse_xval_stats(cc_anom, labels, nbins, name="CCanom")
+            cc_anom_all=summary_stats.parse_xval_stats(cc_anom, labels, nbins, name="CCanom")
         
             print("\n\nCCanom for each repeat & averaged over repeats; across resolution bins and overall:\n")
             print(cc_anom_all.head(nbins+1))

@@ -5,6 +5,7 @@ Compute CCanom from careless output.
 import argparse
 import matplotlib.pyplot as plt
 import reciprocalspaceship as rs
+from rsbooster.stats import summary_stats
 import seaborn as sns
 
 
@@ -27,6 +28,13 @@ def parse_arguments():
         choices=["spearman", "pearson"],
         help=("Method for computing correlation coefficient (spearman or pearson)"),
     )
+    parser.add_argument(
+        "-b",
+        "--bins",
+        default=10,
+        type=int,
+        help=("Number of bins for scaling (default: 10)")
+    )   
 
     return parser.parse_args()
 
@@ -65,7 +73,7 @@ def analyze_ccanom_mtz(mtzpath, bins=10, return_labels=True, method="spearman"):
 
     mtz = mtz.acentrics
     mtz = mtz.loc[(mtz["N(+)"] > 0) & (mtz["N(-)"] > 0)]
-    m, labels = make_halves_ccanom(mtz)
+    m, labels = make_halves_ccanom(mtz, bins=bins)
 
     grouper = m.groupby(["bin", "repeat"])[["DF1", "DF2"]]
     result = (
@@ -90,34 +98,42 @@ def main():
 
     # Parse commandline arguments
     args = parse_arguments()
+    nbins = args.bins
 
     results = []
     labels = None
     for m in args.mtz:
-        result = analyze_ccanom_mtz(m, method=args.method)
+        result, labels = analyze_ccanom_mtz(m, bins=args.bins, method=args.method)
         if result is None:
             continue
         else:
-            result[0]["filename"] = m
-            results.append(result[0])
-            labels = result[1]
-
+            print("\n\nAnalyzing " + m)
+            print("CCanom for each repeat & averaged over repeats; across resolution bins and overall:\n")
+            cc_anom_all= summary_stats.parse_xval_stats(result, labels, nbins, name="CCanom")        
+            print(cc_anom_all.head(nbins+1))
+            
+            result["filename"]=m
+            # print(result)
+            results.append(result)
+    
     results = rs.concat(results, check_isomorphous=False)
     results = results.reset_index(drop=True)
-    results["CCanom"] = results[("DF1", "DF2")]
-    results.drop(columns=[("DF1", "DF2")], inplace=True)
-
-    print(results)
+    results["bin"]=results["bin"].astype(int)
+    results["CCanom"]=results["CCanom"].astype(float)
+    results.columns = [x[0] for x in results.columns] # get rid of pesky tuples
 
     sns.lineplot(
-        data=results, x="bin", y="CCanom", hue="filename", ci="sd", palette="viridis"
+        data=results.loc[results.bin < nbins,], x="bin", y="CCanom", errorbar="sd", hue="filename",palette="viridis"
     )
-    plt.xticks(range(10), labels, rotation=45, ha="right", rotation_mode="anchor")
+    plt.xticks(range(nbins), labels[:nbins], rotation=45, ha="right", rotation_mode="anchor")
     plt.ylabel(r"$CC_{anom}$ " + f"({args.method})")
-    plt.legend(loc="center left", bbox_to_anchor=(1, 0.5))
+    plt.legend() #loc="center left", bbox_to_anchor=(1, 0.5))
     plt.grid()
     plt.tight_layout()
+    plt.ylim([-0.1,1])
     plt.show()
+
+            
 
 
 if __name__ == "__main__":

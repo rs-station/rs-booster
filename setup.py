@@ -48,6 +48,7 @@ setup(
             "rs.ccanom=rsbooster.stats.ccanom:main",
             "rs.cchalf=rsbooster.stats.cchalf:main",
             "rs.ccpred=rsbooster.stats.ccpred:main",
+            "rs.rsplit=rsbooster.stats.rsplit:main",
             "rs.diffmap=rsbooster.diffmaps.diffmap:main",
             "rs.precog2mtz=rsbooster.io.precog2mtz:main",
             "rs.find_peaks=rsbooster.realspace.find_peaks:find_peaks",

@@ -4,7 +4,9 @@ Compute Rsplit from careless output.
 """
 import argparse
 import matplotlib.pyplot as plt
+import seaborn as sns
 import reciprocalspaceship as rs
+from rsbooster.stats import summary_stats
 import numpy as np
 import pandas as pd
 from scipy.optimize import minimize
@@ -36,14 +38,6 @@ def parse_arguments():
         type=int,
         help=("Number of bins for scaling (default: 10)")
     )
-    # parser.add_argument(
-    #     "-o",
-    #     "--overall", 
-    #     dest='overall', 
-    #     action='store_true', 
-    #     default=False,
-    #     help=("Reports by bin unless this flag is used.") 
-    # )
     parser.add_argument(
         "-f",
         "--amplitudes",
@@ -175,6 +169,7 @@ def analyze_rsplit_mtz(mtzpath, bins=10, generate_I=True, return_labels=True, by
         half-dataset origin (e.g., 0/1)")
 
     m, labels = make_halves_rsplit(mtz, bins, generate_I)
+    labels = labels + ["Overall"]
     
     if generate_I:
         key_1="I1"
@@ -186,7 +181,7 @@ def analyze_rsplit_mtz(mtzpath, bins=10, generate_I=True, return_labels=True, by
     result = rsplit_from_dataset(m, key_1=key_1, key_2=key_2, by_bin=by_bin)
     # print(result)
     
-    result = pd.DataFrame(data=result)#.transpose()
+    result = rs.DataSet(data=result)#.transpose()
     result = result.stack()
     result = result.reset_index()
     result = result.rename(columns={"level_0":"bin", "level_1":"repeat",0: "Rsplit"})
@@ -202,54 +197,50 @@ def main():
 
     # Parse commandline arguments
     args = parse_arguments()
-    
-    # To help poor souls like me:
-    print(f"We are scaling by {args.method} (determined by -m flag)") #by_bin
-    print(f"Using {args.bins} resolution bins (determined by -b flag)") #None
-    print(f"According to the -o flag are we reporting a single value? {args.overall}.")
-    print(f"We could calculate an Rsplit(F), for amplitudes. Are we? {args.amplitudes}.") #False
+    nbins=args.bins
+    # print(f"We are scaling by {args.method} (determined by -m flag)") #by_bin
+    # print(f"Using {args.bins} resolution bins (determined by -b flag)") #None
+    # print(f"We could calculate an Rsplit(F), for amplitudes. Are we? {args.amplitudes}.") #False
 
     if args.method=="by_bin":
         by_bin=True
     else:
         by_bin=False
-    if args.bins == None:
-        overall=True
     
     results = []
-    labels = None
-    if not args.overall:
-        plt.figure(figsize=(6,4))
-        for m in args.mtz:
-            result,labels = analyze_rsplit_mtz(m, bins=args.bins, generate_I=(not args.amplitudes), return_labels=True, by_bin=by_bin, overall=args.overall)
-            if result is None:
-                continue
-            else:
-                results.append(result)
-                plt.plot(results,label=m)
-        results["res. range"]=labels #assumes they are the same for all input MTZs
+    plt.figure(figsize=(6,4))
+    for m in args.mtz:
+        result,labels = analyze_rsplit_mtz(m, bins=nbins, generate_I=(not args.amplitudes), return_labels=True, by_bin=by_bin)
+        if result is None:
+            continue
+        else:
+            print("\n\nAnalyzing " + m)
+            print("Rsplit for each repeat & averaged over repeats; across resolution bins and overall:\n")
+            r_split_all= summary_stats.parse_xval_stats(result, labels, nbins, name="Rsplit")        
+            print(r_split_all.head(args.bins+1))
 
-        
-        results = pd.concat(results,axis=1)
-        print("Rsplit results by res bin (rows) and repeat (cols):\n")
-        print(results)
+            result["filename"]=m
+            # print(result.info())
+            results.append(result)    
+    
+    results = rs.concat(results, check_isomorphous=False)
+    results = results.reset_index(drop=True)
+    results["bin"]=results["bin"].astype(int)
+    results["Rsplit"]=results["Rsplit"].astype(float)
+    # results.columns = [x[0] for x in results.columns] # get rid of pesky tuples
 
-        plt.xticks(range(args.bins), labels, rotation=45, ha="right", rotation_mode="anchor")
-        plt.ylabel(r"$R_{split}$" + f"({args.method})")
-        # plt.legend(loc="center left", bbox_to_anchor=(1, 0.5))
-        plt.legend()
-        plt.grid()
-        plt.tight_layout()
-        plt.show()
-    else:
-        print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
-        print("Note that if by_bin=True, scaling still happens by bin.")
-        print("even if reporting an overall Rsplit.")
-        for m in args.mtz:
-            result = analyze_rsplit_mtz(m, bins=args.bins, generate_I=(not args.amplitudes), return_labels=False, by_bin=by_bin, overall=args.overall)
-            print(m)
-            print(f"Rsplit = {result[0]:.5} over resolution range {result[1]}.")
-            print("")
+            
+    sns.lineplot(
+        data=results.loc[results.bin < nbins,], x="bin", y="Rsplit", errorbar="sd", hue="filename",palette="viridis"
+    )
+    plt.xticks(range(nbins), labels[:nbins], rotation=45, ha="right", rotation_mode="anchor")
+    plt.ylabel(r"$R_{split}$" + f"({args.method})")
+    plt.ylim([0, 1])
+    # plt.legend(loc="center left", bbox_to_anchor=(1, 0.5))
+    plt.legend()
+    plt.grid()
+    plt.tight_layout()
+    plt.show()
             
 
 if __name__ == "__main__":
