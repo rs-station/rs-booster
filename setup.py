@@ -32,8 +32,7 @@ docs_require = [
         "sphinx-panels",
         "sphinxcontrib-autoprogram",
         "autodocsumm",
-        ],
-
+        ]
 
 setup(
     name="rs-booster",
@@ -50,7 +49,8 @@ setup(
     python_requires=">3.7",
     install_requires=["reciprocalspaceship", "matplotlib", "seaborn"],
     extras_require={
-        "dev": docs_require,
+        "dev": tests_require + docs_require,
+        "docs": docs_require
     },
     entry_points={
         "console_scripts": [
