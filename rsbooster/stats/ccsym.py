@@ -57,7 +57,7 @@ def parse_arguments():
         help=("Use id mod 2 to assign delays (use when employing spacegroup hack)"),
     )
 
-    return parser.parse_args()
+    return parser#.parse_args()
 
 
 def make_halves_ccsym(mtz, op, bins=10):
@@ -114,7 +114,7 @@ def analyze_ccsym_mtz(
 def main():
 
     # Parse commandline arguments
-    args = parse_arguments()
+    args = parse_arguments().parse_args()
 
     # Get symmetry operation
     try:

@@ -47,7 +47,7 @@ def parse_arguments():
         help="MTZ file to which scaleit output will be written",
     )
 
-    return parser.parse_args()
+    return parser#.parse_args()
 
 
 def load_mtz(mtzpath, data_col, sig_col):
@@ -109,7 +109,7 @@ def run_scaleit(joined, outfile, n_mtzs):
 def main():
 
     # Parse commandline arguments
-    args = parse_arguments()
+    args = parse_arguments().parse_args()
 
     # Test whether scaleit is on PATH
     if shutil.which("scaleit") is None:

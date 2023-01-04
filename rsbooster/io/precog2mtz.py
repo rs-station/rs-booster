@@ -43,7 +43,7 @@ def parse_arguments():
         default="integrated.mtz",
         help="Name of the output mtz file.",
     )
-    parser = parser.parse_args()
+    # parser = parser.parse_args()
     return parser
 
 
@@ -73,7 +73,7 @@ def make_dataset(filenames, spacegroup, cell):
 
 
 def main():
-    parser = parse_arguments()
+    parser = parse_arguments().parse_args()
 
     # Parse the output filename(s)
     if isinstance(parser.ii_in, str):

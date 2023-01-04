@@ -216,7 +216,7 @@ def parse_args(default_sigma_cutoff=1.5):
         help="the distance cutoff of nearest neighbor search with default of 4 angstroms.")
     parser.add_argument("--use-long-names", action='store_true',
         help="use more verbose column names in the peak report.")
-    parser = parser.parse_args()
+    # parser = parser.parse_args()
     return parser
 
 def find_peaks():
@@ -226,7 +226,7 @@ def find_difference_peaks():
     main(difference_map=True, default_sigma_cutoff=3.0)
 
 def main(difference_map=False, default_sigma_cutoff=1.5):
-    parser = parse_args(default_sigma_cutoff)
+    parser = parse_args(default_sigma_cutoff).parse_args()
     structure = gemmi.read_pdb(parser.pdb_file)
     ds = rs.read_mtz(parser.mtz_file)
     mtz = ds[[parser.phase_key]].copy()

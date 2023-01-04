@@ -81,11 +81,11 @@ def parse_arguments():
         help=("Seed to random number generator for reproducible Rfree flags"),
     )
 
-    return parser.parse_args()
+    return parser#.parse_args() # making docs works best when a function returns just the parser
 
 
 def main():
-    args = parse_arguments()
+    args = parse_arguments().parse_args()
 
     flags = rfree(
         args.cell, args.spacegroup, args.dmin, args.rfraction, args.seed

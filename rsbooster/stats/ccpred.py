@@ -43,7 +43,7 @@ def parse_arguments():
         help=("Use (id mod 2) to assign delays (use when employing spacegroup hack)"),
     )
 
-    return parser.parse_args()
+    return parser#.parse_args()
 
 
 def compute_ccpred(
@@ -82,7 +82,7 @@ def compute_ccpred(
 def main():
 
     # Parse commandline arguments
-    args = parse_arguments()
+    args = parse_arguments().parse_args()
 
     results = []
     labels = None
