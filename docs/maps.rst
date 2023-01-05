@@ -4,7 +4,7 @@ Map utilities
 =============
 
 Making difference maps
---------------------
+----------------------
 
 .. autoprogram:: rsbooster.diffmaps.internaldiffmap:parse_arguments()
    :prog: rs.internal_diffmap
@@ -14,7 +14,7 @@ Making difference maps
 
 
 Finding map peaks
------
+-----------------
 
 .. autoprogram:: rsbooster.realspace.find_peaks:parse_args()
    :prog: rs.find_peaks

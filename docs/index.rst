@@ -12,7 +12,7 @@ You can install rs-booster via::
 
 
 Reciprocal Space Station
----------
+------------------------
 ``rs-booster`` is part of the `Reciprocal Space Station family of packages`_
 
 .. toctree::

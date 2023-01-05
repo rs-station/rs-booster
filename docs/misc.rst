@@ -1,7 +1,7 @@
 .. _misc:
 
 Other miscellaneous utilites
-============
+============================
 
 .. autoprogram:: rsbooster.scaleit.scaleit:parse_arguments()
    :prog: rs.scaleit

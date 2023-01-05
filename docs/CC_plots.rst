@@ -1,7 +1,7 @@
 .. _ccplots:
 
 Making CC plots
-============
+===============
 
 Utilites for plotting various CCs from ``careless`` output
 
