@@ -131,10 +131,10 @@ html_theme = 'sphinx_rtd_theme'
 html_static_path = ['_static']
 
 # Add favicon
-# html_favicon = 'img/rs-favicon_32x32.png'
+html_favicon = 'img/rs-favicon_32x32.png'
 
 # Add
-# html_logo = 'img/rs.png'
+html_logo = 'img/rs.png'
 
 # -- Resolve links to source code --------------------------------------------
 
