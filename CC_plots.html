@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Making CC plots &mdash; rs-booster 0.1.0 documentation</title><link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/panels-bootstrap.5fd3999ee7762ccc51105388f4a9d115.css" type="text/css" />
+      <link rel="stylesheet" href="_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" type="text/css" />
+      <link rel="stylesheet" href="_static/panels-variables.06eb56fa6e07937060861dad626602ad.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Other miscellaneous utilites" href="misc.html" />
+    <link rel="prev" title="Map utilities" href="maps.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> rs-booster
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="maps.html">Map utilities</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">CC plots</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#rs-ccsym">rs.ccsym</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#rs-ccanom">rs.ccanom</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#rs-cchalf">rs.cchalf</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#rs-ccpred">rs.ccpred</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="misc.html">Other</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">rs-booster</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a></li>
+      <li class="breadcrumb-item active">Making CC plots</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/CC_plots.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<div class="section" id="making-cc-plots">
+<span id="ccplots"></span><h1>Making CC plots<a class="headerlink" href="#making-cc-plots" title="Permalink to this headline"></a></h1>
+<p>Utilites for plotting various CCs from <code class="docutils literal notranslate"><span class="pre">careless</span></code> output</p>
+<div class="section" id="rs-ccsym">
+<h2>rs.ccsym<a class="headerlink" href="#rs-ccsym" title="Permalink to this headline"></a></h2>
+<p>Compute CCsym from careless output.</p>
+<p>Note: This method currently assumes that careless has been called using
+both the reduced-symmetry and the parent spacegroup</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">usage: rs.ccsym [-h] --op OP [-sg SPACEGROUP] [-m {spearman,pearson}] [--mod2]</span>
+<span class="go">                mtz [mtz ...]</span>
+</pre></div>
+</div>
+<dl class="std option">
+<dt id="cmdoption-rs.ccsym-arg-mtz">
+<code class="sig-name descname"><span class="pre">mtz</span></code><code class="sig-prename descclassname"></code><a class="headerlink" href="#cmdoption-rs.ccsym-arg-mtz" title="Permalink to this definition"></a></dt>
+<dd><p>MTZs containing crossvalidation data from careless</p>
+</dd></dl>
+
+<dl class="std option">
+<dt id="cmdoption-rs.ccsym-h">
+<code class="sig-name descname"><span class="pre">-h</span></code><code class="sig-prename descclassname"></code><code class="sig-prename descclassname"><span class="pre">,</span> </code><code class="sig-name descname"><span class="pre">--help</span></code><code class="sig-prename descclassname"></code><a class="headerlink" href="#cmdoption-rs.ccsym-h" title="Permalink to this definition"></a></dt>
+<dd><p>show this help message and exit</p>
+</dd></dl>
+
+<dl class="std option">
+<dt id="cmdoption-rs.ccsym-op">
+<code class="sig-name descname"><span class="pre">--op</span></code><code class="sig-prename descclassname"> <span class="pre">&lt;op&gt;</span></code><a class="headerlink" href="#cmdoption-rs.ccsym-op" title="Permalink to this definition"></a></dt>
+<dd><p>Symmetry operation to use to compute internal difference map. Can be given as ISYM if used with a <cite>spacegroup</cite> argument</p>
+</dd></dl>
+
+<dl class="std option">
+<dt id="cmdoption-rs.ccsym-sg">
+<code class="sig-name descname"><span class="pre">-sg</span></code><code class="sig-prename descclassname"> <span class="pre">&lt;spacegroup&gt;</span></code><code class="sig-prename descclassname"><span class="pre">,</span> </code><code class="sig-name descname"><span class="pre">--spacegroup</span></code><code class="sig-prename descclassname"> <span class="pre">&lt;spacegroup&gt;</span></code><a class="headerlink" href="#cmdoption-rs.ccsym-sg" title="Permalink to this definition"></a></dt>
+<dd><p>Spacegroup to use for symmetry operation (only necessary if <cite>op</cite> specifies an ISYM).</p>
+</dd></dl>
+
+<dl class="std option">
+<dt id="cmdoption-rs.ccsym-m">
+<code class="sig-name descname"><span class="pre">-m</span></code><code class="sig-prename descclassname"> <span class="pre">{spearman,pearson}</span></code><code class="sig-prename descclassname"><span class="pre">,</span> </code><code class="sig-name descname"><span class="pre">--method</span></code><code class="sig-prename descclassname"> <span class="pre">{spearman,pearson}</span></code><a class="headerlink" href="#cmdoption-rs.ccsym-m" title="Permalink to this definition"></a></dt>
+<dd><p>Method for computing correlation coefficient (spearman or pearson)</p>
+</dd></dl>
+
+<dl class="std option">
+<dt id="cmdoption-rs.ccsym-mod2">
+<code class="sig-name descname"><span class="pre">--mod2</span></code><code class="sig-prename descclassname"></code><a class="headerlink" href="#cmdoption-rs.ccsym-mod2" title="Permalink to this definition"></a></dt>
+<dd><p>Use id mod 2 to assign delays (use when employing spacegroup hack)</p>
+</dd></dl>
+
+</div>
+<div class="section" id="rs-ccanom">
+<h2>rs.ccanom<a class="headerlink" href="#rs-ccanom" title="Permalink to this headline"></a></h2>
+<p>Compute CCanom from careless output.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">usage: rs.ccanom [-h] [-m {spearman,pearson}] mtz [mtz ...]</span>
+</pre></div>
+</div>
+<dl class="std option">
+<dt id="cmdoption-rs.ccanom-arg-mtz">
+<code class="sig-name descname"><span class="pre">mtz</span></code><code class="sig-prename descclassname"></code><a class="headerlink" href="#cmdoption-rs.ccanom-arg-mtz" title="Permalink to this definition"></a></dt>
+<dd><p>MTZs containing crossvalidation data from careless</p>
+</dd></dl>
+
+<dl class="std option">
+<dt id="cmdoption-rs.ccanom-h">
+<code class="sig-name descname"><span class="pre">-h</span></code><code class="sig-prename descclassname"></code><code class="sig-prename descclassname"><span class="pre">,</span> </code><code class="sig-name descname"><span class="pre">--help</span></code><code class="sig-prename descclassname"></code><a class="headerlink" href="#cmdoption-rs.ccanom-h" title="Permalink to this definition"></a></dt>
+<dd><p>show this help message and exit</p>
+</dd></dl>
+
+<dl class="std option">
+<dt id="cmdoption-rs.ccanom-m">
+<code class="sig-name descname"><span class="pre">-m</span></code><code class="sig-prename descclassname"> <span class="pre">{spearman,pearson}</span></code><code class="sig-prename descclassname"><span class="pre">,</span> </code><code class="sig-name descname"><span class="pre">--method</span></code><code class="sig-prename descclassname"> <span class="pre">{spearman,pearson}</span></code><a class="headerlink" href="#cmdoption-rs.ccanom-m" title="Permalink to this definition"></a></dt>
+<dd><p>Method for computing correlation coefficient (spearman or pearson)</p>
+</dd></dl>
+
+</div>
+<div class="section" id="rs-cchalf">
+<h2>rs.cchalf<a class="headerlink" href="#rs-cchalf" title="Permalink to this headline"></a></h2>
+<p>Compute CChalf from careless output.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">usage: rs.cchalf [-h] [-m {spearman,pearson}] mtz [mtz ...]</span>
+</pre></div>
+</div>
+<dl class="std option">
+<dt id="cmdoption-rs.cchalf-arg-mtz">
+<code class="sig-name descname"><span class="pre">mtz</span></code><code class="sig-prename descclassname"></code><a class="headerlink" href="#cmdoption-rs.cchalf-arg-mtz" title="Permalink to this definition"></a></dt>
+<dd><p>MTZs containing crossvalidation data from careless</p>
+</dd></dl>
+
+<dl class="std option">
+<dt id="cmdoption-rs.cchalf-h">
+<code class="sig-name descname"><span class="pre">-h</span></code><code class="sig-prename descclassname"></code><code class="sig-prename descclassname"><span class="pre">,</span> </code><code class="sig-name descname"><span class="pre">--help</span></code><code class="sig-prename descclassname"></code><a class="headerlink" href="#cmdoption-rs.cchalf-h" title="Permalink to this definition"></a></dt>
+<dd><p>show this help message and exit</p>
+</dd></dl>
+
+<dl class="std option">
+<dt id="cmdoption-rs.cchalf-m">
+<code class="sig-name descname"><span class="pre">-m</span></code><code class="sig-prename descclassname"> <span class="pre">{spearman,pearson}</span></code><code class="sig-prename descclassname"><span class="pre">,</span> </code><code class="sig-name descname"><span class="pre">--method</span></code><code class="sig-prename descclassname"> <span class="pre">{spearman,pearson}</span></code><a class="headerlink" href="#cmdoption-rs.cchalf-m" title="Permalink to this definition"></a></dt>
+<dd><p>Method for computing correlation coefficient (spearman or pearson)</p>
+</dd></dl>
+
+</div>
+<div class="section" id="rs-ccpred">
+<h2>rs.ccpred<a class="headerlink" href="#rs-ccpred" title="Permalink to this headline"></a></h2>
+<p>Compute CCsym from careless output.</p>
+<p>Note: If more than one <cite>-i</cite> argument is given, only overall CCpred is reported</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">usage: rs.ccpred [-h] -i INPUTMTZS [INPUTMTZS ...] [-m {spearman,pearson}]</span>
+<span class="go">                 [--mod2]</span>
+</pre></div>
+</div>
+<dl class="std option">
+<dt id="cmdoption-rs.ccpred-h">
+<code class="sig-name descname"><span class="pre">-h</span></code><code class="sig-prename descclassname"></code><code class="sig-prename descclassname"><span class="pre">,</span> </code><code class="sig-name descname"><span class="pre">--help</span></code><code class="sig-prename descclassname"></code><a class="headerlink" href="#cmdoption-rs.ccpred-h" title="Permalink to this definition"></a></dt>
+<dd><p>show this help message and exit</p>
+</dd></dl>
+
+<dl class="std option">
+<dt id="cmdoption-rs.ccpred-i">
+<code class="sig-name descname"><span class="pre">-i</span></code><code class="sig-prename descclassname"> <span class="pre">&lt;inputmtzs&gt;</span></code><code class="sig-prename descclassname"><span class="pre">,</span> </code><code class="sig-name descname"><span class="pre">--inputmtzs</span></code><code class="sig-prename descclassname"> <span class="pre">&lt;inputmtzs&gt;</span></code><a class="headerlink" href="#cmdoption-rs.ccpred-i" title="Permalink to this definition"></a></dt>
+<dd><p>MTZs containing holdout prediction data from careless</p>
+</dd></dl>
+
+<dl class="std option">
+<dt id="cmdoption-rs.ccpred-m">
+<code class="sig-name descname"><span class="pre">-m</span></code><code class="sig-prename descclassname"> <span class="pre">{spearman,pearson}</span></code><code class="sig-prename descclassname"><span class="pre">,</span> </code><code class="sig-name descname"><span class="pre">--method</span></code><code class="sig-prename descclassname"> <span class="pre">{spearman,pearson}</span></code><a class="headerlink" href="#cmdoption-rs.ccpred-m" title="Permalink to this definition"></a></dt>
+<dd><p>Method for computing correlation coefficient (spearman or pearson)</p>
+</dd></dl>
+
+<dl class="std option">
+<dt id="cmdoption-rs.ccpred-mod2">
+<code class="sig-name descname"><span class="pre">--mod2</span></code><code class="sig-prename descclassname"></code><a class="headerlink" href="#cmdoption-rs.ccpred-mod2" title="Permalink to this definition"></a></dt>
+<dd><p>Use (id mod 2) to assign delays (use when employing spacegroup hack)</p>
+</dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="maps.html" class="btn btn-neutral float-left" title="Map utilities" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="misc.html" class="btn btn-neutral float-right" title="Other miscellaneous utilites" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, 1/Astronauts.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
