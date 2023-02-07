@@ -26,12 +26,13 @@ tests_require = ["pytest", "pytest-xdist", "pytest-runner"]
 
 # Requirements for building docs
 docs_require = [
-        "sphinx",
+        "sphinx<4",
         "sphinx_rtd_theme",
         "nbsphinx",
         "sphinx-panels",
         "sphinxcontrib-autoprogram",
         "autodocsumm",
+        "jinga2<3.1",
         ]
 
 setup(
