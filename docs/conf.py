@@ -43,7 +43,6 @@ extensions = [
     "sphinx_panels",
     "sphinxcontrib.autoprogram",
     "autodocsumm",
-    "Jinja2<3.1",
 ]
 
 napoleon_google_docstring = False
