@@ -75,13 +75,13 @@ def parse_arguments():
         "-o", "--outfile", default="internal_diffmap.mtz", help="Output MTZ filename"
     )
 
-    return parser.parse_args()
+    return parser#.parse_args()
 
 
 def main():
 
     # Parse commandline arguments
-    args = parse_arguments()
+    args = parse_arguments().parse_args()
     refmtz, phi_col = args.refmtz
 
     # Read MTZ files

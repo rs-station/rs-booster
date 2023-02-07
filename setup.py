@@ -24,6 +24,16 @@ PROJECT_URLS = {
 # Testing requirements
 tests_require = ["pytest", "pytest-xdist", "pytest-runner"]
 
+# Requirements for building docs
+docs_require = [
+        "sphinx",
+        "sphinx_rtd_theme",
+        "nbsphinx",
+        "sphinx-panels",
+        "sphinxcontrib-autoprogram",
+        "autodocsumm",
+        ]
+
 setup(
     name="rs-booster",
     packages=find_packages(),
@@ -38,7 +48,10 @@ setup(
     project_urls=PROJECT_URLS,
     python_requires=">3.7",
     install_requires=["reciprocalspaceship", "matplotlib", "seaborn"],
-    extras_require={"dev": tests_require},
+    extras_require={
+        "dev": tests_require + docs_require,
+        "docs": docs_require
+    },
     entry_points={
         "console_scripts": [
             "rs.extrapolate=rsbooster.esf.extrapolate:main",

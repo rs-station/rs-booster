@@ -28,7 +28,7 @@ def parse_arguments():
         help=("Method for computing correlation coefficient (spearman or pearson)"),
     )
 
-    return parser.parse_args()
+    return parser#.parse_args()
 
 
 def make_halves_ccanom(mtz, bins=10):
@@ -78,7 +78,7 @@ def analyze_ccanom_mtz(mtzpath, bins=10, return_labels=True, method="spearman"):
 def main():
 
     # Parse commandline arguments
-    args = parse_arguments()
+    args = parse_arguments().parse_args()
 
     results = []
     labels = None
