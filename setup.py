@@ -32,7 +32,7 @@ docs_require = [
         "sphinx-panels",
         "sphinxcontrib-autoprogram",
         "autodocsumm",
-        "jinga2<3.1",
+        "Jinga2<3.1",
         ]
 
 setup(
