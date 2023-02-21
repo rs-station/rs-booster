@@ -40,7 +40,6 @@ extensions = [
     'sphinx_rtd_theme',
     'nbsphinx',
     "sphinx.ext.linkcode",
-    "sphinx_panels",
     "sphinxcontrib.autoprogram",
     "autodocsumm",
 ]
