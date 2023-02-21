@@ -29,7 +29,6 @@ docs_require = [
         "sphinx",
         "sphinx_rtd_theme",
         "nbsphinx",
-        "sphinx-panels",
         "sphinxcontrib-autoprogram",
         "autodocsumm",
         ]
