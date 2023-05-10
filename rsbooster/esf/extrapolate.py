@@ -22,6 +22,8 @@ Notes
     - F_{off} and F_{calc} can be the same MTZ file, as done in Hekstra et al, 
       Nature (2016). In that case, the equation for SigF_{esf} is adjusted to
       use (f-1)**2 for SigF_{off} to avoid double-counting in the error propagation.
+    - At most one of F_{ref} and F_{calc} can be specified. If neither is specified, 
+      F_{calc} will be set to F_{off}.
     - After computing |F_{esf}|, any negative structure factor amplitudes are converted
       to positive values. This is to ensure that they are handled correctly downstream in
       phenix, and because they are technically amplitudes of complex numbers and the phase
@@ -58,20 +60,20 @@ def parse_arguments():
         help=("MTZ to be used as `off` data. Specified as (filename, F, SigF)"),
     )
 
-    # at most one of these must provided
+    # at most one of these must be provided
     parser.add_argument(
         "-calc",
         "--calcmtz",
         nargs=2,
         metavar=("mtz", "data_col"),
-        help=("MTZ to be used as `calc` data. Specified as (filename, F)"),
+        help=("MTZ to be used as `calc` data. Specified as (filename, F). At most one of `-calc` and `-ref` can be specified."),
     )
     parser.add_argument(
         "-ref",
         "--refmtz",
         nargs=3,
         metavar=("mtz", "data_col", "sig_col"),
-        help=("MTZ to be used as `ref` data. Specified as (filename, F, SigF)"),
+        help=("MTZ to be used as `ref` data. Specified as (filename, F, SigF). At most one of `-calc` and `-ref` can be specified."),
     )
 
     # Optional arguments
