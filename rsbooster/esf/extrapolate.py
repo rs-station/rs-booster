@@ -58,13 +58,13 @@ def parse_arguments():
         help=("MTZ to be used as `off` data. Specified as (filename, F, SigF)"),
     )
 
-    # One of these must provided
+    # at most one of these must provided
     parser.add_argument(
         "-calc",
         "--calcmtz",
         nargs=2,
         metavar=("mtz", "data_col"),
-        help=("MTZ to be used as `calc` data. Specified as (filename, F, SigF)"),
+        help=("MTZ to be used as `calc` data. Specified as (filename, F)"),
     )
     parser.add_argument(
         "-ref",
@@ -100,7 +100,9 @@ def main():
     elif args.refmtz:
         calc, f_calc, sigf_calc = args.refmtz
     else:
-        raise ValueError("One of `-calc` or `-ref` must be specified.")
+        print("No `-calc` or `-ref` is specified. `-calc` is set to `-off`.")
+        calc, f_calc, _ = args.offmtz
+        sigf_calc = None
 
     # Read MTZ files
     on = rs.read_mtz(on)
