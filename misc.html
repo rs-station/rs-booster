@@ -12,7 +12,8 @@
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/doctools.js"></script>
         <script src="_static/sphinx_highlight.js"></script>
@@ -84,31 +85,7 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  
-<style>
-/* CSS overrides for sphinx_rtd_theme */
-
-/* 24px margin */
-.nbinput.nblast.container,
-.nboutput.nblast.container {
-    margin-bottom: 19px;  /* padding has already 5px */
-}
-
-/* ... except between code cells! */
-.nblast.container + .nbinput.container {
-    margin-top: -19px;
-}
-
-.admonition > p:before {
-    margin-right: 4px;  /* make room for the exclamation icon */
-}
-
-/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
-.math {
-    text-align: unset;
-}
-</style>
-<section id="other-miscellaneous-utilites">
+  <section id="other-miscellaneous-utilites">
 <span id="misc"></span><h1>Other miscellaneous utilites<a class="headerlink" href="#other-miscellaneous-utilites" title="Permalink to this heading"></a></h1>
 <section id="rs-scaleit">
 <h2>rs.scaleit<a class="headerlink" href="#rs-scaleit" title="Permalink to this heading"></a></h2>
@@ -301,6 +278,8 @@ SigF_{esf} = sqrt( ( (f**2)*(SigF_{on}**2) ) + ( (f**2)*(SigF_{off}**2) ) )</p>
 <li><p>F_{off} and F_{calc} can be the same MTZ file, as done in Hekstra et al, 
 Nature (2016). In that case, the equation for SigF_{esf} is adjusted to
 use (f-1)**2 for SigF_{off} to avoid double-counting in the error propagation.</p></li>
+<li><p>At most one of F_{ref} and F_{calc} can be specified. If neither is specified, 
+F_{calc} will be set to F_{off}.</p></li>
 <li><p>After computing <a href="#id2"><span class="problematic" id="id3">|F_{esf}|</span></a>, any negative structure factor amplitudes are converted
 to positive values. This is to ensure that they are handled correctly downstream in
 phenix, and because they are technically amplitudes of complex numbers and the phase
@@ -333,13 +312,13 @@ should just be flipped by 180 degrees.</p></li>
 <dl class="std option">
 <dt class="sig sig-object std" id="cmdoption-rs.extrapolate-calc">
 <span class="sig-name descname"><span class="pre">-calc</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;mtz&gt;</span> <span class="pre">&lt;data_col&gt;</span></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--calcmtz</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;mtz&gt;</span> <span class="pre">&lt;data_col&gt;</span></span><a class="headerlink" href="#cmdoption-rs.extrapolate-calc" title="Permalink to this definition"></a></dt>
-<dd><p>MTZ to be used as <cite>calc</cite> data. Specified as (filename, F, SigF)</p>
+<dd><p>MTZ to be used as <cite>calc</cite> data. Specified as (filename, F). At most one of <cite>-calc</cite> and <cite>-ref</cite> can be specified.</p>
 </dd></dl>
 
 <dl class="std option">
 <dt class="sig sig-object std" id="cmdoption-rs.extrapolate-ref">
 <span class="sig-name descname"><span class="pre">-ref</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;mtz&gt;</span> <span class="pre">&lt;data_col&gt;</span> <span class="pre">&lt;sig_col&gt;</span></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--refmtz</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;mtz&gt;</span> <span class="pre">&lt;data_col&gt;</span> <span class="pre">&lt;sig_col&gt;</span></span><a class="headerlink" href="#cmdoption-rs.extrapolate-ref" title="Permalink to this definition"></a></dt>
-<dd><p>MTZ to be used as <cite>ref</cite> data. Specified as (filename, F, SigF)</p>
+<dd><p>MTZ to be used as <cite>ref</cite> data. Specified as (filename, F, SigF). At most one of <cite>-calc</cite> and <cite>-ref</cite> can be specified.</p>
 </dd></dl>
 
 <dl class="std option">
