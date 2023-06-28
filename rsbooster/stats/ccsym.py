@@ -14,51 +14,51 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 
 
-def parse_arguments():
-    """Parse commandline arguments"""
-    parser = argparse.ArgumentParser(
-        formatter_class=argparse.RawTextHelpFormatter, description=__doc__
-    )
-
-    # Required arguments
-    parser.add_argument(
-        "mtz",
-        nargs="+",
-        help="MTZs containing crossvalidation data from careless",
-    )
-    parser.add_argument(
-        "--op",
-        required=True,
-        help=(
-            "Symmetry operation to use to compute internal difference map. "
-            "Can be given as ISYM if used with a `spacegroup` argument"
-        ),
-    )
-
-    # Optional arguments
-    parser.add_argument(
-        "-sg",
-        "--spacegroup",
-        help=(
-            "Spacegroup to use for symmetry operation "
-            "(only necessary if `op` specifies an ISYM)."
-        ),
-    )
-    parser.add_argument(
-        "-m",
-        "--method",
-        default="spearman",
-        choices=["spearman", "pearson"],
-        help=("Method for computing correlation coefficient (spearman or pearson)"),
-    )
-    parser.add_argument(
-        "--mod2",
-        action="store_true",
-        help=("Use id mod 2 to assign delays (use when employing spacegroup hack)"),
-    )
-
-    return parser#.parse_args()
-
+from rsbooster.stats.parser import BaseParser
+class ArgumentParser(BaseParser):
+    def __init__(self):
+        super().__init__(
+            description=__doc__
+        )
+        
+        # Required arguments
+        self.add_argument(
+            "mtz",
+            nargs="+",
+            help="MTZs containing crossvalidation data from careless",
+        )
+        self.add_argument(
+            "--op",
+            required=True,
+            help=(
+                "Symmetry operation to use to compute internal difference map. "
+                "Can be given as ISYM if used with a `spacegroup` argument"
+                "Symops start counting at 0 (the identity), but CCsym for the identity are NaNs."
+                "Minus signs in symops are presently causing problems!"
+            ),
+        )
+    
+        # Optional arguments
+        self.add_argument(
+            "-sg",
+            "--spacegroup",
+            help=(
+                "Spacegroup to use for symmetry operation "
+                "(only necessary if `op` specifies an ISYM)."
+            ),
+        )
+        self.add_argument(
+            "-m",
+            "--method",
+            default="spearman",
+            choices=["spearman", "pearson"],
+            help=("Method for computing correlation coefficient (spearman or pearson)"),
+        )
+        self.add_argument(
+            "--mod2",
+            action="store_true",
+            help=("Use id mod 2 to assign delays (use when employing spacegroup hack)"),
+        )
 
 def make_halves_ccsym(mtz, op, bins=10):
     """Construct half-datasets for computing CCsym"""
@@ -92,9 +92,15 @@ def analyze_ccsym_mtz(
 ):
     """Compute CCsym from 2-fold cross-validation"""
 
-    mtz = rs.read_mtz(mtzpath)
+    if type(mtzpath) is rs.dataset.DataSet:
+        mtz=mtzpath
+    else:
+        mtz = rs.read_mtz(mtzpath)
+    
     m, labels = make_halves_ccsym(mtz, op)
 
+    # print(m)
+    # print(labels)
     grouper = m.groupby(["bin", "repeat"])[["DF1", "DF2"]]
     result = (
         grouper.corr(method=method).unstack()[("DF1", "DF2")].to_frame().reset_index()
@@ -111,11 +117,7 @@ def analyze_ccsym_mtz(
         return result
 
 
-def main():
-
-    # Parse commandline arguments
-    args = parse_arguments().parse_args()
-
+def run_analysis(args):
     # Get symmetry operation
     try:
         isym = int(args.op)
@@ -123,6 +125,7 @@ def main():
         op = sg.operations().sym_ops[isym]
     except ValueError:
         op = gemmi.Op(args.op)
+    print(op)
 
     results = []
     labels = None
@@ -138,19 +141,32 @@ def main():
     results = results.reset_index(drop=True)
     results["CCsym"] = results[("DF1", "DF2")]
     results.drop(columns=[("DF1", "DF2")], inplace=True)
+        
+    for k in ('bin', 'repeat'):
+        results[k] = results[k].to_numpy('int32')
 
-    print(results)
+    if args.output is not None:
+        results.to_csv(args.output)
+    else:
+        print(results.to_string())
 
+    results.info()
     sns.lineplot(
-        data=results, x="bin", y="CCsym", hue="delay", ci="sd", palette="viridis"
+        data=results, x="bin", y="CCsym", hue="delay", errorbar="sd", palette="viridis"
     )
     plt.xticks(range(10), labels, rotation=45, ha="right", rotation_mode="anchor")
     plt.ylabel(r"$CC_{sym}$ " + f"({args.method})")
     plt.legend(loc="center left", bbox_to_anchor=(1, 0.5))
     plt.grid()
     plt.tight_layout()
-    plt.show()
+    
+    if args.image is not None:
+        plt.savefig(args.image)
+
+    if args.show:
+        plt.show()
 
 
-if __name__ == "__main__":
-    main()
+def main():
+    parser = ArgumentParser().parse_args()
+    run_analysis(parser)

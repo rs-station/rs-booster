@@ -13,37 +13,39 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 
 
-def parse_arguments():
-    """Parse commandline arguments"""
-    parser = argparse.ArgumentParser(
-        formatter_class=argparse.RawTextHelpFormatter, description=__doc__
-    )
+from rsbooster.stats.parser import BaseParser
+class ArgumentParser(BaseParser):
+    def __init__(self):
+        super().__init__(
+            description=__doc__
+        )
 
-    # Required arguments
-    parser.add_argument(
-        "-i",
-        "--inputmtzs",
-        nargs="+",
-        action="append",
-        required=True,
-        help="MTZs containing holdout prediction data from careless",
-    )
-
-    # Optional arguments
-    parser.add_argument(
-        "-m",
-        "--method",
-        default="spearman",
-        choices=["spearman", "pearson"],
-        help=("Method for computing correlation coefficient (spearman or pearson)"),
-    )
-    parser.add_argument(
-        "--mod2",
-        action="store_true",
-        help=("Use (id mod 2) to assign delays (use when employing spacegroup hack)"),
-    )
-
-    return parser#.parse_args()
+        # Required arguments
+        self.add_argument(
+            "mtzs",
+            nargs="+",
+            help="MTZs containing prediction data from careless",
+        )
+    
+        # Optional arguments
+        self.add_argument(
+            "-m",
+            "--method",
+            default="spearman",
+            choices=["spearman", "pearson"],
+            help=("Method for computing correlation coefficient (spearman or pearson)"),
+        )
+        self.add_argument(
+            "--mod2",
+            action="store_true",
+            help=("Use (id mod 2) to assign delays (use when employing spacegroup hack)"),
+        )
+        self.add_argument(
+            "--overall",
+            action="store_true",
+            default=False,
+            help=("Whether to report a single value for the entire dataset"),
+        )
 
 
 def compute_ccpred(
@@ -51,8 +53,11 @@ def compute_ccpred(
 ):
     """Compute CCsym from 2-fold cross-validation"""
 
-    mtz = rs.read_mtz(mtzpath)
-
+    if type(mtzpath) is rs.dataset.DataSet:
+        mtz=mtzpath
+    else:
+        mtz = rs.read_mtz(mtzpath)
+        
     if overall:
         grouper = mtz.groupby(["test"])[["Iobs", "Ipred"]]
     else:
@@ -79,23 +84,14 @@ def compute_ccpred(
         return result
 
 
-def main():
-
-    # Parse commandline arguments
-    args = parse_arguments().parse_args()
+def run_analysis(args):
 
     results = []
     labels = None
 
-    if isinstance(args.inputmtzs[0], list) and len(args.inputmtzs) > 1:
-        overall = True
-        mtzs = [item for sublist in args.inputmtzs for item in sublist]
-    else:
-        overall = False
-        mtzs = [item for sublist in args.inputmtzs for item in sublist]
-
-    for m in mtzs:
-        result = compute_ccpred(m, overall=overall, method=args.method, mod2=args.mod2)
+    # mtzs -> args.mtzs!
+    for m in args.mtzs: 
+        result = compute_ccpred(m, overall=args.overall, method=args.method, mod2=args.mod2)
         if isinstance(result, tuple):
             results.append(result[0])
             labels = result[1]
@@ -107,8 +103,17 @@ def main():
     results["CCpred"] = results[("Iobs", "Ipred")]
     results.drop(columns=[("Iobs", "Ipred")], inplace=True)
 
-    print(results)
-    if overall:
+    # print(results.info())
+    for k in ('bin', 'test'):
+        results[k] = results[k].to_numpy('int32')
+            
+    if args.output is not None:
+        results.to_csv(args.output)
+    else:
+        print(results.to_string())
+
+    print(results.info())
+    if args.overall:
         g = sns.relplot(
             data=results,
             x="id",
@@ -140,8 +145,14 @@ def main():
             ax.set_xticks(range(10))
             ax.set_xticklabels(labels, rotation=45, ha="right", rotation_mode="anchor")
             ax.grid(True)
+
+    if args.image is not None:
+        plt.savefig(args.image)
+
+    if args.show:
         plt.show()
 
 
-if __name__ == "__main__":
-    main()
+def main():
+    parser = ArgumentParser().parse_args()
+    run_analysis(parser)
