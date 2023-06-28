@@ -50,7 +50,7 @@ setup(
     python_requires=">3.7",
     install_requires=["reciprocalspaceship",
                       "matplotlib",
-                      "seaborn==0.11.2"
+                      "seaborn<=0.11.2"
                       ],
     extras_require={
         "dev": tests_require + docs_require,
