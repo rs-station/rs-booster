@@ -8,28 +8,27 @@ import reciprocalspaceship as rs
 import seaborn as sns
 
 
-def parse_arguments():
-    """Parse commandline arguments"""
-    parser = argparse.ArgumentParser(
-        formatter_class=argparse.RawTextHelpFormatter, description=__doc__
-    )
-
-    # Required arguments
-    parser.add_argument(
-        "mtz",
-        nargs="+",
-        help="MTZs containing crossvalidation data from careless",
-    )
-
-    parser.add_argument(
-        "-m",
-        "--method",
-        default="spearman",
-        choices=["spearman", "pearson"],
-        help=("Method for computing correlation coefficient (spearman or pearson)"),
-    )
-
-    return parser#.parse_args()
+from rsbooster.stats.parser import BaseParser
+class ArgumentParser(BaseParser):
+    def __init__(self):
+        super().__init__(
+            description=__doc__
+        )
+        
+        # Required arguments
+        self.add_argument(
+            "mtz",
+            nargs="+",
+            help="MTZs containing crossvalidation data from careless",
+        )
+    
+        self.add_argument(
+            "-m",
+            "--method",
+            default="spearman",
+            choices=["spearman", "pearson"],
+            help=("Method for computing correlation coefficient (spearman or pearson)"),
+        )
 
 
 def make_halves_cchalf(mtz, bins=10):
@@ -54,8 +53,11 @@ def make_halves_cchalf(mtz, bins=10):
 def analyze_cchalf_mtz(mtzpath, bins=10, return_labels=True, method="spearman"):
     """Compute CChalf from 2-fold cross-validation"""
 
-    mtz = rs.read_mtz(mtzpath)
-
+    if type(mtzpath) is rs.dataset.DataSet:
+        mtz=mtzpath
+    else:
+        mtz = rs.read_mtz(mtzpath)
+        
     # Error handling -- make sure MTZ file is appropriate
     if "half" not in mtz.columns:
         raise ValueError("Please provide MTZs from careless crossvalidation")
@@ -73,11 +75,7 @@ def analyze_cchalf_mtz(mtzpath, bins=10, return_labels=True, method="spearman"):
         return result
 
 
-def main():
-
-    # Parse commandline arguments
-    args = parse_arguments().parse_args()
-
+def run_analysis(args):
     results = []
     labels = None
     for m in args.mtz:
@@ -94,18 +92,33 @@ def main():
     results["CChalf"] = results[("F1", "F2")]
     results.drop(columns=[("F1", "F2")], inplace=True)
 
-    print(results)
+    for k in ('bin', 'repeat'):
+        results[k] = results[k].to_numpy('int32')
+
+    if args.output is not None:
+        results.to_csv(args.output)
+    else:
+        print(results.to_string())
+
+    print(results.info())
 
     sns.lineplot(
-        data=results, x="bin", y="CChalf", hue="filename", ci="sd", palette="viridis"
+        data=results, x="bin", y="CChalf", hue="filename", errorbar="sd", palette="viridis"
     )
     plt.xticks(range(10), labels, rotation=45, ha="right", rotation_mode="anchor")
     plt.ylabel(r"$CC_{1/2}$ " + f"({args.method})")
     plt.legend(loc="center left", bbox_to_anchor=(1, 0.5))
     plt.grid()
     plt.tight_layout()
-    plt.show()
+    if args.image is not None:
+        plt.savefig(args.image)
+
+    if args.show:
+        plt.show()
 
 
-if __name__ == "__main__":
-    main()
+def parse_arguments():
+    return ArgumentParser()
+
+def main():
+    run_analysis(parse_arguments().parse_args())
