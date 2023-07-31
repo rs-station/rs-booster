@@ -171,7 +171,7 @@ def peak_report(
                 record[k] = -record[k]
         peaks.append(record)
 
-    out = pd.DataFrame.from_records(peaks)
+    out = pd.DataFrame.from_records(peaks, columns=long_names.keys())
 
     #In case there are no peaks we need to test the length
     if len(out) > 0:
