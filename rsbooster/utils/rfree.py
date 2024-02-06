@@ -53,7 +53,7 @@ def parse_arguments():
         "-sg",
         "--spacegroup",
         required=True,
-        type=int,
+        type=str,
         help=("Spacegroup for output mtz file containing rfree flags"),
     )
 
