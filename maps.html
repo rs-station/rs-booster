@@ -1,22 +1,24 @@
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="./">
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Map utilities &mdash; rs-booster 0.1.0 documentation</title>
-      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <title>Map utilities &mdash; rs-booster 0.1.1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+
+  
     <link rel="shortcut icon" href="_static/rs-favicon_32x32.png"/>
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script src="_static/jquery.js"></script>
-        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
-        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-        <script src="_static/doctools.js"></script>
-        <script src="_static/sphinx_highlight.js"></script>
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=a58bc63e"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
@@ -88,11 +90,11 @@
            <div itemprop="articleBody">
              
   <section id="map-utilities">
-<span id="maps"></span><h1>Map utilities<a class="headerlink" href="#map-utilities" title="Permalink to this heading"></a></h1>
+<span id="maps"></span><h1>Map utilities<a class="headerlink" href="#map-utilities" title="Link to this heading"></a></h1>
 <section id="making-difference-maps">
-<h2>Making difference maps<a class="headerlink" href="#making-difference-maps" title="Permalink to this heading"></a></h2>
+<h2>Making difference maps<a class="headerlink" href="#making-difference-maps" title="Link to this heading"></a></h2>
 <section id="rs-internal-diffmap">
-<h3>rs.internal_diffmap<a class="headerlink" href="#rs-internal-diffmap" title="Permalink to this heading"></a></h3>
+<h3>rs.internal_diffmap<a class="headerlink" href="#rs-internal-diffmap" title="Link to this heading"></a></h3>
 <p>Make an internal difference map using the given symmetry operation</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">usage: rs.internal_diffmap [-h] -i mtz data_col sig_col -r ref phi_col -op</span>
 <span class="go">                           SYMOP [-a ALPHA] [-d DMAX] [-sg SPACEGROUP]</span>
@@ -101,55 +103,55 @@
 </div>
 <dl class="std option">
 <dt class="sig sig-object std" id="cmdoption-rs.internal_diffmap-h">
-<span class="sig-name descname"><span class="pre">-h</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--help</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-rs.internal_diffmap-h" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">-h</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--help</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-rs.internal_diffmap-h" title="Link to this definition"></a></dt>
 <dd><p>show this help message and exit</p>
 </dd></dl>
 
 <dl class="std option">
 <dt class="sig sig-object std" id="cmdoption-rs.internal_diffmap-i">
-<span class="sig-name descname"><span class="pre">-i</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;mtz&gt;</span> <span class="pre">&lt;data_col&gt;</span> <span class="pre">&lt;sig_col&gt;</span></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--inputmtz</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;mtz&gt;</span> <span class="pre">&lt;data_col&gt;</span> <span class="pre">&lt;sig_col&gt;</span></span><a class="headerlink" href="#cmdoption-rs.internal_diffmap-i" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">-i</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;mtz&gt;</span> <span class="pre">&lt;data_col&gt;</span> <span class="pre">&lt;sig_col&gt;</span></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--inputmtz</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;mtz&gt;</span> <span class="pre">&lt;data_col&gt;</span> <span class="pre">&lt;sig_col&gt;</span></span><a class="headerlink" href="#cmdoption-rs.internal_diffmap-i" title="Link to this definition"></a></dt>
 <dd><p>MTZ to be used for internal difference map. Specified as (filename, F, SigF)</p>
 </dd></dl>
 
 <dl class="std option">
 <dt class="sig sig-object std" id="cmdoption-rs.internal_diffmap-r">
-<span class="sig-name descname"><span class="pre">-r</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;ref&gt;</span> <span class="pre">&lt;phi_col&gt;</span></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--refmtz</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;ref&gt;</span> <span class="pre">&lt;phi_col&gt;</span></span><a class="headerlink" href="#cmdoption-rs.internal_diffmap-r" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">-r</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;ref&gt;</span> <span class="pre">&lt;phi_col&gt;</span></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--refmtz</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;ref&gt;</span> <span class="pre">&lt;phi_col&gt;</span></span><a class="headerlink" href="#cmdoption-rs.internal_diffmap-r" title="Link to this definition"></a></dt>
 <dd><p>MTZ containing isomorphous phases to be used. Specified as (filename, Phi).</p>
 </dd></dl>
 
 <dl class="std option">
 <dt class="sig sig-object std" id="cmdoption-rs.internal_diffmap-op">
-<span class="sig-name descname"><span class="pre">-op</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;symop&gt;</span></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--symop</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;symop&gt;</span></span><a class="headerlink" href="#cmdoption-rs.internal_diffmap-op" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">-op</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;symop&gt;</span></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--symop</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;symop&gt;</span></span><a class="headerlink" href="#cmdoption-rs.internal_diffmap-op" title="Link to this definition"></a></dt>
 <dd><p>Symmetry operation to use to compute internal difference map. Can be given as ISYM if used with a <cite>spacegroup</cite> argument.</p>
 </dd></dl>
 
 <dl class="std option">
 <dt class="sig sig-object std" id="cmdoption-rs.internal_diffmap-a">
-<span class="sig-name descname"><span class="pre">-a</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;alpha&gt;</span></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--alpha</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;alpha&gt;</span></span><a class="headerlink" href="#cmdoption-rs.internal_diffmap-a" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">-a</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;alpha&gt;</span></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--alpha</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;alpha&gt;</span></span><a class="headerlink" href="#cmdoption-rs.internal_diffmap-a" title="Link to this definition"></a></dt>
 <dd><p>alpha value for computing difference map weights (default=0.0)</p>
 </dd></dl>
 
 <dl class="std option">
 <dt class="sig sig-object std" id="cmdoption-rs.internal_diffmap-d">
-<span class="sig-name descname"><span class="pre">-d</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;dmax&gt;</span></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--dmax</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;dmax&gt;</span></span><a class="headerlink" href="#cmdoption-rs.internal_diffmap-d" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">-d</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;dmax&gt;</span></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--dmax</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;dmax&gt;</span></span><a class="headerlink" href="#cmdoption-rs.internal_diffmap-d" title="Link to this definition"></a></dt>
 <dd><p>If set, dmax to truncate difference map</p>
 </dd></dl>
 
 <dl class="std option">
 <dt class="sig sig-object std" id="cmdoption-rs.internal_diffmap-sg">
-<span class="sig-name descname"><span class="pre">-sg</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;spacegroup&gt;</span></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--spacegroup</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;spacegroup&gt;</span></span><a class="headerlink" href="#cmdoption-rs.internal_diffmap-sg" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">-sg</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;spacegroup&gt;</span></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--spacegroup</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;spacegroup&gt;</span></span><a class="headerlink" href="#cmdoption-rs.internal_diffmap-sg" title="Link to this definition"></a></dt>
 <dd><p>Spacegroup to use for symmetry operation (only necessary if <cite>op</cite> specifies an ISYM).</p>
 </dd></dl>
 
 <dl class="std option">
 <dt class="sig sig-object std" id="cmdoption-rs.internal_diffmap-o">
-<span class="sig-name descname"><span class="pre">-o</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;outfile&gt;</span></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--outfile</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;outfile&gt;</span></span><a class="headerlink" href="#cmdoption-rs.internal_diffmap-o" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">-o</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;outfile&gt;</span></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--outfile</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;outfile&gt;</span></span><a class="headerlink" href="#cmdoption-rs.internal_diffmap-o" title="Link to this definition"></a></dt>
 <dd><p>Output MTZ filename</p>
 </dd></dl>
 
 </section>
 <section id="rs-diffmap">
-<h3>rs.diffmap<a class="headerlink" href="#rs-diffmap" title="Permalink to this heading"></a></h3>
+<h3>rs.diffmap<a class="headerlink" href="#rs-diffmap" title="Link to this heading"></a></h3>
 <p>Make an ordinary difference map between columns of data.</p>
 <p>The naming convention chosen for inputs is <cite>on</cite> and <cite>off</cite>, such
 that the generated differrence map will be <cite>|F_on| - |F_off|</cite>.</p>
@@ -159,52 +161,52 @@ that the generated differrence map will be <cite>|F_on| - |F_off|</cite>.</p>
 </div>
 <dl class="std option">
 <dt class="sig sig-object std" id="cmdoption-rs.diffmap-h">
-<span class="sig-name descname"><span class="pre">-h</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--help</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-rs.diffmap-h" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">-h</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--help</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-rs.diffmap-h" title="Link to this definition"></a></dt>
 <dd><p>show this help message and exit</p>
 </dd></dl>
 
 <dl class="std option">
 <dt class="sig sig-object std" id="cmdoption-rs.diffmap-on">
-<span class="sig-name descname"><span class="pre">-on</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;mtz&gt;</span> <span class="pre">&lt;data_col&gt;</span> <span class="pre">&lt;sig_col&gt;</span></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--onmtz</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;mtz&gt;</span> <span class="pre">&lt;data_col&gt;</span> <span class="pre">&lt;sig_col&gt;</span></span><a class="headerlink" href="#cmdoption-rs.diffmap-on" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">-on</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;mtz&gt;</span> <span class="pre">&lt;data_col&gt;</span> <span class="pre">&lt;sig_col&gt;</span></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--onmtz</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;mtz&gt;</span> <span class="pre">&lt;data_col&gt;</span> <span class="pre">&lt;sig_col&gt;</span></span><a class="headerlink" href="#cmdoption-rs.diffmap-on" title="Link to this definition"></a></dt>
 <dd><p>MTZ to be used as <cite>on</cite> data. Specified as (filename, F, SigF)</p>
 </dd></dl>
 
 <dl class="std option">
 <dt class="sig sig-object std" id="cmdoption-rs.diffmap-off">
-<span class="sig-name descname"><span class="pre">-off</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;mtz&gt;</span> <span class="pre">&lt;data_col&gt;</span> <span class="pre">&lt;sig_col&gt;</span></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--offmtz</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;mtz&gt;</span> <span class="pre">&lt;data_col&gt;</span> <span class="pre">&lt;sig_col&gt;</span></span><a class="headerlink" href="#cmdoption-rs.diffmap-off" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">-off</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;mtz&gt;</span> <span class="pre">&lt;data_col&gt;</span> <span class="pre">&lt;sig_col&gt;</span></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--offmtz</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;mtz&gt;</span> <span class="pre">&lt;data_col&gt;</span> <span class="pre">&lt;sig_col&gt;</span></span><a class="headerlink" href="#cmdoption-rs.diffmap-off" title="Link to this definition"></a></dt>
 <dd><p>MTZ to be used as <cite>off</cite> data. Specified as (filename, F, SigF)</p>
 </dd></dl>
 
 <dl class="std option">
 <dt class="sig sig-object std" id="cmdoption-rs.diffmap-r">
-<span class="sig-name descname"><span class="pre">-r</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;ref&gt;</span> <span class="pre">&lt;phi_col&gt;</span></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--refmtz</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;ref&gt;</span> <span class="pre">&lt;phi_col&gt;</span></span><a class="headerlink" href="#cmdoption-rs.diffmap-r" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">-r</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;ref&gt;</span> <span class="pre">&lt;phi_col&gt;</span></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--refmtz</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;ref&gt;</span> <span class="pre">&lt;phi_col&gt;</span></span><a class="headerlink" href="#cmdoption-rs.diffmap-r" title="Link to this definition"></a></dt>
 <dd><p>MTZ containing isomorphous phases to be used. Specified as (filename, Phi).</p>
 </dd></dl>
 
 <dl class="std option">
 <dt class="sig sig-object std" id="cmdoption-rs.diffmap-a">
-<span class="sig-name descname"><span class="pre">-a</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;alpha&gt;</span></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--alpha</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;alpha&gt;</span></span><a class="headerlink" href="#cmdoption-rs.diffmap-a" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">-a</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;alpha&gt;</span></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--alpha</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;alpha&gt;</span></span><a class="headerlink" href="#cmdoption-rs.diffmap-a" title="Link to this definition"></a></dt>
 <dd><p>alpha value for computing difference map weights (default=0.0)</p>
 </dd></dl>
 
 <dl class="std option">
 <dt class="sig sig-object std" id="cmdoption-rs.diffmap-d">
-<span class="sig-name descname"><span class="pre">-d</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;dmax&gt;</span></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--dmax</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;dmax&gt;</span></span><a class="headerlink" href="#cmdoption-rs.diffmap-d" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">-d</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;dmax&gt;</span></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--dmax</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;dmax&gt;</span></span><a class="headerlink" href="#cmdoption-rs.diffmap-d" title="Link to this definition"></a></dt>
 <dd><p>If set, dmax to truncate difference map</p>
 </dd></dl>
 
 <dl class="std option">
 <dt class="sig sig-object std" id="cmdoption-rs.diffmap-o">
-<span class="sig-name descname"><span class="pre">-o</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;outfile&gt;</span></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--outfile</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;outfile&gt;</span></span><a class="headerlink" href="#cmdoption-rs.diffmap-o" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">-o</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;outfile&gt;</span></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--outfile</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;outfile&gt;</span></span><a class="headerlink" href="#cmdoption-rs.diffmap-o" title="Link to this definition"></a></dt>
 <dd><p>Output MTZ filename</p>
 </dd></dl>
 
 </section>
 </section>
 <section id="finding-map-peaks">
-<h2>Finding map peaks<a class="headerlink" href="#finding-map-peaks" title="Permalink to this heading"></a></h2>
+<h2>Finding map peaks<a class="headerlink" href="#finding-map-peaks" title="Link to this heading"></a></h2>
 <section id="rs-find-peaks">
-<h3>rs.find_peaks<a class="headerlink" href="#rs-find-peaks" title="Permalink to this heading"></a></h3>
+<h3>rs.find_peaks<a class="headerlink" href="#rs-find-peaks" title="Link to this heading"></a></h3>
 <p>Search an electron density map for
 peaks in the vicinity of a structure.</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">usage: rs.find_peaks [-h] -f STRUCTURE_FACTOR_KEY -p PHASE_KEY [-o CSV_OUT]</span>
@@ -217,89 +219,89 @@ peaks in the vicinity of a structure.</p>
 </div>
 <dl class="std option">
 <dt class="sig sig-object std" id="cmdoption-rs.find_peaks-arg-mtz_file">
-<span class="sig-name descname"><span class="pre">mtz_file</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-rs.find_peaks-arg-mtz_file" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">mtz_file</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-rs.find_peaks-arg-mtz_file" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="std option">
 <dt class="sig sig-object std" id="cmdoption-rs.find_peaks-arg-pdb_file">
-<span class="sig-name descname"><span class="pre">pdb_file</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-rs.find_peaks-arg-pdb_file" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">pdb_file</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-rs.find_peaks-arg-pdb_file" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="std option">
 <dt class="sig sig-object std" id="cmdoption-rs.find_peaks-h">
-<span class="sig-name descname"><span class="pre">-h</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--help</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-rs.find_peaks-h" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">-h</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--help</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-rs.find_peaks-h" title="Link to this definition"></a></dt>
 <dd><p>show this help message and exit</p>
 </dd></dl>
 
 <dl class="std option">
 <dt class="sig sig-object std" id="cmdoption-rs.find_peaks-f">
-<span class="sig-name descname"><span class="pre">-f</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;structure_factor_key&gt;</span></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--structure-factor-key</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;structure_factor_key&gt;</span></span><a class="headerlink" href="#cmdoption-rs.find_peaks-f" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">-f</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;structure_factor_key&gt;</span></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--structure-factor-key</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;structure_factor_key&gt;</span></span><a class="headerlink" href="#cmdoption-rs.find_peaks-f" title="Link to this definition"></a></dt>
 <dd><p>column label of the structure factor you want to use.</p>
 </dd></dl>
 
 <dl class="std option">
 <dt class="sig sig-object std" id="cmdoption-rs.find_peaks-p">
-<span class="sig-name descname"><span class="pre">-p</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;phase_key&gt;</span></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--phase-key</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;phase_key&gt;</span></span><a class="headerlink" href="#cmdoption-rs.find_peaks-p" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">-p</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;phase_key&gt;</span></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--phase-key</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;phase_key&gt;</span></span><a class="headerlink" href="#cmdoption-rs.find_peaks-p" title="Link to this definition"></a></dt>
 <dd><p>column label of the phase you want to use.</p>
 </dd></dl>
 
 <dl class="std option">
 <dt class="sig sig-object std" id="cmdoption-rs.find_peaks-o">
-<span class="sig-name descname"><span class="pre">-o</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;csv_out&gt;</span></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--csv-out</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;csv_out&gt;</span></span><a class="headerlink" href="#cmdoption-rs.find_peaks-o" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">-o</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;csv_out&gt;</span></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--csv-out</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;csv_out&gt;</span></span><a class="headerlink" href="#cmdoption-rs.find_peaks-o" title="Link to this definition"></a></dt>
 <dd><p>output the report to a csv file</p>
 </dd></dl>
 
 <dl class="std option">
 <dt class="sig sig-object std" id="cmdoption-rs.find_peaks-z">
-<span class="sig-name descname"><span class="pre">-z</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;sigma_cutoff&gt;</span></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--sigma-cutoff</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;sigma_cutoff&gt;</span></span><a class="headerlink" href="#cmdoption-rs.find_peaks-z" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">-z</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;sigma_cutoff&gt;</span></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--sigma-cutoff</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;sigma_cutoff&gt;</span></span><a class="headerlink" href="#cmdoption-rs.find_peaks-z" title="Link to this definition"></a></dt>
 <dd><p>the z-score cutoff for voxels to be included in the peak search. the default is 1.5</p>
 </dd></dl>
 
 <dl class="std option">
 <dt class="sig sig-object std" id="cmdoption-rs.find_peaks-w">
-<span class="sig-name descname"><span class="pre">-w</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;weight_key&gt;</span></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--weight-key</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;weight_key&gt;</span></span><a class="headerlink" href="#cmdoption-rs.find_peaks-w" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">-w</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;weight_key&gt;</span></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--weight-key</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;weight_key&gt;</span></span><a class="headerlink" href="#cmdoption-rs.find_peaks-w" title="Link to this definition"></a></dt>
 <dd><p>column label of any weights you wish to apply to the map.</p>
 </dd></dl>
 
 <dl class="std option">
 <dt class="sig sig-object std" id="cmdoption-rs.find_peaks-sample-rate">
-<span class="sig-name descname"><span class="pre">--sample-rate</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;sample_rate&gt;</span></span><a class="headerlink" href="#cmdoption-rs.find_peaks-sample-rate" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">--sample-rate</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;sample_rate&gt;</span></span><a class="headerlink" href="#cmdoption-rs.find_peaks-sample-rate" title="Link to this definition"></a></dt>
 <dd><p>change fft oversampling from the default (3).</p>
 </dd></dl>
 
 <dl class="std option">
 <dt class="sig sig-object std" id="cmdoption-rs.find_peaks-min-volume">
-<span class="sig-name descname"><span class="pre">--min-volume</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;min_volume&gt;</span></span><a class="headerlink" href="#cmdoption-rs.find_peaks-min-volume" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">--min-volume</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;min_volume&gt;</span></span><a class="headerlink" href="#cmdoption-rs.find_peaks-min-volume" title="Link to this definition"></a></dt>
 <dd><p>the minimum volume of peaks with default zero.</p>
 </dd></dl>
 
 <dl class="std option">
 <dt class="sig sig-object std" id="cmdoption-rs.find_peaks-min-score">
-<span class="sig-name descname"><span class="pre">--min-score</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;min_score&gt;</span></span><a class="headerlink" href="#cmdoption-rs.find_peaks-min-score" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">--min-score</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;min_score&gt;</span></span><a class="headerlink" href="#cmdoption-rs.find_peaks-min-score" title="Link to this definition"></a></dt>
 <dd><p>the minimum score of peaks with default zero.</p>
 </dd></dl>
 
 <dl class="std option">
 <dt class="sig sig-object std" id="cmdoption-rs.find_peaks-min-peak">
-<span class="sig-name descname"><span class="pre">--min-peak</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;min_peak&gt;</span></span><a class="headerlink" href="#cmdoption-rs.find_peaks-min-peak" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">--min-peak</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;min_peak&gt;</span></span><a class="headerlink" href="#cmdoption-rs.find_peaks-min-peak" title="Link to this definition"></a></dt>
 <dd><p>the minimum peak value with default zero.</p>
 </dd></dl>
 
 <dl class="std option">
 <dt class="sig sig-object std" id="cmdoption-rs.find_peaks-d">
-<span class="sig-name descname"><span class="pre">-d</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;distance_cutoff&gt;</span></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--distance-cutoff</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;distance_cutoff&gt;</span></span><a class="headerlink" href="#cmdoption-rs.find_peaks-d" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">-d</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;distance_cutoff&gt;</span></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--distance-cutoff</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;distance_cutoff&gt;</span></span><a class="headerlink" href="#cmdoption-rs.find_peaks-d" title="Link to this definition"></a></dt>
 <dd><p>the distance cutoff of nearest neighbor search with default of 4 angstroms.</p>
 </dd></dl>
 
 <dl class="std option">
 <dt class="sig sig-object std" id="cmdoption-rs.find_peaks-use-long-names">
-<span class="sig-name descname"><span class="pre">--use-long-names</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-rs.find_peaks-use-long-names" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">--use-long-names</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-rs.find_peaks-use-long-names" title="Link to this definition"></a></dt>
 <dd><p>use more verbose column names in the peak report.</p>
 </dd></dl>
 
 </section>
 <section id="rs-find-difference-peaks">
-<h3>rs.find_difference_peaks<a class="headerlink" href="#rs-find-difference-peaks" title="Permalink to this heading"></a></h3>
+<h3>rs.find_difference_peaks<a class="headerlink" href="#rs-find-difference-peaks" title="Link to this heading"></a></h3>
 <p>Search an electron density map for
 peaks in the vicinity of a structure.</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">usage: rs.find_difference_peaks [-h] -f STRUCTURE_FACTOR_KEY -p PHASE_KEY</span>
@@ -313,83 +315,83 @@ peaks in the vicinity of a structure.</p>
 </div>
 <dl class="std option">
 <dt class="sig sig-object std" id="cmdoption-rs.find_difference_peaks-arg-mtz_file">
-<span class="sig-name descname"><span class="pre">mtz_file</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-rs.find_difference_peaks-arg-mtz_file" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">mtz_file</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-rs.find_difference_peaks-arg-mtz_file" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="std option">
 <dt class="sig sig-object std" id="cmdoption-rs.find_difference_peaks-arg-pdb_file">
-<span class="sig-name descname"><span class="pre">pdb_file</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-rs.find_difference_peaks-arg-pdb_file" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">pdb_file</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-rs.find_difference_peaks-arg-pdb_file" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="std option">
 <dt class="sig sig-object std" id="cmdoption-rs.find_difference_peaks-h">
-<span class="sig-name descname"><span class="pre">-h</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--help</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-rs.find_difference_peaks-h" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">-h</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--help</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-rs.find_difference_peaks-h" title="Link to this definition"></a></dt>
 <dd><p>show this help message and exit</p>
 </dd></dl>
 
 <dl class="std option">
 <dt class="sig sig-object std" id="cmdoption-rs.find_difference_peaks-f">
-<span class="sig-name descname"><span class="pre">-f</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;structure_factor_key&gt;</span></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--structure-factor-key</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;structure_factor_key&gt;</span></span><a class="headerlink" href="#cmdoption-rs.find_difference_peaks-f" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">-f</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;structure_factor_key&gt;</span></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--structure-factor-key</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;structure_factor_key&gt;</span></span><a class="headerlink" href="#cmdoption-rs.find_difference_peaks-f" title="Link to this definition"></a></dt>
 <dd><p>column label of the structure factor you want to use.</p>
 </dd></dl>
 
 <dl class="std option">
 <dt class="sig sig-object std" id="cmdoption-rs.find_difference_peaks-p">
-<span class="sig-name descname"><span class="pre">-p</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;phase_key&gt;</span></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--phase-key</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;phase_key&gt;</span></span><a class="headerlink" href="#cmdoption-rs.find_difference_peaks-p" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">-p</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;phase_key&gt;</span></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--phase-key</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;phase_key&gt;</span></span><a class="headerlink" href="#cmdoption-rs.find_difference_peaks-p" title="Link to this definition"></a></dt>
 <dd><p>column label of the phase you want to use.</p>
 </dd></dl>
 
 <dl class="std option">
 <dt class="sig sig-object std" id="cmdoption-rs.find_difference_peaks-o">
-<span class="sig-name descname"><span class="pre">-o</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;csv_out&gt;</span></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--csv-out</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;csv_out&gt;</span></span><a class="headerlink" href="#cmdoption-rs.find_difference_peaks-o" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">-o</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;csv_out&gt;</span></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--csv-out</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;csv_out&gt;</span></span><a class="headerlink" href="#cmdoption-rs.find_difference_peaks-o" title="Link to this definition"></a></dt>
 <dd><p>output the report to a csv file</p>
 </dd></dl>
 
 <dl class="std option">
 <dt class="sig sig-object std" id="cmdoption-rs.find_difference_peaks-z">
-<span class="sig-name descname"><span class="pre">-z</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;sigma_cutoff&gt;</span></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--sigma-cutoff</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;sigma_cutoff&gt;</span></span><a class="headerlink" href="#cmdoption-rs.find_difference_peaks-z" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">-z</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;sigma_cutoff&gt;</span></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--sigma-cutoff</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;sigma_cutoff&gt;</span></span><a class="headerlink" href="#cmdoption-rs.find_difference_peaks-z" title="Link to this definition"></a></dt>
 <dd><p>the z-score cutoff for voxels to be included in the peak search. the default is 1.5</p>
 </dd></dl>
 
 <dl class="std option">
 <dt class="sig sig-object std" id="cmdoption-rs.find_difference_peaks-w">
-<span class="sig-name descname"><span class="pre">-w</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;weight_key&gt;</span></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--weight-key</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;weight_key&gt;</span></span><a class="headerlink" href="#cmdoption-rs.find_difference_peaks-w" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">-w</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;weight_key&gt;</span></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--weight-key</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;weight_key&gt;</span></span><a class="headerlink" href="#cmdoption-rs.find_difference_peaks-w" title="Link to this definition"></a></dt>
 <dd><p>column label of any weights you wish to apply to the map.</p>
 </dd></dl>
 
 <dl class="std option">
 <dt class="sig sig-object std" id="cmdoption-rs.find_difference_peaks-sample-rate">
-<span class="sig-name descname"><span class="pre">--sample-rate</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;sample_rate&gt;</span></span><a class="headerlink" href="#cmdoption-rs.find_difference_peaks-sample-rate" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">--sample-rate</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;sample_rate&gt;</span></span><a class="headerlink" href="#cmdoption-rs.find_difference_peaks-sample-rate" title="Link to this definition"></a></dt>
 <dd><p>change fft oversampling from the default (3).</p>
 </dd></dl>
 
 <dl class="std option">
 <dt class="sig sig-object std" id="cmdoption-rs.find_difference_peaks-min-volume">
-<span class="sig-name descname"><span class="pre">--min-volume</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;min_volume&gt;</span></span><a class="headerlink" href="#cmdoption-rs.find_difference_peaks-min-volume" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">--min-volume</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;min_volume&gt;</span></span><a class="headerlink" href="#cmdoption-rs.find_difference_peaks-min-volume" title="Link to this definition"></a></dt>
 <dd><p>the minimum volume of peaks with default zero.</p>
 </dd></dl>
 
 <dl class="std option">
 <dt class="sig sig-object std" id="cmdoption-rs.find_difference_peaks-min-score">
-<span class="sig-name descname"><span class="pre">--min-score</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;min_score&gt;</span></span><a class="headerlink" href="#cmdoption-rs.find_difference_peaks-min-score" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">--min-score</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;min_score&gt;</span></span><a class="headerlink" href="#cmdoption-rs.find_difference_peaks-min-score" title="Link to this definition"></a></dt>
 <dd><p>the minimum score of peaks with default zero.</p>
 </dd></dl>
 
 <dl class="std option">
 <dt class="sig sig-object std" id="cmdoption-rs.find_difference_peaks-min-peak">
-<span class="sig-name descname"><span class="pre">--min-peak</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;min_peak&gt;</span></span><a class="headerlink" href="#cmdoption-rs.find_difference_peaks-min-peak" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">--min-peak</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;min_peak&gt;</span></span><a class="headerlink" href="#cmdoption-rs.find_difference_peaks-min-peak" title="Link to this definition"></a></dt>
 <dd><p>the minimum peak value with default zero.</p>
 </dd></dl>
 
 <dl class="std option">
 <dt class="sig sig-object std" id="cmdoption-rs.find_difference_peaks-d">
-<span class="sig-name descname"><span class="pre">-d</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;distance_cutoff&gt;</span></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--distance-cutoff</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;distance_cutoff&gt;</span></span><a class="headerlink" href="#cmdoption-rs.find_difference_peaks-d" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">-d</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;distance_cutoff&gt;</span></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--distance-cutoff</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;distance_cutoff&gt;</span></span><a class="headerlink" href="#cmdoption-rs.find_difference_peaks-d" title="Link to this definition"></a></dt>
 <dd><p>the distance cutoff of nearest neighbor search with default of 4 angstroms.</p>
 </dd></dl>
 
 <dl class="std option">
 <dt class="sig sig-object std" id="cmdoption-rs.find_difference_peaks-use-long-names">
-<span class="sig-name descname"><span class="pre">--use-long-names</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-rs.find_difference_peaks-use-long-names" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">--use-long-names</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-rs.find_difference_peaks-use-long-names" title="Link to this definition"></a></dt>
 <dd><p>use more verbose column names in the peak report.</p>
 </dd></dl>
 

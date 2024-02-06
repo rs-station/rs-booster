@@ -1,22 +1,24 @@
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="./">
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Making CC plots &mdash; rs-booster 0.1.0 documentation</title>
-      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <title>Making CC plots &mdash; rs-booster 0.1.1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+
+  
     <link rel="shortcut icon" href="_static/rs-favicon_32x32.png"/>
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script src="_static/jquery.js"></script>
-        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
-        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-        <script src="_static/doctools.js"></script>
-        <script src="_static/sphinx_highlight.js"></script>
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=a58bc63e"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
@@ -82,10 +84,10 @@
            <div itemprop="articleBody">
              
   <section id="making-cc-plots">
-<span id="ccplots"></span><h1>Making CC plots<a class="headerlink" href="#making-cc-plots" title="Permalink to this heading"></a></h1>
+<span id="ccplots"></span><h1>Making CC plots<a class="headerlink" href="#making-cc-plots" title="Link to this heading"></a></h1>
 <p>Utilites for plotting various CCs from <code class="docutils literal notranslate"><span class="pre">careless</span></code> output</p>
 <section id="rs-ccsym">
-<h2>rs.ccsym<a class="headerlink" href="#rs-ccsym" title="Permalink to this heading"></a></h2>
+<h2>rs.ccsym<a class="headerlink" href="#rs-ccsym" title="Link to this heading"></a></h2>
 <p>Compute CCsym from careless output.</p>
 <p>Note: This method currently assumes that careless has been called using
 both the reduced-symmetry and the parent spacegroup</p>
@@ -96,61 +98,61 @@ both the reduced-symmetry and the parent spacegroup</p>
 </div>
 <dl class="std option">
 <dt class="sig sig-object std" id="cmdoption-rs.ccsym-arg-mtz">
-<span class="sig-name descname"><span class="pre">mtz</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-rs.ccsym-arg-mtz" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">mtz</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-rs.ccsym-arg-mtz" title="Link to this definition"></a></dt>
 <dd><p>MTZs containing crossvalidation data from careless</p>
 </dd></dl>
 
 <dl class="std option">
 <dt class="sig sig-object std" id="cmdoption-rs.ccsym-h">
-<span class="sig-name descname"><span class="pre">-h</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--help</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-rs.ccsym-h" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">-h</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--help</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-rs.ccsym-h" title="Link to this definition"></a></dt>
 <dd><p>show this help message and exit</p>
 </dd></dl>
 
 <dl class="std option">
 <dt class="sig sig-object std" id="cmdoption-rs.ccsym-s">
-<span class="sig-name descname"><span class="pre">-s</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--show</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-rs.ccsym-s" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">-s</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--show</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-rs.ccsym-s" title="Link to this definition"></a></dt>
 <dd><p>Make a plot of the results and display it using matplotlib.</p>
 </dd></dl>
 
 <dl class="std option">
 <dt class="sig sig-object std" id="cmdoption-rs.ccsym-i">
-<span class="sig-name descname"><span class="pre">-i</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;image&gt;</span></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--image</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;image&gt;</span></span><a class="headerlink" href="#cmdoption-rs.ccsym-i" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">-i</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;image&gt;</span></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--image</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;image&gt;</span></span><a class="headerlink" href="#cmdoption-rs.ccsym-i" title="Link to this definition"></a></dt>
 <dd><p>Make a plot of the results and save it to this filename. The filetype will be determined from the filename. Any filetype supported by your matplotlib version will be available.</p>
 </dd></dl>
 
 <dl class="std option">
 <dt class="sig sig-object std" id="cmdoption-rs.ccsym-o">
-<span class="sig-name descname"><span class="pre">-o</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;output&gt;</span></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--output</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;output&gt;</span></span><a class="headerlink" href="#cmdoption-rs.ccsym-o" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">-o</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;output&gt;</span></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--output</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;output&gt;</span></span><a class="headerlink" href="#cmdoption-rs.ccsym-o" title="Link to this definition"></a></dt>
 <dd><p>Optionally save results to this file in csv format instead of printing them to the terminal.</p>
 </dd></dl>
 
 <dl class="std option">
 <dt class="sig sig-object std" id="cmdoption-rs.ccsym-op">
-<span class="sig-name descname"><span class="pre">--op</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;op&gt;</span></span><a class="headerlink" href="#cmdoption-rs.ccsym-op" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">--op</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;op&gt;</span></span><a class="headerlink" href="#cmdoption-rs.ccsym-op" title="Link to this definition"></a></dt>
 <dd><p>Symmetry operation to use to compute internal difference map. Can be given as ISYM if used with a <cite>spacegroup</cite> argumentSymops start counting at 0 (the identity), but CCsym for the identity are NaNs.Minus signs in symops are presently causing problems!</p>
 </dd></dl>
 
 <dl class="std option">
 <dt class="sig sig-object std" id="cmdoption-rs.ccsym-sg">
-<span class="sig-name descname"><span class="pre">-sg</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;spacegroup&gt;</span></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--spacegroup</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;spacegroup&gt;</span></span><a class="headerlink" href="#cmdoption-rs.ccsym-sg" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">-sg</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;spacegroup&gt;</span></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--spacegroup</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;spacegroup&gt;</span></span><a class="headerlink" href="#cmdoption-rs.ccsym-sg" title="Link to this definition"></a></dt>
 <dd><p>Spacegroup to use for symmetry operation (only necessary if <cite>op</cite> specifies an ISYM).</p>
 </dd></dl>
 
 <dl class="std option">
 <dt class="sig sig-object std" id="cmdoption-rs.ccsym-m">
-<span class="sig-name descname"><span class="pre">-m</span></span><span class="sig-prename descclassname"> <span class="pre">{spearman,pearson}</span></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--method</span></span><span class="sig-prename descclassname"> <span class="pre">{spearman,pearson}</span></span><a class="headerlink" href="#cmdoption-rs.ccsym-m" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">-m</span></span><span class="sig-prename descclassname"> <span class="pre">{spearman,pearson}</span></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--method</span></span><span class="sig-prename descclassname"> <span class="pre">{spearman,pearson}</span></span><a class="headerlink" href="#cmdoption-rs.ccsym-m" title="Link to this definition"></a></dt>
 <dd><p>Method for computing correlation coefficient (spearman or pearson)</p>
 </dd></dl>
 
 <dl class="std option">
 <dt class="sig sig-object std" id="cmdoption-rs.ccsym-mod2">
-<span class="sig-name descname"><span class="pre">--mod2</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-rs.ccsym-mod2" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">--mod2</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-rs.ccsym-mod2" title="Link to this definition"></a></dt>
 <dd><p>Use id mod 2 to assign delays (use when employing spacegroup hack)</p>
 </dd></dl>
 
 </section>
 <section id="rs-ccanom">
-<h2>rs.ccanom<a class="headerlink" href="#rs-ccanom" title="Permalink to this heading"></a></h2>
+<h2>rs.ccanom<a class="headerlink" href="#rs-ccanom" title="Link to this heading"></a></h2>
 <p>Compute CCanom from careless output.</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">usage: rs.ccanom [-h] [-s] [-i IMAGE] [-o OUTPUT] [-m {spearman,pearson}]</span>
 <span class="go">                 mtz [mtz ...]</span>
@@ -158,43 +160,43 @@ both the reduced-symmetry and the parent spacegroup</p>
 </div>
 <dl class="std option">
 <dt class="sig sig-object std" id="cmdoption-rs.ccanom-arg-mtz">
-<span class="sig-name descname"><span class="pre">mtz</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-rs.ccanom-arg-mtz" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">mtz</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-rs.ccanom-arg-mtz" title="Link to this definition"></a></dt>
 <dd><p>MTZs containing crossvalidation data from careless</p>
 </dd></dl>
 
 <dl class="std option">
 <dt class="sig sig-object std" id="cmdoption-rs.ccanom-h">
-<span class="sig-name descname"><span class="pre">-h</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--help</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-rs.ccanom-h" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">-h</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--help</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-rs.ccanom-h" title="Link to this definition"></a></dt>
 <dd><p>show this help message and exit</p>
 </dd></dl>
 
 <dl class="std option">
 <dt class="sig sig-object std" id="cmdoption-rs.ccanom-s">
-<span class="sig-name descname"><span class="pre">-s</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--show</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-rs.ccanom-s" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">-s</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--show</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-rs.ccanom-s" title="Link to this definition"></a></dt>
 <dd><p>Make a plot of the results and display it using matplotlib.</p>
 </dd></dl>
 
 <dl class="std option">
 <dt class="sig sig-object std" id="cmdoption-rs.ccanom-i">
-<span class="sig-name descname"><span class="pre">-i</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;image&gt;</span></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--image</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;image&gt;</span></span><a class="headerlink" href="#cmdoption-rs.ccanom-i" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">-i</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;image&gt;</span></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--image</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;image&gt;</span></span><a class="headerlink" href="#cmdoption-rs.ccanom-i" title="Link to this definition"></a></dt>
 <dd><p>Make a plot of the results and save it to this filename. The filetype will be determined from the filename. Any filetype supported by your matplotlib version will be available.</p>
 </dd></dl>
 
 <dl class="std option">
 <dt class="sig sig-object std" id="cmdoption-rs.ccanom-o">
-<span class="sig-name descname"><span class="pre">-o</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;output&gt;</span></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--output</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;output&gt;</span></span><a class="headerlink" href="#cmdoption-rs.ccanom-o" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">-o</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;output&gt;</span></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--output</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;output&gt;</span></span><a class="headerlink" href="#cmdoption-rs.ccanom-o" title="Link to this definition"></a></dt>
 <dd><p>Optionally save results to this file in csv format instead of printing them to the terminal.</p>
 </dd></dl>
 
 <dl class="std option">
 <dt class="sig sig-object std" id="cmdoption-rs.ccanom-m">
-<span class="sig-name descname"><span class="pre">-m</span></span><span class="sig-prename descclassname"> <span class="pre">{spearman,pearson}</span></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--method</span></span><span class="sig-prename descclassname"> <span class="pre">{spearman,pearson}</span></span><a class="headerlink" href="#cmdoption-rs.ccanom-m" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">-m</span></span><span class="sig-prename descclassname"> <span class="pre">{spearman,pearson}</span></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--method</span></span><span class="sig-prename descclassname"> <span class="pre">{spearman,pearson}</span></span><a class="headerlink" href="#cmdoption-rs.ccanom-m" title="Link to this definition"></a></dt>
 <dd><p>Method for computing correlation coefficient (spearman or pearson)</p>
 </dd></dl>
 
 </section>
 <section id="rs-cchalf">
-<h2>rs.cchalf<a class="headerlink" href="#rs-cchalf" title="Permalink to this heading"></a></h2>
+<h2>rs.cchalf<a class="headerlink" href="#rs-cchalf" title="Link to this heading"></a></h2>
 <p>Compute CChalf from careless output.</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">usage: rs.cchalf [-h] [-s] [-i IMAGE] [-o OUTPUT] [-m {spearman,pearson}]</span>
 <span class="go">                 mtz [mtz ...]</span>
@@ -202,43 +204,43 @@ both the reduced-symmetry and the parent spacegroup</p>
 </div>
 <dl class="std option">
 <dt class="sig sig-object std" id="cmdoption-rs.cchalf-arg-mtz">
-<span class="sig-name descname"><span class="pre">mtz</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-rs.cchalf-arg-mtz" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">mtz</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-rs.cchalf-arg-mtz" title="Link to this definition"></a></dt>
 <dd><p>MTZs containing crossvalidation data from careless</p>
 </dd></dl>
 
 <dl class="std option">
 <dt class="sig sig-object std" id="cmdoption-rs.cchalf-h">
-<span class="sig-name descname"><span class="pre">-h</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--help</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-rs.cchalf-h" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">-h</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--help</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-rs.cchalf-h" title="Link to this definition"></a></dt>
 <dd><p>show this help message and exit</p>
 </dd></dl>
 
 <dl class="std option">
 <dt class="sig sig-object std" id="cmdoption-rs.cchalf-s">
-<span class="sig-name descname"><span class="pre">-s</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--show</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-rs.cchalf-s" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">-s</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--show</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-rs.cchalf-s" title="Link to this definition"></a></dt>
 <dd><p>Make a plot of the results and display it using matplotlib.</p>
 </dd></dl>
 
 <dl class="std option">
 <dt class="sig sig-object std" id="cmdoption-rs.cchalf-i">
-<span class="sig-name descname"><span class="pre">-i</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;image&gt;</span></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--image</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;image&gt;</span></span><a class="headerlink" href="#cmdoption-rs.cchalf-i" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">-i</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;image&gt;</span></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--image</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;image&gt;</span></span><a class="headerlink" href="#cmdoption-rs.cchalf-i" title="Link to this definition"></a></dt>
 <dd><p>Make a plot of the results and save it to this filename. The filetype will be determined from the filename. Any filetype supported by your matplotlib version will be available.</p>
 </dd></dl>
 
 <dl class="std option">
 <dt class="sig sig-object std" id="cmdoption-rs.cchalf-o">
-<span class="sig-name descname"><span class="pre">-o</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;output&gt;</span></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--output</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;output&gt;</span></span><a class="headerlink" href="#cmdoption-rs.cchalf-o" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">-o</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;output&gt;</span></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--output</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;output&gt;</span></span><a class="headerlink" href="#cmdoption-rs.cchalf-o" title="Link to this definition"></a></dt>
 <dd><p>Optionally save results to this file in csv format instead of printing them to the terminal.</p>
 </dd></dl>
 
 <dl class="std option">
 <dt class="sig sig-object std" id="cmdoption-rs.cchalf-m">
-<span class="sig-name descname"><span class="pre">-m</span></span><span class="sig-prename descclassname"> <span class="pre">{spearman,pearson}</span></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--method</span></span><span class="sig-prename descclassname"> <span class="pre">{spearman,pearson}</span></span><a class="headerlink" href="#cmdoption-rs.cchalf-m" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">-m</span></span><span class="sig-prename descclassname"> <span class="pre">{spearman,pearson}</span></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--method</span></span><span class="sig-prename descclassname"> <span class="pre">{spearman,pearson}</span></span><a class="headerlink" href="#cmdoption-rs.cchalf-m" title="Link to this definition"></a></dt>
 <dd><p>Method for computing correlation coefficient (spearman or pearson)</p>
 </dd></dl>
 
 </section>
 <section id="rs-ccpred">
-<h2>rs.ccpred<a class="headerlink" href="#rs-ccpred" title="Permalink to this heading"></a></h2>
+<h2>rs.ccpred<a class="headerlink" href="#rs-ccpred" title="Link to this heading"></a></h2>
 <p>Compute CCsym from careless output.</p>
 <p>Note: If more than one <cite>-i</cite> argument is given, only overall CCpred is reported</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">usage: rs.ccpred [-h] [-s] [-i IMAGE] [-o OUTPUT] [-m {spearman,pearson}]</span>
@@ -248,49 +250,49 @@ both the reduced-symmetry and the parent spacegroup</p>
 </div>
 <dl class="std option">
 <dt class="sig sig-object std" id="cmdoption-rs.ccpred-arg-mtzs">
-<span class="sig-name descname"><span class="pre">mtzs</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-rs.ccpred-arg-mtzs" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">mtzs</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-rs.ccpred-arg-mtzs" title="Link to this definition"></a></dt>
 <dd><p>MTZs containing prediction data from careless</p>
 </dd></dl>
 
 <dl class="std option">
 <dt class="sig sig-object std" id="cmdoption-rs.ccpred-h">
-<span class="sig-name descname"><span class="pre">-h</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--help</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-rs.ccpred-h" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">-h</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--help</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-rs.ccpred-h" title="Link to this definition"></a></dt>
 <dd><p>show this help message and exit</p>
 </dd></dl>
 
 <dl class="std option">
 <dt class="sig sig-object std" id="cmdoption-rs.ccpred-s">
-<span class="sig-name descname"><span class="pre">-s</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--show</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-rs.ccpred-s" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">-s</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--show</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-rs.ccpred-s" title="Link to this definition"></a></dt>
 <dd><p>Make a plot of the results and display it using matplotlib.</p>
 </dd></dl>
 
 <dl class="std option">
 <dt class="sig sig-object std" id="cmdoption-rs.ccpred-i">
-<span class="sig-name descname"><span class="pre">-i</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;image&gt;</span></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--image</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;image&gt;</span></span><a class="headerlink" href="#cmdoption-rs.ccpred-i" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">-i</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;image&gt;</span></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--image</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;image&gt;</span></span><a class="headerlink" href="#cmdoption-rs.ccpred-i" title="Link to this definition"></a></dt>
 <dd><p>Make a plot of the results and save it to this filename. The filetype will be determined from the filename. Any filetype supported by your matplotlib version will be available.</p>
 </dd></dl>
 
 <dl class="std option">
 <dt class="sig sig-object std" id="cmdoption-rs.ccpred-o">
-<span class="sig-name descname"><span class="pre">-o</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;output&gt;</span></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--output</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;output&gt;</span></span><a class="headerlink" href="#cmdoption-rs.ccpred-o" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">-o</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;output&gt;</span></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--output</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;output&gt;</span></span><a class="headerlink" href="#cmdoption-rs.ccpred-o" title="Link to this definition"></a></dt>
 <dd><p>Optionally save results to this file in csv format instead of printing them to the terminal.</p>
 </dd></dl>
 
 <dl class="std option">
 <dt class="sig sig-object std" id="cmdoption-rs.ccpred-m">
-<span class="sig-name descname"><span class="pre">-m</span></span><span class="sig-prename descclassname"> <span class="pre">{spearman,pearson}</span></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--method</span></span><span class="sig-prename descclassname"> <span class="pre">{spearman,pearson}</span></span><a class="headerlink" href="#cmdoption-rs.ccpred-m" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">-m</span></span><span class="sig-prename descclassname"> <span class="pre">{spearman,pearson}</span></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--method</span></span><span class="sig-prename descclassname"> <span class="pre">{spearman,pearson}</span></span><a class="headerlink" href="#cmdoption-rs.ccpred-m" title="Link to this definition"></a></dt>
 <dd><p>Method for computing correlation coefficient (spearman or pearson)</p>
 </dd></dl>
 
 <dl class="std option">
 <dt class="sig sig-object std" id="cmdoption-rs.ccpred-mod2">
-<span class="sig-name descname"><span class="pre">--mod2</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-rs.ccpred-mod2" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">--mod2</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-rs.ccpred-mod2" title="Link to this definition"></a></dt>
 <dd><p>Use (id mod 2) to assign delays (use when employing spacegroup hack)</p>
 </dd></dl>
 
 <dl class="std option">
 <dt class="sig sig-object std" id="cmdoption-rs.ccpred-overall">
-<span class="sig-name descname"><span class="pre">--overall</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-rs.ccpred-overall" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">--overall</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-rs.ccpred-overall" title="Link to this definition"></a></dt>
 <dd><p>Whether to report a single value for the entire dataset</p>
 </dd></dl>
 
