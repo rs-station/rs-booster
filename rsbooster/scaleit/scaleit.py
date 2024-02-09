@@ -49,7 +49,7 @@ def parse_arguments():
     
     parser.add_argument(
         "--ignore-isomorphism",
-        action="store_false",
+        action="store_true",
         help=(
             "Allow poorly isomorphous inputs to be scaled. "
             "By default (no flag) poorly isomorphous inputs will raise an error.")
@@ -148,7 +148,7 @@ def main():
     print(f"Number of common reflections: {len(common)}")
     mtzs = [mtz.loc[common] for mtz in mtzs]
     
-    joined = rs.concat([ref.loc[common]] + mtzs, axis=1, check_isomorphous=args.ignore_isomorphism)
+    joined = rs.concat([ref.loc[common]] + mtzs, axis=1, check_isomorphous=(not args.ignore_isomorphism))
 
     # Run scaleit
     run_scaleit(joined, args.outfile, len(mtzs))
