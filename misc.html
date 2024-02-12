@@ -93,7 +93,7 @@
 <h2>rs.scaleit<a class="headerlink" href="#rs-scaleit" title="Link to this heading"></a></h2>
 <p>Run CCP4’s scaleit on the given data.</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">usage: rs.scaleit [-h] -r ref data_col sig_col -i mtz data_col sig_col</span>
-<span class="go">                  [-o OUTFILE]</span>
+<span class="go">                  [-o OUTFILE] [--ignore-isomorphism]</span>
 </pre></div>
 </div>
 <dl class="std option">
@@ -118,6 +118,12 @@
 <dt class="sig sig-object std" id="cmdoption-rs.scaleit-o">
 <span class="sig-name descname"><span class="pre">-o</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;outfile&gt;</span></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--outfile</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;outfile&gt;</span></span><a class="headerlink" href="#cmdoption-rs.scaleit-o" title="Link to this definition"></a></dt>
 <dd><p>MTZ file to which scaleit output will be written</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-rs.scaleit-ignore-isomorphism">
+<span class="sig-name descname"><span class="pre">--ignore-isomorphism</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-rs.scaleit-ignore-isomorphism" title="Link to this definition"></a></dt>
+<dd><p>Allow poorly isomorphous inputs to be scaled. By default (no flag) poorly isomorphous inputs will raise an error.</p>
 </dd></dl>
 
 </section>
@@ -228,7 +234,7 @@
 <h2>rs.scaleit<a class="headerlink" href="#id1" title="Link to this heading"></a></h2>
 <p>Run CCP4’s scaleit on the given data.</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">usage: rs.scaleit [-h] -r ref data_col sig_col -i mtz data_col sig_col</span>
-<span class="go">                  [-o OUTFILE]</span>
+<span class="go">                  [-o OUTFILE] [--ignore-isomorphism]</span>
 </pre></div>
 </div>
 <dl class="std option">
@@ -253,6 +259,12 @@
 <dt class="sig sig-object std" id="cmdoption-rs.scaleit-6">
 <span class="sig-name descname"><span class="pre">-o</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;outfile&gt;</span></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--outfile</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;outfile&gt;</span></span><a class="headerlink" href="#cmdoption-rs.scaleit-6" title="Link to this definition"></a></dt>
 <dd><p>MTZ file to which scaleit output will be written</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-rs.scaleit-8">
+<span class="sig-name descname"><span class="pre">--ignore-isomorphism</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-rs.scaleit-8" title="Link to this definition"></a></dt>
+<dd><p>Allow poorly isomorphous inputs to be scaled. By default (no flag) poorly isomorphous inputs will raise an error.</p>
 </dd></dl>
 
 </section>
