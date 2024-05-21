@@ -38,12 +38,23 @@ def parse_arguments():
     )
 
     parser.add_argument(
+        "-f",
+        "--from-file",
+        default=None,
+        type=str,
+        help=(
+            "Use the cell and spacegroup from the specified mtz file. "
+            "Either this or `--cell` and --spacegroup` must be provided."
+        ),
+    )
+
+    parser.add_argument(
         "-c",
         "--cell",
         nargs=6,
         metavar=("a", "b", "c", "alpha", "beta", "gamma"),
         type=float,
-        required=True,
+        default=None,
         help=(
             "Cell for output mtz file containing rfree flags. Specified as (a, b, c, alpha, beta, gamma)"
         ),
@@ -52,15 +63,14 @@ def parse_arguments():
     parser.add_argument(
         "-sg",
         "--spacegroup",
-        required=True,
         type=str,
+        default=None,
         help=("Spacegroup for output mtz file containing rfree flags"),
     )
 
     parser.add_argument(
         "-d",
         "--dmin",
-        required=True,
         type=float,
         help=("Maximum resolution of reflections to be included"),
     )
@@ -86,6 +96,17 @@ def parse_arguments():
 
 def main():
     args = parse_arguments().parse_args()
+
+    msg = "Either --from-file or both --cell and --spacegroup must be specified"
+    if args.from_file is None:
+        if args.cell is None or args.spacegroup is None:
+            raise ValueError(msg)
+    else:
+        if args.cell is not None or args.spacegroup is not None:
+            raise ValueError(msg)
+        ds = rs.read_mtz(args.from_file)
+        args.cell = ds.cell
+        args.spacegroup = ds.spacegroup
 
     flags = rfree(
         args.cell, args.spacegroup, args.dmin, args.rfraction, args.seed
