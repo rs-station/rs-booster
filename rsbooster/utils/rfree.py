@@ -107,6 +107,9 @@ def main():
         ds = rs.read_mtz(args.from_file)
         args.cell = ds.cell
         args.spacegroup = ds.spacegroup
+        
+        if args.dmin is None:
+            args.dmin = ds.compute_dHKL()["dHKL"].min()
 
     flags = rfree(
         args.cell, args.spacegroup, args.dmin, args.rfraction, args.seed
