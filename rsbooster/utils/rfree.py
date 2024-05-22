@@ -44,7 +44,8 @@ def parse_arguments():
         type=str,
         help=(
             "Use the cell and spacegroup from the specified mtz file. "
-            "Either this or `--cell` and `--spacegroup` must be provided."
+            "Either this or `--cell` and `--spacegroup` must be provided. "
+            "If no `--dmin` is provided, dmin will be inferred from this file."
         ),
     )
 
