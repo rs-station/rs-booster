@@ -183,8 +183,8 @@
 <section id="rs-rfree">
 <h2>rs.rfree<a class="headerlink" href="#rs-rfree" title="Link to this heading"></a></h2>
 <p>Create an mtz containing rfree flags</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">usage: rs.rfree [-h] [-o OUTFILE] -c a b c alpha beta gamma -sg SPACEGROUP -d</span>
-<span class="go">                DMIN -r RFRACTION [-s SEED]</span>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">usage: rs.rfree [-h] [-o OUTFILE] [-f FROM_FILE] [-c a b c alpha beta gamma]</span>
+<span class="go">                [-sg SPACEGROUP] [-d DMIN] -r RFRACTION [-s SEED]</span>
 </pre></div>
 </div>
 <dl class="std option">
@@ -197,6 +197,12 @@
 <dt class="sig sig-object std" id="cmdoption-rs.rfree-o">
 <span class="sig-name descname"><span class="pre">-o</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;outfile&gt;</span></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--outfile</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;outfile&gt;</span></span><a class="headerlink" href="#cmdoption-rs.rfree-o" title="Link to this definition"></a></dt>
 <dd><p>Output MTZ filename</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-rs.rfree-f">
+<span class="sig-name descname"><span class="pre">-f</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;from_file&gt;</span></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--from-file</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;from_file&gt;</span></span><a class="headerlink" href="#cmdoption-rs.rfree-f" title="Link to this definition"></a></dt>
+<dd><p>Use the cell and spacegroup from the specified mtz file. Either this or <cite>–cell</cite> and <cite>–spacegroup</cite> must be provided. If no <cite>–dmin</cite> is provided, dmin will be inferred from this file.</p>
 </dd></dl>
 
 <dl class="std option">
