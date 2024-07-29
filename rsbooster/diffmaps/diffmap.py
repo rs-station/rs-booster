@@ -91,6 +91,10 @@ def main():
             f"{args.Phi} is not a phases column in {args.mtz2}. Try again."
         )
 
+    onmtz=onmtz.hkl_to_asu()
+    offmtz=offmtz.hkl_to_asu()
+    ref=ref.hkl_to_asu()
+    
     diff = onmtz.merge(offmtz, on=["H", "K", "L"], suffixes=("_on", "_off"))
     diff["DF"] = diff["F_on"] - diff["F_off"]
     diff["SigDF"] = np.sqrt((diff["SigF_on"] ** 2) + (diff["SigF_off"] ** 2))
