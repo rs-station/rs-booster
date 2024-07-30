@@ -39,6 +39,7 @@ def subset_to_FSigF(mtzpath, data_col, sig_col, column_names_dict={}):
 
     # Run French-Wilson if intensities are provided
     if isinstance(mtz[data_col].dtype, rs.IntensityDtype):
+        print(f"Applying French-Wilson scaling to columns {data_col} and {sig_col}.")
         scaled = rs.algorithms.scale_merged_intensities(
             mtz, data_col, sig_col, mean_intensity_method="anisotropic"
         )
