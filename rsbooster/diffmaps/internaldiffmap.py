@@ -84,6 +84,16 @@ def parse_arguments():
 
     return parser#.parse_args()
 
+def remove_HKL_duplicates(ds, ds_name):
+    num_duplicates = np.sum(ds.index.duplicated())
+    if num_duplicates > 0:
+        print(f"Warning: {ds_name} contains {num_duplicates} sets of duplicate Miller indices.")
+        print( "Only the first instance of each HKL will be retained.")
+        # useful diagnostic:
+        # print(ds.reset_index().loc[ds.index.duplicated(keep=False),:].sort_values(["H","K","L"]).head(6))
+        ds=ds.loc[~ds.index.duplicated(keep='first'),:]
+    ds.merged=True
+    return ds
 
 def main():
 
@@ -96,9 +106,11 @@ def main():
         *args.inputmtz, {args.inputmtz[1]: "F", args.inputmtz[2]: "SigF"}
     )
     mtz = mtz.hkl_to_asu()
+    mtz = remove_HKL_duplicates(mtz, 'MTZ of Interest')
     
     ref = rs.read_mtz(refmtz)
     ref = ref.hkl_to_asu()
+    ref = remove_HKL_duplicates(ref, 'REF MTZ')
 
     # Canonicalize column names
     ref.rename(columns={phi_col: "Phi"}, inplace=True)
