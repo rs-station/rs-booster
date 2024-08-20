@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-import glob
 from argparse import ArgumentDefaultsHelpFormatter, ArgumentParser
 from reciprocalspaceship.io import dials
 
@@ -24,6 +23,13 @@ def get_parser():
     return parser
 
 
+def _write(ds, mtzname):
+    """write the RS dataset to mtz file"""
+    ds.write_mtz(mtzname)
+    print("Wrote %s." % mtzname)
+    print("Done!")
+
+
 def ray_main():
     parser = get_parser()
     parser.add_argument("--nj", default=10, type=int, help="number of workers!")
@@ -32,9 +38,20 @@ def ray_main():
     assert args.symbol is not None
 
     ds = dials.read_dials_stills(args.dirnames, ucell=args.ucell, symbol=args.symbol, nj=args.nj)
-    ds.write_mtz(args.mtz)
-    print("Wrote %s." % args.mtz)
-    print("Done!")
+    _write(ds, args.mtz)
+
+
+def mpi_main():
+    parser = get_parser()
+    args = parser.parse_args()
+    assert args.ucell is not None
+    assert args.symbol is not None
+    from mpi4py import MPI
+    COMM = MPI.COMM_WORLD
+    from reciprocalspaceship.io.dials_mpi import read_dials_stills_mpi
+    ds = read_dials_stills_mpi(args.dirnames, ucell=args.ucell, symbol=args.symbol)
+    if COMM.rank==0:
+        _write(ds, args.mtz)
 
 
 if __name__ == "__main__":
