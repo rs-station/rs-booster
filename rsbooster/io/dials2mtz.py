@@ -42,26 +42,16 @@ def get_fnames(dirnames, verbose=False):
     return fnames
 
 
-def _set_logger(verbose, silence_ray=True):
-    logger = logging.getLogger("rs.io.dials")
-    console = logger.handlers[0]
+def _set_logger(verbose):
+    level = logging.CRITICAL
     if verbose:
-        logger.setLevel(logging.DEBUG)
-        console.setLevel(logging.DEBUG)
-    else:
-        logger.setLevel(logging.CRITICAL)
-        console.setLevel(logging.CRITICAL)
+        level = logging.DEBUG
 
-    if silence_ray:
-        ray_level = logging.CRITICAL
-    else:
-        ray_level = logging.DEBUG
-
-    for _ray_name in ("ray", "ray.remote"):
-        ray_logger = logging.getLogger(_ray_name)
-        ray_logger.setLevel(ray_level)
-        for handler in ray_logger.handlers:
-            handler.setLevel(ray_level)
+    for log_name in ("rs.io.dials", "ray"):
+        logger = logging.getLogger(log_name)
+        logger.setLevel(level)
+        for handler in logger.handlers:
+            handler.setLevel(level)
 
 
 def ray_main():
@@ -70,7 +60,7 @@ def ray_main():
     args = parser.parse_args()
     assert args.ucell is not None
     assert args.symbol is not None
-    _set_logger(args.verbose, silence_ray=not args.verbose)
+    _set_logger(args.verbose)
 
     fnames = get_fnames(args.dirnames, args.verbose)
     ds = dials.read_dials_stills(fnames, unitcell=args.ucell, spacegroup=args.symbol, numjobs=args.numjobs)
