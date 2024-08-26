@@ -4,7 +4,7 @@ import logging
 import glob
 
 
-from reciprocalspaceship.io import dials
+from reciprocalspaceship.io import read_dials_stills
 
 
 def get_parser():
@@ -63,7 +63,7 @@ def ray_main():
     _set_logger(args.verbose)
 
     fnames = get_fnames(args.dirnames, args.verbose)
-    ds = dials.read_dials_stills(fnames, unitcell=args.ucell, spacegroup=args.symbol, numjobs=args.numjobs)
+    ds = read_dials_stills(fnames, unitcell=args.ucell, spacegroup=args.symbol, numjobs=args.numjobs, parallel_backend="ray")
     _write(ds, args.mtz)
 
 
@@ -74,10 +74,9 @@ def mpi_main():
     assert args.symbol is not None
     from mpi4py import MPI
     COMM = MPI.COMM_WORLD
-    from reciprocalspaceship.io.dials_mpi import read_dials_stills_mpi
     _set_logger(args.verbose)
     fnames = get_fnames(args.dirnames, args.verbose)
-    ds = read_dials_stills_mpi(fnames, unitcell=args.ucell, spacegroup=args.symbol)
+    ds = read_dials_stills(fnames, unitcell=args.ucell, spacegroup=args.symbol, parallel_backend="mpi")
     if COMM.rank==0:
         _write(ds, args.mtz)
 
