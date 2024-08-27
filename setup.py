@@ -66,7 +66,8 @@ setup(
             "rs.find_difference_peaks=rsbooster.realspace.find_peaks:find_difference_peaks",
             "rs.rfree=rsbooster.utils.rfree:main",
             "rs.from_dials=rsbooster.io.dials2mtz:ray_main",
-            "rs.from_dials_mpi=rsbooster.io.dials2mtz:mpi_main"
+            "rs.from_dials_mpi=rsbooster.io.dials2mtz:mpi_main",
+            "rs.print_refl=rsbooster.io.dials2mtz:print_refl"
         ]
     },
     classifiers=[
