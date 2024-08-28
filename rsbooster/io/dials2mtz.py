@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 from argparse import ArgumentDefaultsHelpFormatter, ArgumentParser
-import logging
 import glob
 
 
@@ -70,29 +69,16 @@ def get_fnames(dirnames, verbose=False, tag=None, ext="integrated.refl"):
     return fnames
 
 
-def _set_logger(verbose):
-    level = logging.CRITICAL
-    if verbose:
-        level = logging.DEBUG
-
-    for log_name in ("rs.io.dials", "ray"):
-        logger = logging.getLogger(log_name)
-        logger.setLevel(level)
-        for handler in logger.handlers:
-            handler.setLevel(level)
-
-
 def ray_main():
     parser = get_parser()
     parser.add_argument("--numjobs", default=10, type=int, help="number of workers!")
     args = parser.parse_args()
     assert args.ucell is not None
     assert args.symbol is not None
-    _set_logger(args.verbose)
 
     fnames = get_fnames(args.dirnames, args.verbose, tag=args.tag, ext=args.ext)
     ds = read_dials_stills(fnames, unitcell=args.ucell, spacegroup=args.symbol, numjobs=args.numjobs,
-                           parallel_backend="ray", extra_cols=args.extra_cols)
+                           parallel_backend="ray", extra_cols=args.extra_cols, verbose=args.verbose)
     _write(ds, args.mtz)
 
 
@@ -103,11 +89,10 @@ def mpi_main():
     assert args.symbol is not None
     from mpi4py import MPI
     COMM = MPI.COMM_WORLD
-    _set_logger(args.verbose)
     fnames = get_fnames(args.dirnames, args.verbose, tag=args.tag, ext=args.ext)
     ds = read_dials_stills(fnames, unitcell=args.ucell, spacegroup=args.symbol, parallel_backend="mpi",
-                           extra_cols=args.extra_cols)
-    if COMM.rank==0:
+                           extra_cols=args.extra_cols, verbose=args.verbose)
+    if COMM.rank == 0:
         _write(ds, args.mtz)
 
 
