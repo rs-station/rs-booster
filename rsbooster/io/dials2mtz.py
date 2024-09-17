@@ -94,11 +94,11 @@ def mpi_main():
     assert args.ucell is not None
     assert args.symbol is not None
     from mpi4py import MPI
-    COMM = MPI.COMM_WORLD
+    comm = MPI.COMM_WORLD
     fnames = get_fnames(args.dirnames, args.verbose, optional_tag=args.tag, ext=args.ext)
     ds = read_dials_stills(fnames, unitcell=args.ucell, spacegroup=args.symbol, parallel_backend="mpi",
-                           extra_cols=args.extra_cols, verbose=args.verbose)
-    if COMM.rank == 0:
+                           extra_cols=args.extra_cols, verbose=args.verbose, comm=comm)
+    if comm.rank == 0:
         _write(ds, args.mtz, args.verbose)
 
 
