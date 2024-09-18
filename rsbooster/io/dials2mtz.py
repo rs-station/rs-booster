@@ -19,10 +19,11 @@ def get_parser():
         "--ucell",
         default=None,
         nargs=6,
+        required=True,
         type=float,
         help="unit cell params (default will be average experiment crystal)",
     )
-    parser.add_argument("--symbol", type=str, default=None)
+    parser.add_argument("--symbol", type=str, default=None, required=True)
     parser.add_argument("--verbose", action="store_true", help="show some stdout")
     parser.add_argument("--extra-cols", dest="extra_cols", nargs="+", type=str, default=None, help="attemp to pull in additional columns")
     parser.add_argument("--ext", type=str, default="integrated.refl", help="read files with this extension")
@@ -40,6 +41,7 @@ def print_refl():
 
 def _write(ds, mtzname, verbose=False):
     """write the RS dataset to mtz file"""
+    ds.infer_mtz_dtypes(inplace=True)
     if verbose:
         print(f"Writing MTZ {mtzname} ...")
     ds.write_mtz(mtzname)
@@ -79,8 +81,6 @@ def ray_main():
     parser = get_parser()
     parser.add_argument("--numjobs", default=10, type=int, help="number of workers!")
     args = parser.parse_args()
-    assert args.ucell is not None
-    assert args.symbol is not None
 
     fnames = get_fnames(args.dirnames, args.verbose, optional_tag=args.tag, ext=args.ext)
     ds = read_dials_stills(fnames, unitcell=args.ucell, spacegroup=args.symbol, numjobs=args.numjobs,
@@ -91,8 +91,6 @@ def ray_main():
 def mpi_main():
     parser = get_parser()
     args = parser.parse_args()
-    assert args.ucell is not None
-    assert args.symbol is not None
     from mpi4py import MPI
     comm = MPI.COMM_WORLD
     fnames = get_fnames(args.dirnames, args.verbose, optional_tag=args.tag, ext=args.ext)
