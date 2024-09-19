@@ -41,7 +41,6 @@ def print_refl():
 
 def _write(ds, mtzname, verbose=False):
     """write the RS dataset to mtz file"""
-    ds.infer_mtz_dtypes(inplace=True)
     if verbose:
         print(f"Writing MTZ {mtzname} ...")
     ds.write_mtz(mtzname)
@@ -84,7 +83,8 @@ def ray_main():
 
     fnames = get_fnames(args.dirnames, args.verbose, optional_tag=args.tag, ext=args.ext)
     ds = read_dials_stills(fnames, unitcell=args.ucell, spacegroup=args.symbol, numjobs=args.numjobs,
-                           parallel_backend="ray", extra_cols=args.extra_cols, verbose=args.verbose)
+                           parallel_backend="ray", extra_cols=args.extra_cols, verbose=args.verbose, 
+                           mtz_dtypes=True)
     _write(ds, args.mtz, args.verbose)
 
 
