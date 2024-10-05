@@ -70,7 +70,17 @@ def parse_arguments():
 
     return parser#.parse_args()
 
-
+def remove_HKL_duplicates(ds, ds_name):
+    num_duplicates = np.sum(ds.index.duplicated())
+    if num_duplicates > 0:
+        print(f"Warning: {ds_name} contains {num_duplicates} sets of duplicate Miller indices.")
+        print( "Only the first instance of each HKL will be retained.")
+        # useful diagnostic:
+        # print(ds.reset_index().loc[ds.index.duplicated(keep=False),:].sort_values(["H","K","L"]).head(6))
+        ds=ds.loc[~ds.index.duplicated(keep='first'),:]
+    ds.merged=True
+    return ds
+    
 def main():
 
     # Parse commandline arguments
@@ -91,6 +101,14 @@ def main():
             f"{args.Phi} is not a phases column in {args.mtz2}. Try again."
         )
 
+    onmtz=onmtz.hkl_to_asu()
+    offmtz=offmtz.hkl_to_asu()
+    ref=ref.hkl_to_asu()
+
+    onmtz = remove_HKL_duplicates(onmtz,  'ON MTZ')
+    offmtz= remove_HKL_duplicates(offmtz, 'OFF MTZ')
+    ref   = remove_HKL_duplicates(ref,    'REF MTZ')
+
     diff = onmtz.merge(offmtz, on=["H", "K", "L"], suffixes=("_on", "_off"))
     diff["DF"] = diff["F_on"] - diff["F_off"]
     diff["SigDF"] = np.sqrt((diff["SigF_on"] ** 2) + (diff["SigF_off"] ** 2))
@@ -108,6 +126,7 @@ def main():
     # Useful for PyMOL
     diff["wDF"] = (diff["DF"] * diff["W"]).astype("SFAmplitude")
 
+    
     if args.dmax is None:
         diff.write_mtz(args.outfile)
     else:
