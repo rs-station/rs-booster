@@ -47,13 +47,13 @@ def parse_arguments():
     )
 
     parser.add_argument(
-        "-n", "--nsamples", type=int, default=500_000, help="number of samples for pseudo-integration"
+        "-n", "--nsamples", type=int, default=200_000, help="number of samples for pseudo-integration"
     )
     parser.add_argument(
         "-r", "--rDW", type=float, default=0.9, help="Assumed DW correlation between GS and ES structure factors"
     )
     parser.add_argument(
-        "-p", "--es_fraction", type=float, help="Excited state fraction"
+        "-p", "--es-fraction", type=float, help="Excited state fraction"
     )
     parser.add_argument(
         "-f", "--factor", type=float, help="Extrapolation factor"
@@ -61,7 +61,9 @@ def parse_arguments():
     parser.add_argument(
         "-o", "--outfile", default="esf_dw.mtz", help="Output MTZ filename"
     )
-
+    parser.add_argument( #not working?
+        "--disable-progress-bar", action='store_true', help="Disable the progress bar"
+    )
     return parser
 
 
@@ -147,6 +149,7 @@ def main():
     off = args.offmtz
     r   = args.rDW
     print(args.outfile)
+    print(f"Disable progress bar? {args.disable_progress_bar}")
 
     if args.factor and args.es_fraction:
         raise ValueError("Only specify `-f` or `-p`, not both.")
@@ -220,7 +223,7 @@ def main():
     
     ES_abs_2_list   =[]
     SIGES_abs_2_list=[]
-    for n in tqdm(range(len(ds_all.index))):
+    for n in tqdm(range(len(ds_all.index)),disable=args.disable_progress_bar):
         row=ds_all.iloc[n]
     
         # set up the likelihood function
