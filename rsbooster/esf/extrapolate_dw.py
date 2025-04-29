@@ -4,7 +4,12 @@ Bayesian extrapolated structure factors calculation using the double-wilson stat
 
 Equations
 ---------
-to do
+The underlying model assumes that
+
+- Prior distribution: ground-state (GS) and excited-state (ES) amplitudes are correlated with strenght r (see https://pmc.ncbi.nlm.nih.gov/articles/PMC11291090/)
+- the ON structure factor amplitudes are a "random-diffuse" mixture of GS and ES (a la Phil Coppens)
+  with 
+  E^ON = p E^ES + (1-p) E^GS
 
 Notes
 -----
