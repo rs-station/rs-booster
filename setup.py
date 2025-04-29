@@ -54,6 +54,7 @@ setup(
     entry_points={
         "console_scripts": [
             "rs.extrapolate=rsbooster.esf.extrapolate:main",
+            "rs.extrapolate_dw=rsbooster.esf.extrapolate_dw:main",
             "rs.scaleit=rsbooster.scaleit.scaleit:main",
             "rs.internal_diffmap=rsbooster.diffmaps.internaldiffmap:main",
             "rs.ccsym=rsbooster.stats.ccsym:main",
