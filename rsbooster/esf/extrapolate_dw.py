@@ -35,12 +35,14 @@ def parse_arguments():
     parser.add_argument(
         "-on",
         "--onmtz",
+        nargs='+',
         required=True,
         help="MTZ to be used as `on` data.",
     )
     parser.add_argument(
         "-off",
         "--offmtz",
+        nargs='+',
         required=True,
         help=("MTZ to be used as `off` data."),
     )
@@ -150,22 +152,31 @@ def main():
 
     # Parse commandline arguments
     args = parse_arguments().parse_args()
-    on  = args.onmtz
-    off = args.offmtz
+    on_list  = args.onmtz
+    off_list = args.offmtz
     r   = args.rDW
     print(args.outfile)
     print(f"Disable progress bar? {args.disable_progress_bar}")
+    bReturnGS=False
 
     if args.factor and args.es_fraction:
         raise ValueError("Only specify `-f` or `-p`, not both.")
     elif args.factor:
-        p = 1/args.factor
+        p = 1.0/args.factor
     else:
         p=args.es_fraction
 
     # Read MTZ files
-    ds_on  = rs.read_mtz(on)
-    ds_of  = rs.read_mtz(off)
+    ds_on_list=[]
+    for m in on_list:
+        ds_on_list.append(rs.read_mtz(m))
+    ds_on = ds_on_list[0]  # for now, we'll just deal with the first one. want to be able to provide multiple!
+    
+    ds_off_list=[]
+    for m in off_list:
+        ds_off_list.append(rs.read_mtz(m))
+    ds_of = ds_off_list[0]  # for now, we'll just deal with the first one. want to be able to provide multiple!
+
 
     # Samples from the prior
     mean    = [0,0,0,0]                 
@@ -217,16 +228,19 @@ def main():
     ds_all.compute_multiplicity(inplace=True)
     ds_all.compute_dHKL(inplace=True)    
     
-    Sigma_off=mean_intensity_by_resolution(ds_all.loc[:, "F_off"].to_numpy()**2, ds_all.dHKL, bins=50, gridpoints=None)
-    Sigma_on =mean_intensity_by_resolution(ds_all.loc[:, "F_on"].to_numpy()**2,  ds_all.dHKL, bins=50, gridpoints=None)
+    multiplicity = ds_all.EPSILON.to_numpy()
+    
+    Sigma_off=mean_intensity_by_resolution((ds_all.loc[:, "F_off"].to_numpy()**2)/multiplicity, ds_all.dHKL, bins=50, gridpoints=None)
+    Sigma_on =mean_intensity_by_resolution((ds_all.loc[:, "F_on"].to_numpy()**2)/multiplicity, ds_all.dHKL, bins=50, gridpoints=None)
 
     row=ds_of.iloc[0]
     eps=1e-10
     a, b = (float(row["low"]) -  float(row["loc"])) / float(row["scale"]), \
            (float(row["high"]) - float(row["loc"])) / float(row["scale"])
 
-    
+    GS_abs_2_list   =[]
     ES_abs_2_list   =[]
+    SIGGS_abs_2_list=[]
     SIGES_abs_2_list=[]
     for n in tqdm(range(len(ds_all.index)),disable=args.disable_progress_bar):
         row=ds_all.iloc[n]
@@ -244,9 +258,15 @@ def main():
             sum_w = sum(w)
             if np.sum(w>0)>5:
                 w = w/sum_w
+                if bReturnGS:
+                    GS_abs_2     = sqrt_eps * w_avg_abs(GS_ac,w)
+                    SIGGS_abs_2  = sqrt_eps * np.sqrt( var_abs_E(GS_ac, w, 0) )
                 ES_abs_2     = sqrt_eps * w_avg_abs(ES_ac,w)
                 SIGES_abs_2  = sqrt_eps * np.sqrt( var_abs_E(ES_ac, w, 0) )
             else:
+                if bReturnGS:
+                    GS_abs_2     = np.nan
+                    SIGGS_abs_2  = np.nan
                 ES_abs_2     = np.nan
                 SIGES_abs_2  = np.nan
         else: # row["CENTRIC"]:
@@ -256,15 +276,24 @@ def main():
             sum_w = sum(w)
             if np.sum(w>0)>5:
                 w = w/sum_w
+                if bReturnGS:
+                    GS_abs_2     = sqrt_eps * w_avg_abs(GS_c,w)
+                    SIGES_abs_2  = sqrt_eps * np.sqrt( var_abs_E(GS_c, w, 0) )
                 ES_abs_2     = sqrt_eps * w_avg_abs(ES_c,w)
                 SIGES_abs_2  = sqrt_eps * np.sqrt( var_abs_E(ES_c, w, 0) )
             else:
+                if bReturnGS:
+                    GS_abs_2    = np.nan
+                    SIGGS_abs_2 = np.nan
                 ES_abs_2    = np.nan
                 SIGES_abs_2 = np.nan
+        if bReturnGS:
+            GS_abs_2_list.append(GS_abs_2)
+            SIGGS_abs_2_list.append(SIGGS_abs_2)
         ES_abs_2_list.append(ES_abs_2)
         SIGES_abs_2_list.append(SIGES_abs_2)
 
-    # OUTPUT
+    # OUTPUT ES
     ds_all["ES_abs_2"]=ES_abs_2_list
     ds_all["SIGES_abs_2"]=SIGES_abs_2_list
     
@@ -272,7 +301,18 @@ def main():
     ds_all["SIGES_abs_2"]=ds_all["SIGES_abs_2"].astype("Q")
     
     ds_all.infer_mtz_dtypes(inplace=True)
-    ds_all[["ES_abs_2","SIGES_abs_2"]].write_mtz(args.outfile)
+    ds_all[["ES_abs_2","SIGES_abs_2","CENTRIC"]].write_mtz(args.outfile)
+
+    if bReturnGS:
+        # OUTPUT GS
+        ds_all["GS_abs_2"]=GS_abs_2_list
+        ds_all["SIGGS_abs_2"]=SIGGS_abs_2_list
+        
+        ds_all["GS_abs_2"]=ds_all["GS_abs_2"].astype("F")
+        ds_all["SIGGS_abs_2"]=ds_all["SIGGS_abs_2"].astype("Q")
+        
+        ds_all.infer_mtz_dtypes(inplace=True)
+        ds_all[["GS_abs_2","SIGGS_abs_2","CENTRIC"]].write_mtz(args.outfile[:-4]+"_GS_reference.mtz")
 
 
 if __name__ == "__main__":
