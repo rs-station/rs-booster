@@ -205,7 +205,7 @@ def parse_arguments():
     p.add_argument("--init_r", type=float, default=0.9, help="Initial guess for r")
     p.add_argument("--init_p", type=float, default=0.125, help="Initial guess for p")
     p.add_argument(
-        "--bounds_r", type=float, nargs=2, default=[-0.999, 0.999], help="Bounds for r"
+        "--bounds_r", type=float, nargs=2, default=[1e-6, 1-1e-6], help="Bounds for r"
     )
     p.add_argument(
         "--bounds_p", type=float, nargs=2, default=[1e-6, 1 - 1e-6], help="Bounds for p"
