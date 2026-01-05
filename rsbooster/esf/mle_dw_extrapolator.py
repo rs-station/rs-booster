@@ -24,7 +24,9 @@ from scipy import optimize
 import reciprocalspaceship as rs
 import multiprocessing as mp
 from multiprocessing import shared_memory
-
+from reciprocalspaceship.algorithms.scale_merged_intensities import (
+    mean_intensity_by_resolution,
+)
 
 raw_Z_ac_shm = None
 raw_Z_c_shm = None
@@ -41,14 +43,22 @@ def init_shared_memory(Z_ac_name, Z_c_name, nsamples):
     raw_Z_c = np.ndarray((nsamples, 2), dtype=np.float32, buffer=raw_Z_c_shm.buf)
 
 
-# worker function for computing the log-mean in the likelihood caclulation
 def _logmeanexp(logw):
     m = np.max(logw)
     return m + np.log(np.mean(np.exp(logw - m) + 1e-300))
 
 
-# worker function for computing the log likelihood using the truncated Normal parameterization
 def loglike_reflection_SF(args):
+    """Log-likelihood contribution for one reflection (Structure‑Factor model).
+
+    Parameters (packed in args):
+        centric: bool
+        loc_off, scale_off, low_off, high_off: TN params for OFF |GS|
+        loc_on,  scale_on,  low_on,  high_on: TN params for ON |(1-p)GS + p ES|/k
+        sqrt_eps: sqrt(multiplicity)
+        sqrt_Sig_on, sqrt_Sig_off: sqrt of resolution trend Sigma
+        r, p: current global parameters
+    """
     (
         centric,
         loc_off,
@@ -93,11 +103,13 @@ def loglike_reflection_SF(args):
         OF_abs = np.abs(GS)
         ON_abs = np.abs(ON)
 
+    # Empirical k to match ON/OFF scale (as in ESF script)
     k = np.median(ON_abs) / (np.median(OF_abs) + 1e-12)
 
     x_off = sqrt_eps * sqrt_Sig_off * OF_abs
     x_on = sqrt_eps * sqrt_Sig_on * (ON_abs / (k + 1e-12))
 
+    # Truncated normal pdfs for observed |F|
     a_off, b_off = (low_off - loc_off) / (scale_off + 1e-30), (high_off - loc_off) / (
         scale_off + 1e-30
     )
@@ -112,8 +124,8 @@ def loglike_reflection_SF(args):
     return _logmeanexp(logw)
 
 
-# worker function for computing the log likelihood using the standard Normal parameterization
 def loglike_reflection_I(args):
+    """Log-likelihood contribution for one reflection (Intensity model)."""
     (
         centric,
         I_off_obs,
@@ -153,6 +165,7 @@ def loglike_reflection_I(args):
         OF_abs = np.abs(GS)
         ON_abs = np.abs(ON)
 
+    # Empirical k
     k = np.median(ON_abs) / (np.median(OF_abs) + 1e-12)
     ON_abs = ON_abs / (k + 1e-12)
 
@@ -164,9 +177,6 @@ def loglike_reflection_I(args):
 
     logw = rv_off.logpdf(I_off_obs) + rv_on.logpdf(I_on_obs)
     return _logmeanexp(logw)
-
-
-# Reading Arguments
 
 
 def parse_arguments():
@@ -205,7 +215,7 @@ def parse_arguments():
     p.add_argument("--init_r", type=float, default=0.9, help="Initial guess for r")
     p.add_argument("--init_p", type=float, default=0.125, help="Initial guess for p")
     p.add_argument(
-        "--bounds_r", type=float, nargs=2, default=[1e-6, 1-1e-6], help="Bounds for r"
+        "--bounds_r", type=float, nargs=2, default=[1e-6, 1 - 1e-6], help="Bounds for r"
     )
     p.add_argument(
         "--bounds_p", type=float, nargs=2, default=[1e-6, 1 - 1e-6], help="Bounds for p"
@@ -223,27 +233,6 @@ def parse_arguments():
         "--out", "-o", default="results.json", help="Where to write JSON results"
     )
     return p
-
-
-# Helper Functions
-
-
-def mean_intensity_by_resolution(I, dHKL, bins=50, gridpoints=None):
-    I = np.array(I, dtype=np.float64)
-    dHKL = np.array(dHKL, dtype=np.float64)
-    if gridpoints is None:
-        gridpoints = bins * 20
-    X = dHKL**-2.0
-    bw = (X.max() - X.min()) / bins
-    grid = np.linspace(X.min(), X.max(), gridpoints)
-    K = np.exp(-0.5 * ((X[:, None] - grid[None, :]) / bw) ** 2)
-    K = K / K.sum(0)
-    protos = I @ K
-    bw = grid[1] - grid[0]
-    K = np.exp(-0.5 * ((X[:, None] - grid[None, :]) / bw) ** 2)
-    K = K / K.sum(1)[:, None]
-    Sigma = K @ protos
-    return Sigma
 
 
 def reparam(df):
@@ -317,6 +306,7 @@ def build_dataset(args):
             suffixes=("_off", "_on"),
             check_isomorphous=False,
         )
+        # Optional random subset for speed
         if args.subset is not None and args.subset > 0:
             n = int(min(args.subset, len(ds_all)))
             ds_all = ds_all.sample(n=n, random_state=args.seed)
@@ -376,6 +366,7 @@ def build_dataset(args):
         suffixes=("_off", "_on"),
         check_isomorphous=False,
     )
+    # Optional random subset for speed
     if args.subset is not None and args.subset > 0:
         n = int(min(args.subset, len(ds_all)))
         ds_all = ds_all.sample(n=n, random_state=args.seed)
@@ -402,8 +393,10 @@ def build_dataset(args):
 def objective_factory(
     args, ds_all, sqrt_eps_arr, sqrt_Sigma_on, sqrt_Sigma_off, extra=None
 ):
+    """Create an objective(theta) -> negative log-likelihood, using a persistent pool."""
     use_I = args.use_intensities is not None
 
+    # Prebuild per-reflection static parts to minimize per-iteration overhead
     if not use_I:
         static = []
         for i, row in enumerate(ds_all.itertuples(index=False)):
@@ -456,10 +449,12 @@ def objective_factory(
 
     def objective(theta):
         r, p = float(theta[0]), float(theta[1])
+        # Build eval-time args by appending r,p
         if not use_I:
             args_list = [s + (r, p) for s in static]
         else:
             args_list = [s + (r, p) for s in static]
+        # Map
         parts = list(
             tqdm(
                 pool.imap(worker, args_list, chunksize=200),
@@ -469,12 +464,15 @@ def objective_factory(
             )
         )
         total_ll = float(np.sum(parts))
+        # negative log-likelihood for minimizer
         return -total_ll
 
+    # Attach for proper pool teardown by caller
     objective._pool = pool
     return objective
 
 
+# Attach names used by the pool initializer (set in main before factory call)
 objective_factory.Z_ac_name = None
 objective_factory.Z_c_name = None
 
@@ -483,6 +481,7 @@ def main():
     args = parse_arguments().parse_args()
     mp.set_start_method("spawn", force=True)
 
+    # Shared MC samples
     rng = np.random.default_rng(args.seed)
     raw_Z_ac_local = rng.standard_normal(size=(args.nsamples, 4), dtype=np.float32)
     raw_Z_c_local = rng.standard_normal(size=(args.nsamples, 2), dtype=np.float32)
@@ -496,9 +495,11 @@ def main():
         :
     ] = raw_Z_c_local
 
+    # Expose names to workers via the objective_factory initializer
     objective_factory.Z_ac_name = Z_ac_shm_obj.name
     objective_factory.Z_c_name = Z_c_shm_obj.name
 
+    # Build dataset & static caches
     if args.use_intensities:
         (
             ds_all,
@@ -515,10 +516,12 @@ def main():
         ds_all, sqrt_eps_arr, sqrt_Sigma_on, sqrt_Sigma_off = build_dataset(args)
         extra = None
 
+    # Objective with persistent pool
     objective = objective_factory(
         args, ds_all, sqrt_eps_arr, sqrt_Sigma_on, sqrt_Sigma_off, extra
     )
 
+    # Run bounded L‑BFGS‑B
     x0 = np.array([args.init_r, args.init_p], dtype=float)
     bounds = [tuple(args.bounds_r), tuple(args.bounds_p)]
 
@@ -531,9 +534,9 @@ def main():
         fun=objective,
         x0=x0,
         method="L-BFGS-B",
-        callback=callback,
         bounds=bounds,
-        options={"maxiter": args.maxiter, "disp": False},
+        callback=callback,
+        options={"maxiter": args.maxiter, "disp": True},
     )
 
     # Close pool cleanly
