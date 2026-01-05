@@ -24,14 +24,29 @@ from scipy import optimize
 import reciprocalspaceship as rs
 import multiprocessing as mp
 from multiprocessing import shared_memory
+from reciprocalspaceship.algorithms.scale_merged_intensities import (
+    mean_intensity_by_resolution,
+)
+
+# globals
+GS_ac_shm = ES_ac_shm = GS_c_shm = ES_c_shm = None
+GS_ac = ES_ac = None
+GS_c = ES_c = None
 
 
-def init_shared_memory(Z_ac_name, Z_c_name, nsamples):
-    global raw_Z_ac_shm, raw_Z_c_shm, raw_Z_ac, raw_Z_c
-    raw_Z_ac_shm = shared_memory.SharedMemory(name=Z_ac_name)
-    raw_Z_c_shm = shared_memory.SharedMemory(name=Z_c_name)
-    raw_Z_ac = np.ndarray((nsamples, 4), dtype=np.float32, buffer=raw_Z_ac_shm.buf)
-    raw_Z_c = np.ndarray((nsamples, 2), dtype=np.float32, buffer=raw_Z_c_shm.buf)
+def init_shared_memory(GS_ac_name, ES_ac_name, GS_c_name, ES_c_name, nsamples):
+    global GS_ac_shm, ES_ac_shm, GS_c_shm, ES_c_shm
+    global GS_ac, ES_ac, GS_c, ES_c
+
+    GS_ac_shm = shared_memory.SharedMemory(name=GS_ac_name)
+    ES_ac_shm = shared_memory.SharedMemory(name=ES_ac_name)
+    GS_c_shm = shared_memory.SharedMemory(name=GS_c_name)
+    ES_c_shm = shared_memory.SharedMemory(name=ES_c_name)
+
+    GS_ac = np.ndarray((nsamples,), dtype=np.complex64, buffer=GS_ac_shm.buf)
+    ES_ac = np.ndarray((nsamples,), dtype=np.complex64, buffer=ES_ac_shm.buf)
+    GS_c = np.ndarray((nsamples,), dtype=np.float32, buffer=GS_c_shm.buf)
+    ES_c = np.ndarray((nsamples,), dtype=np.float32, buffer=ES_c_shm.buf)
 
 
 # worker function for inference using the Truncated Normal distribution on structure factors
@@ -52,25 +67,6 @@ def estimate_reflection(args):
         high,
         r,
     ) = args
-
-    # transform acentric multivariate Normals into the DW prior
-    L_ac = np.sqrt(0.5) * np.array(
-        [
-            [1, 0, 0, 0],
-            [0, 1, 0, 0],
-            [r, 0, np.sqrt(1 - r**2), 0],
-            [0, r, 0, np.sqrt(1 - r**2)],
-        ]
-    )
-    E_ac = raw_Z_ac.dot(L_ac.T)
-    GS_ac = E_ac[:, 0] + 1j * E_ac[:, 1]
-    ES_ac = E_ac[:, 2] + 1j * E_ac[:, 3]
-
-    # transform centric multivariate Normals into the DW prior
-    L_c = np.array([[1, 0], [r, np.sqrt(1 - r**2)]])
-    E_c = raw_Z_c.dot(L_c.T)
-    GS_c = E_c[:, 0]
-    ES_c = E_c[:, 1]
 
     a_off, b_off = (float(low) - float(loc_off)) / float(scale_off), (
         float(high) - float(loc_off)
@@ -100,9 +96,14 @@ def estimate_reflection(args):
         x_on = sqrt_eps * sqrt_Sig_on * (ON_abs / k)
         ES = ES_c
 
-    w_off = rv_off.pdf(x_off)
-    w_on = rv_on.pdf(x_on)
-    w = w_off * w_on * (w_off > eps) * (w_on > eps)
+    # likelihood calculation
+    logw = rv_off.logpdf(x_off) + rv_on.logpdf(x_on)
+    ll_i = _logmeanexp(logw)
+
+    # weights calculation
+    m = np.max(logw)
+    w = np.exp(logw - m)
+    w *= w > eps
     sum_w = np.sum(w)
 
     if sum_w > 0 and np.sum(w > 0) > 5:
@@ -119,10 +120,11 @@ def estimate_reflection(args):
             es_val,  # ES_abs_2
             es_sig,  # SIGES_abs_2
             fs_val,  # FS_abs_2
-            fs_sig,
-        )  # SIGFS_abs_2
+            fs_sig,  # SIGFS_abs_2
+            ll_i,
+        )
     else:
-        return (i, np.nan, np.nan, np.nan, np.nan)
+        return (i, np.nan, np.nan, np.nan, np.nan, ll_i)
 
 
 # worker function for inference using the Normal distribution for intensities
@@ -143,25 +145,6 @@ def estimate_reflection_intensity(args):
         sqrt_Sig_off,
         r,
     ) = args
-
-    # transform acentric multivariate Normals into the DW prior
-    L_ac = np.sqrt(0.5) * np.array(
-        [
-            [1, 0, 0, 0],
-            [0, 1, 0, 0],
-            [r, 0, np.sqrt(1 - r**2), 0],
-            [0, r, 0, np.sqrt(1 - r**2)],
-        ]
-    )
-    E_ac = raw_Z_ac.dot(L_ac.T)
-    GS_ac = E_ac[:, 0] + 1j * E_ac[:, 1]
-    ES_ac = E_ac[:, 2] + 1j * E_ac[:, 3]
-
-    # transform centric multivariate Normals into the DW prior
-    L_c = np.array([[1, 0], [r, np.sqrt(1 - r**2)]])
-    E_c = raw_Z_c.dot(L_c.T)
-    GS_c = E_c[:, 0]
-    ES_c = E_c[:, 1]
 
     if not centric:
         ON = (1 - p) * GS_ac + p * ES_ac
@@ -184,10 +167,16 @@ def estimate_reflection_intensity(args):
         loc_ON = ON_abs**2 * Sigma_on * sqrt_eps**2
         ES = ES_c
 
-    w_off = norm(loc=loc_OF, scale=SigI_off).pdf(I_off_obs)
-    w_on = norm(loc=loc_ON, scale=SigI_on).pdf(I_on_obs)
+    # likelihood calculation
+    logw = norm(loc=loc_OF, scale=SigI_off).logpdf(I_off_obs) + norm(
+        loc=loc_ON, scale=SigI_on
+    ).logpdf(I_on_obs)
+    ll_i = _logmeanexp(logw)
 
-    w = w_off * w_on * (w_off > eps) * (w_on > eps)
+    # weights calculation
+    m = np.max(logw)
+    w = np.exp(logw - m)
+    w *= w > eps
     sum_w = np.sum(w)
 
     if sum_w > 0 and np.sum(w > 0) > 5:
@@ -204,15 +193,28 @@ def estimate_reflection_intensity(args):
             es_val,  # ES_abs_2
             es_sig,  # SIGES_abs_2
             fs_val,  # FS_abs_2
-            fs_sig,
-        )  # SIGFS_abs_2
+            fs_sig,  # SIGFS_abs_2
+            ll_i,
+        )
     else:
-        return (i, np.nan, np.nan, np.nan, np.nan)
+        return (i, np.nan, np.nan, np.nan, np.nan, ll_i)
 
 
-def main():
-    # Read in arguments
-    args = parse_arguments().parse_args()
+def extrapolate_dw(args):
+    """Run DW extrapolation given parsed command-line arguments.
+
+    Parameters
+    ----------
+    args : argparse.Namespace
+        Parsed arguments from :func:`parse_arguments`.
+
+    Returns
+    -------
+    reciprocalspaceship.DataSet
+        Output dataset containing extrapolated structure factor columns that were written
+        to the output MTZ.
+    """
+    # Unpack arguments
     r = args.rDW
     nsamples = args.nsamples
     eps = 1e-10
@@ -234,13 +236,44 @@ def main():
     raw_Z_ac = np.random.randn(nsamples, 4).astype(np.float32)  # acentric samples
     raw_Z_c = np.random.randn(nsamples, 2).astype(np.float32)  # centric samples
 
-    # Create shared memory blocks for standard Multivariate normals + write into memory
-    Z_ac_shm_obj = shared_memory.SharedMemory(create=True, size=raw_Z_ac.nbytes)
-    Z_c_shm_obj = shared_memory.SharedMemory(create=True, size=raw_Z_c.nbytes)
-    np.ndarray(raw_Z_ac.shape, dtype=raw_Z_ac.dtype, buffer=Z_ac_shm_obj.buf)[:] = (
-        raw_Z_ac
+    L_ac = np.sqrt(0.5) * np.array(
+        [
+            [1, 0, 0, 0],
+            [0, 1, 0, 0],
+            [r, 0, np.sqrt(1 - r**2), 0],
+            [0, r, 0, np.sqrt(1 - r**2)],
+        ],
+        dtype=np.float32,
     )
-    np.ndarray(raw_Z_c.shape, dtype=raw_Z_c.dtype, buffer=Z_c_shm_obj.buf)[:] = raw_Z_c
+
+    E_ac = raw_Z_ac.dot(L_ac.T)
+    GS_ac_local = (E_ac[:, 0] + 1j * E_ac[:, 1]).astype(np.complex64)
+    ES_ac_local = (E_ac[:, 2] + 1j * E_ac[:, 3]).astype(np.complex64)
+
+    L_c = np.array([[1, 0], [r, np.sqrt(1 - r**2)]], dtype=np.float32)
+    E_c = raw_Z_c.dot(L_c.T)
+    GS_c_local = E_c[:, 0].astype(np.float32)
+    ES_c_local = E_c[:, 1].astype(np.float32)
+
+    # Allocate storage
+
+    GS_ac_shm_obj = shared_memory.SharedMemory(create=True, size=GS_ac_local.nbytes)
+    ES_ac_shm_obj = shared_memory.SharedMemory(create=True, size=ES_ac_local.nbytes)
+    GS_c_shm_obj = shared_memory.SharedMemory(create=True, size=GS_c_local.nbytes)
+    ES_c_shm_obj = shared_memory.SharedMemory(create=True, size=ES_c_local.nbytes)
+
+    np.ndarray(GS_ac_local.shape, dtype=GS_ac_local.dtype, buffer=GS_ac_shm_obj.buf)[
+        :
+    ] = GS_ac_local
+    np.ndarray(ES_ac_local.shape, dtype=ES_ac_local.dtype, buffer=ES_ac_shm_obj.buf)[
+        :
+    ] = ES_ac_local
+    np.ndarray(GS_c_local.shape, dtype=GS_c_local.dtype, buffer=GS_c_shm_obj.buf)[:] = (
+        GS_c_local
+    )
+    np.ndarray(ES_c_local.shape, dtype=ES_c_local.dtype, buffer=ES_c_shm_obj.buf)[:] = (
+        ES_c_local
+    )
 
     # Merge and prepare data
 
@@ -376,7 +409,13 @@ def main():
     with mp.Pool(
         processes=num_procs,
         initializer=init_shared_memory,
-        initargs=(Z_ac_shm_obj.name, Z_c_shm_obj.name, nsamples),
+        initargs=(
+            GS_ac_shm_obj.name,
+            ES_ac_shm_obj.name,
+            GS_c_shm_obj.name,
+            ES_c_shm_obj.name,
+            nsamples,
+        ),
     ) as pool:
         results = list(
             tqdm(
@@ -391,12 +430,16 @@ def main():
     SIGES_abs_2_array = np.full(len(ds_all), np.nan)
     FS_abs_2_array = np.full(len(ds_all), np.nan)
     SIGFS_abs_2_array = np.full(len(ds_all), np.nan)
+    loglik_array = np.full(len(ds_all), np.nan, dtype=np.float64)
 
-    for i, es_val, es_sig, fs_val, fs_sig in results:
+    for i, es_val, es_sig, fs_val, fs_sig, ll_i in results:
         ES_abs_2_array[i] = es_val
         SIGES_abs_2_array[i] = es_sig
         FS_abs_2_array[i] = fs_val
         SIGFS_abs_2_array[i] = fs_sig
+        loglik_array[i] = ll_i
+
+    total_nll = -np.sum(loglik_array)
 
     # Assign and cast to MTZ-friendly types
     ds_all["ES_abs_2"] = ES_abs_2_array.astype("float32")
@@ -419,9 +462,57 @@ def main():
     )
 
     # Cleanup shared memory
-    for shm in [Z_ac_shm_obj, Z_c_shm_obj]:
+    for shm in [GS_ac_shm_obj, ES_ac_shm_obj, GS_c_shm_obj, ES_c_shm_obj]:
         shm.close()
         shm.unlink()
+
+    return ds_all, total_nll
+
+
+def main():
+    parser = parse_arguments()
+    args = parser.parse_args()
+
+    if args.default_scan:
+        # fixed r
+
+        if not args.rDW:
+            args.rDW = 0.9
+
+        # disallow conflicting options
+        if args.factor or args.es_fraction:
+            raise ValueError(
+                "--default_scan cannot be used with --es-fraction or --factor"
+            )
+
+        p_values = np.arange(0.05, 0.51, 0.05)
+
+        base_out = args.outfile
+
+        best = (None, np.inf)  # (p, ll)
+        scan_rows = []
+
+        for p in p_values:
+            args.es_fraction = float(p)
+
+            args.outfile = base_out.replace(".mtz", f"_p{p:.2f}.mtz")
+
+            print(f"Running default scan: r={args.rDW}, p={p:.2f}")
+            ds_out, total_nll = extrapolate_dw(args)
+            print(f"Negative Log Likelihood = {total_nll}")
+
+            scan_rows.append((p, total_nll))
+
+            if np.isfinite(total_nll) and total_nll < best[1]:
+                best = (p, total_nll)
+
+        if best[0] is None:
+            raise RuntimeError("No finite NLL values found in scan.")
+        print("\nDefault scan MLE (grid):")
+        print(f"  r={args.rDW}, p={best[0]:.2f}, NLL={best[1]:.3f}")
+    else:
+        ds_out, total_nll = extrapolate_dw(args)
+        print(f"NLL = {total_nll}")
 
 
 def parse_arguments():
@@ -483,27 +574,13 @@ def parse_arguments():
         default=None,
         help="Number of processes to use for multiprocessing",
     )
+    parser.add_argument(
+        "--default_scan",
+        action="store_true",
+        help="Run default scan with r=0.9 and p from 0.05 to 0.5 in steps of 0.05",
+    )
     parser.add_argument("--disable-progress-bar", action="store_true")
     return parser
-
-
-# For computing resolution-dependent scale factors
-def mean_intensity_by_resolution(I, dHKL, bins=50, gridpoints=None):
-    I = np.array(I, dtype=np.float64)
-    dHKL = np.array(dHKL, dtype=np.float64)
-    if gridpoints is None:
-        gridpoints = bins * 20
-    X = dHKL**-2.0
-    bw = (X.max() - X.min()) / bins
-    grid = np.linspace(X.min(), X.max(), gridpoints)
-    K = np.exp(-0.5 * ((X[:, None] - grid[None, :]) / bw) ** 2)
-    K = K / K.sum(0)
-    protos = I @ K
-    bw = grid[1] - grid[0]
-    K = np.exp(-0.5 * ((X[:, None] - grid[None, :]) / bw) ** 2)
-    K = K / K.sum(1)[:, None]
-    Sigma = K @ protos
-    return Sigma
 
 
 # For getting truncated Normal parameters using method of moments
@@ -556,6 +633,12 @@ def equations(ab, m, s):
     sigma = (b - a) / (beta - alpha)
     mu = a - sigma * alpha
     return [mu + sigma * lam - m, sigma**2 * nu - s**2]
+
+
+# worker function for computing the log-mean in the likelihood caclulation
+def _logmeanexp(logw):
+    m = np.max(logw)
+    return m + np.log(np.mean(np.exp(logw - m) + 1e-300))
 
 
 if __name__ == "__main__":
