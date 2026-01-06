@@ -46,7 +46,7 @@ setup(
     url="https://github.com/rs-station/rs-booster",
     project_urls=PROJECT_URLS,
     python_requires=">3.7",
-    install_requires=["reciprocalspaceship", "matplotlib", "seaborn"],
+    install_requires=["reciprocalspaceship", "matplotlib", "seaborn", "structlog"],
     extras_require={
         "dev": tests_require + docs_require,
         "docs": docs_require
@@ -67,7 +67,8 @@ setup(
             "rs.rfree=rsbooster.utils.rfree:main",
             "rs.from_dials=rsbooster.io.dials2mtz:ray_main",
             "rs.from_dials_mpi=rsbooster.io.dials2mtz:mpi_main",
-            "rs.print_refl=rsbooster.io.dials2mtz:print_refl"
+            "rs.print_refl=rsbooster.io.dials2mtz:print_refl",
+            "rs.i2f=rsbooster.utils.i2f:main",
         ]
     },
     classifiers=[
