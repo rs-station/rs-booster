@@ -46,7 +46,7 @@ setup(
     url="https://github.com/rs-station/rs-booster",
     project_urls=PROJECT_URLS,
     python_requires=">3.7",
-    install_requires=["reciprocalspaceship", "matplotlib", "seaborn"],
+    install_requires=["reciprocalspaceship", "matplotlib", "seaborn","tqdm"],
     extras_require={
         "dev": tests_require + docs_require,
         "docs": docs_require
@@ -54,7 +54,8 @@ setup(
     entry_points={
         "console_scripts": [
             "rs.extrapolate=rsbooster.esf.extrapolate:main",
-            "rs.extrapolate_dw=rsbooster.esf.extrapolate_dw:main",
+            "rs.dw_extrapolate=rsbooster.esf.dw_extrapolator:main",
+            "rs.mle_dw_extrapolate=rsbooster.esf.mle_dw_extrapolator:main",
             "rs.scaleit=rsbooster.scaleit.scaleit:main",
             "rs.internal_diffmap=rsbooster.diffmaps.internaldiffmap:main",
             "rs.ccsym=rsbooster.stats.ccsym:main",
@@ -82,3 +83,4 @@ setup(
         "Programming Language :: Python",
     ],
 )
+
