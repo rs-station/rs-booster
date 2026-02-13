@@ -1,19 +1,80 @@
 #!/usr/bin/env python
 """
-Maximum-likelihood estimation of (r, p) parameters for double-Wilson extrapolation. To be used before with the dw_extrapolate script.
+Maximum Likelihood Estimation for Double-Wilson Extrapolation
+==============================================================
 
+Command-line interface for estimating model parameters (r, p)
+for use with the double-Wilson (DW) extrapolator.
 
-Notes
+Usage
 -----
-- For careless outputs: pass .mtz's without additional arguments
-- For French-Wilson scaled structure factors from other software (e.g., XDS):
-    - Use the --use_structure_factors flag, specifying F/SigF column names
-- For non French-Wilson scaled datasets (e.g., from Aimless), use integrated Intensities datasets:
-    - Use the --use_intensities flag, specifying I/SigI column names
-- Provide initial parameter estimates usin gthe --init_r, --init_p flags
-- To prioritize efficiency, this method has default sample size of n=10,000
-    - We also recommend only using a subset of reflections to perform inference (about a quarter of all reflections) has worked well for us; the number of reflections used can be specified using the --subset flag
+    rs.mle_dw_extrapolate --onmtz <EXCITED_MTZ> --offmtz <OFF_MTZ>
+
+Outputs
+-------
+    results.json
+        File containing the optimization results.
+
+Required Arguments
+------------------
+    --onmtz <EXCITED_MTZ>
+        .mtz file containing perturbed (excited) state data.
+
+    --offmtz <OFF_MTZ>
+        .mtz file containing ground state data.
+
+Optional Arguments
+------------------
+    --use_structure_factors <F_COLUMN> <SIGF_COLUMN>
+        Use French-Wilson scaled structure factors and associated errors.
+
+    --use_intensities <I_COLUMN> <SIGI_COLUMN>
+        Use merged intensities and associated errors.
+
+    --n_samples <N>
+        Number of Monte Carlo samples used to evaluate likelihood.
+        Default: 1e4
+
+    --nproc <P>
+        Number of processors used for multiprocessing speed-ups.
+        Default: system CPU count
+
+    --init_r <R>
+        Initial guess for model correlation parameter r.
+        Default: 0.9
+
+    --init_p <P>
+        Initial guess for model excited-state fraction parameter p.
+        Default: 0.25
+
+    --bounds_r <LOWER_R> <UPPER_R>
+        Bounds for r during optimization.
+        Default: (1e-6, 1 - 1e-6)
+
+    --bounds_p <LOWER_P> <UPPER_P>
+        Bounds for p during optimization.
+        Default: (1e-6, 1 - 1e-6)
+
+    --max_iter <MAX_T>
+        Maximum number of iterations for the optimizer.
+        Default: 50
+
+    --seed <SEED>
+        Random seed for Monte Carlo sampling.
+        Default: 13
+
+    --subset <S>
+        Number of reflections to subsample for faster optimization.
+        Default: None
+
+    --disable_progress_bar
+        Disable tqdm progress bar for likelihood evaluations.
+
+    --out <OUTFILE>
+        Name of output file.
+        Default: results.json
 """
+
 
 import argparse
 import json
@@ -190,7 +251,7 @@ def parse_arguments():
         "-use_SF",
         nargs=2,
         metavar=("F_COL", "SIGF_COL"),
-        help="Use FW‑scaled |F|/SigF columns, e.g., F SigF",
+        help="Use FW‑scaled F/SigF columns, e.g., F SigF",
     )
     p.add_argument(
         "--use_intensities",
@@ -204,7 +265,7 @@ def parse_arguments():
         "-n",
         type=int,
         default=10_000,
-        help="Monte Carlo samples (default 1e6)",
+        help="Number of Monte Carlo samples (default 1e4)",
     )
     p.add_argument(
         "--nproc",
