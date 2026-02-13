@@ -1,20 +1,76 @@
 #!/usr/bin/env python
 """
-Bayesian extrapolated structure factors calculation using the double-Wilson statistical model.
+Double-Wilson Structure Factor Extrapolation
+===========================================
 
-Equations
----------
-The underlying model assumes that the observed structure factors (ON) are a weighted average of ground state (GS) and excited state (ES) structure factors, with excited state fraction p:
-    - E^ON = p E^ES + (1-p) E^GS
+Command-line interface for performing double-Wilson (DW)
+structure factor extrapolation to estimate excited-state
+structure factor amplitudes.
 
-Notes
+Usage
 -----
-- For careless outputs: pass .mtz's without additional arguments
-- For French-Wilson scaled structure factors from other software (e.g., XDS):
-    - Use the --use_structure_factors flag, specifying F/SigF column names
-- For non French-Wilson scaled datasets (e.g., from Aimless), use integrated Intensities datasets:
-    - Use the --use_intensities flag, specifying I/SigI column names
+    rs.dw_extrapolate --onmtz <EXCITED_MTZ> --offmtz <OFF_MTZ>
+
+Outputs
+-------
+    esf_dw.mtz
+        MTZ file containing excited-state structure factor amplitudes.
+
+        ES_abs_2, SIGES_abs_2
+            Normalized excited-state amplitudes and associated errors.
+
+        FS_abs_2, SIGFS_abs_2
+            Excited-state amplitudes rescaled to the original data scale.
+
+Required Arguments
+------------------
+    --onmtz <EXCITED_MTZ>
+        .mtz file containing perturbed (excited) state data.
+
+    --offmtz <OFF_MTZ>
+        .mtz file containing ground state data.
+
+Optional Arguments
+------------------
+    --use_structure_factors <F_COLUMN> <SIGF_COLUMN>
+        Use French-Wilson scaled structure factors and associated errors.
+
+    --use_intensities <I_COLUMN> <SIGI_COLUMN>
+        Use merged intensities and associated errors.
+
+    --nsamples <N>
+        Number of Monte Carlo samples used for importance sampling.
+        Default: 1e6
+
+    --rDW <R>
+        Model correlation parameter r.
+        Default: 0.9
+
+    --es-fraction <P>
+        Model excited-state fraction p.
+        Default: 0.25
+
+    --factor <F>
+        Extrapolation factor equal to 1/p.
+        Specify only one of --es-fraction or --factor.
+        Default: 4
+
+    --outfile <OUTFILE>
+        Name of output MTZ file.
+        Default: esf_dw.mtz
+
+    --nproc
+        Number of processors to use for multiprocessing speed-ups.
+        Default: none
+
+    --default_scan
+        Recommended mode that fixes r = 0.9 and scans over a grid of
+        p values from 0.05 to 0.5 in increments of 0.05.
+
+    --disable-progress-bar
+        Disable tqdm progress bar displaying algorithm iterations.
 """
+
 
 import argparse
 import numpy as np
@@ -572,7 +628,7 @@ def parse_arguments():
         "--nproc",
         type=int,
         default=None,
-        help="Number of processes to use for multiprocessing",
+        help="Number of processors to use for multiprocessing",
     )
     parser.add_argument(
         "--default_scan",
