@@ -69,6 +69,9 @@ Optional Arguments
 
     --disable-progress-bar
         Disable tqdm progress bar displaying algorithm iterations.
+        
+    --Seed
+        Seed for generating Monte Carlo samples
 """
 
 
@@ -289,8 +292,9 @@ def extrapolate_dw(args):
     ds_of = rs.read_mtz(args.offmtz[0])
 
     # Sample standard Multivariate Normals
-    raw_Z_ac = np.random.randn(nsamples, 4).astype(np.float32)  # acentric samples
-    raw_Z_c = np.random.randn(nsamples, 2).astype(np.float32)  # centric samples
+    rng = np.random.default_rng(seed=args.seed)
+    raw_Z_ac = rng.randn(nsamples, 4).astype(np.float32)  # acentric samples
+    raw_Z_c = rng.randn(nsamples, 2).astype(np.float32)  # centric samples
 
     L_ac = np.sqrt(0.5) * np.array(
         [
@@ -636,6 +640,12 @@ def parse_arguments():
         help="Run default scan with r=0.9 and p from 0.05 to 0.5 in steps of 0.05",
     )
     parser.add_argument("--disable-progress-bar", action="store_true")
+    parser.add_argument(
+        "--seed",
+        type=int,
+        default=28,
+        help="Seed from generating Monte Carlo samples",
+    )
     return parser
 
 
