@@ -293,8 +293,8 @@ def extrapolate_dw(args):
 
     # Sample standard Multivariate Normals
     rng = np.random.default_rng(seed=args.seed)
-    raw_Z_ac = rng.standard_normal(nsamples, 4).astype(np.float32)  # acentric samples
-    raw_Z_c = rng.standard_normal(nsamples, 2).astype(np.float32)  # centric samples
+    raw_Z_ac = rng.standard_normal((nsamples, 4)).astype(np.float32)  # acentric samples
+    raw_Z_c = rng.standard_normal((nsamples, 2)).astype(np.float32)  # centric samples
 
     L_ac = np.sqrt(0.5) * np.array(
         [
