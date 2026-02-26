@@ -46,7 +46,7 @@ setup(
     url="https://github.com/rs-station/rs-booster",
     project_urls=PROJECT_URLS,
     python_requires=">3.7",
-    install_requires=["reciprocalspaceship", "matplotlib", "seaborn","tqdm"],
+    install_requires=["reciprocalspaceship", "matplotlib", "seaborn"],
     extras_require={
         "dev": tests_require + docs_require,
         "docs": docs_require
