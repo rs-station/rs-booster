@@ -182,38 +182,38 @@ def parse_arguments():
     parser = argparse.ArgumentParser(
         formatter_class=argparse.RawTextHelpFormatter, description=__doc__
     )
-    p.add_argument("--onmtz", required=True, help=".mtz file for perturbed dataset")
-    p.add_argument("--offmtz", required=True, help=".mtz file for ground state dataset")
-    p.add_argument(
+    parser.add_argument("--onmtz", required=True, help=".mtz file for perturbed dataset")
+    parser.add_argument("--offmtz", required=True, help=".mtz file for ground state dataset")
+    parser.add_argument(
         "--use_structure_factors",
         "-use_SF",
         nargs=2,
         metavar=("f_col", "sigf_col"),
         help="Use structure factors from French-Wilson scaling. Specified as (F, SigF)",
     )
-    p.add_argument(
+    parser.add_argument(
         "--use_intensities",
         "-use_I",
         nargs=2,
         metavar=("i_col", "sigi_col"),
         help="Use integrated intensities. Specified as (I, SigI)",
     )
-    p.add_argument(
+    parser.add_argument(
         "--nsamples",
         "-n",
         type=int,
         default=10_000,
         help="Number of Monte Carlo samples (default 1e4)",
     )
-    p.add_argument(
+    parser.add_argument(
         "--nproc",
         type=int,
         default=None,
         help="Number of processes (default: cpu_count)",
     )
-    p.add_argument("--init_r", type=float, default=0.9, help="Initial guess for r")
-    p.add_argument("--init_p", type=float, default=0.125, help="Initial guess for p")
-    p.add_argument(
+    parser.add_argument("--init_r", type=float, default=0.9, help="Initial guess for r")
+    parser.add_argument("--init_p", type=float, default=0.125, help="Initial guess for p")
+    parser.add_argument(
         "--bounds_r", 
         type=float, 
         nargs=2, 
@@ -221,7 +221,7 @@ def parse_arguments():
         default=[1e-6, 1 - 1e-6], 
         help="Bounds for r"
     )
-    p.add_argument(
+    parser.add_argument(
         "--bounds_p", 
         type=float, 
         nargs=2, 
@@ -229,16 +229,16 @@ def parse_arguments():
         default=[1e-6, 1 - 1e-6], 
         help="Bounds for p"
     )
-    p.add_argument("--maxiter", type=int, default=50, help="Max optimizer iterations")
-    p.add_argument("--seed", type=int, default=13, help="Random seed for MC samples")
-    p.add_argument(
+    parser.add_argument("--maxiter", type=int, default=50, help="Max optimizer iterations")
+    parser.add_argument("--seed", type=int, default=13, help="Random seed for MC samples")
+    parser.add_argument(
         "--subset",
         type=int,
         default=None,
         help="Optional number of reflections to randomly subsample for faster runs",
     )
-    p.add_argument("--disable_progress_bar", action="store_true")
-    p.add_argument(
+    parser.add_argument("--disable_progress_bar", action="store_true")
+    parser.add_argument(
         "--out", "-o", default="results.json", help="Where to write JSON results"
     )
     return p
