@@ -241,7 +241,7 @@ def parse_arguments():
     parser.add_argument(
         "--out", "-o", default="results.json", help="Where to write JSON results"
     )
-    return p
+    return parser
 
 
 def reparam(df):
