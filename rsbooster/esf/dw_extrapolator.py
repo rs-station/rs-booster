@@ -1,83 +1,20 @@
 #!/usr/bin/env python
 """
-Double-Wilson Structure Factor Extrapolation
-===========================================
+Runs DW-Extrapolator, a Bayesian inference procedure to infer excited state structure factors in perturbative crystallography datsets.
 
-Command-line interface for performing double-Wilson (DW)
-structure factor extrapolation to estimate excited-state
-structure factor amplitudes.
+Equations
+---------
+The underlying model assumes that ground state (GS) and excited state (ES) structure factors have correlation r and that the observed "on" state structure factors are given by F^{ON} = (1-p)*F^{GS} + p*F&{ES}. 
 
-Usage
+Notes
 -----
-    rs.dw_extrapolate --onmtz <EXCITED_MTZ> --offmtz <OFF_MTZ>
-
-Outputs
--------
-    esf_dw.mtz
-        MTZ file containing excited-state structure factor amplitudes.
-
-        ES_abs_2, SIGES_abs_2
-            Normalized excited-state amplitudes and associated errors.
-
-        FS_abs_2, SIGFS_abs_2
-            Excited-state amplitudes rescaled to the original data scale.
-
-Required Arguments
-------------------
-    --onmtz <EXCITED_MTZ>
-        .mtz file containing perturbed (excited) state data.
-
-    --offmtz <OFF_MTZ>
-        .mtz file containing ground state data.
-
-Optional Arguments
-------------------
-    --use_structure_factors <F_COLUMN> <SIGF_COLUMN>
-        Use French-Wilson scaled structure factors and associated errors.
-
-    --use_intensities <I_COLUMN> <SIGI_COLUMN>
-        Use merged intensities and associated errors.
-
-    --nsamples <N>
-        Number of Monte Carlo samples used for importance sampling.
-        Default: 1e6
-
-    --rDW <R>
-        Model correlation parameter r.
-        Default: 0.9
-
-    --es-fraction <P>
-        Model excited-state fraction p.
-        Default: 0.25
-
-    --factor <F>
-        Extrapolation factor equal to 1/p.
-        Specify only one of --es-fraction or --factor.
-        Default: 4
-
-    --outfile <OUTFILE>
-        Name of output MTZ file.
-        Default: esf_dw.mtz
-
-    --nproc
-        Number of processors to use for multiprocessing speed-ups.
-        Default: none
-
-    --default_scan
-        Recommended mode that fixes r = 0.9 and scans over a grid of
-        p values from 0.05 to 0.5 in increments of 0.05.
-
-    --disable-progress-bar
-        Disable tqdm progress bar displaying algorithm iterations.
-        
-    --Seed
-        Seed for generating Monte Carlo samples
+    - At minimum, two .mtz's for the off and on data need to be provided
+    - DW-Extrapolator can be run using French-Wilson scaled structure factors or integrated intensities
 """
 
 
 import argparse
 import numpy as np
-from tqdm import tqdm
 from scipy.stats import truncnorm, norm
 from scipy import optimize
 import reciprocalspaceship as rs
@@ -86,6 +23,11 @@ from multiprocessing import shared_memory
 from reciprocalspaceship.algorithms.scale_merged_intensities import (
     mean_intensity_by_resolution,
 )
+
+try:                              
+    from tqdm import tqdm         
+except:                           
+    tqdm = iter       
 
 # globals
 GS_ac_shm = ES_ac_shm = GS_c_shm = ES_c_shm = None
@@ -576,7 +518,9 @@ def main():
 
 
 def parse_arguments():
-    parser = argparse.ArgumentParser(description="Multiprocessing ESF DW extrapolation")
+    parser = argparse.ArgumentParser(
+        formatter_class=argparse.RawTextHelpFormatter, description=__doc__
+    )
     parser.add_argument(
         "-on",
         "--onmtz",
@@ -595,22 +539,22 @@ def parse_arguments():
         "-use_SF",
         "--use_structure_factors",
         nargs=2,
-        metavar=("F_COL, SIGF_COL"),
-        help="Use structure factors outputted by software that uses French-Wilson scaling (e.g., XDS). Provide column header names: e.g., --use-intensities F SigF",
+        metavar=("f_col, sigf_col"),
+        help="Use structure factors from French-Wilson scaling. Specified as (F, SigF)",
     )
     parser.add_argument(
         "-use_I",
         "--use_intensities",
         nargs=2,
-        metavar=("I_COL, SIGI_COL"),
-        help="Use I/SigI with Normal likelihood instead of structure factors. Provide column header names: e.g., --use-intensities I SigI",
+        metavar=("i_col, sigi_col"),
+        help="Use integrated intensities. Specified as (I, SigI)",
     )
     parser.add_argument(
         "-n",
         "--nsamples",
         type=int,
         default=1_000_000,
-        help="Number of samples to use in Monte Carlo integral (default = 10^6",
+        help="Number of importance samples",
     )
     parser.add_argument(
         "-r",
@@ -632,19 +576,19 @@ def parse_arguments():
         "--nproc",
         type=int,
         default=None,
-        help="Number of processors to use for multiprocessing",
+        help="Number of processors for multiprocessing",
     )
     parser.add_argument(
         "--default_scan",
         action="store_true",
         help="Run default scan with r=0.9 and p from 0.05 to 0.5 in steps of 0.05",
     )
-    parser.add_argument("--disable-progress-bar", action="store_true")
+    parser.add_argument("--disable-progress-bar", action="store_true", help="Disable tqdm progress bar")
     parser.add_argument(
         "--seed",
         type=int,
         default=28,
-        help="Seed from generating Monte Carlo samples",
+        help="Random seed for generating Monte Carlo samples",
     )
     return parser
 
