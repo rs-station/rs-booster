@@ -1,85 +1,18 @@
 #!/usr/bin/env python
 """
-Maximum Likelihood Estimation for Double-Wilson Extrapolation
-==============================================================
+Runs maximum likelihood estimation of model parameters (r,p) for DW-Extrapolator. 
 
-Command-line interface for estimating model parameters (r, p)
-for use with the double-Wilson (DW) extrapolator.
-
-Usage
+Notes
 -----
-    rs.mle_dw_extrapolate --onmtz <EXCITED_MTZ> --offmtz <OFF_MTZ>
-
-Outputs
--------
-    results.json
-        File containing the optimization results.
-
-Required Arguments
-------------------
-    --onmtz <EXCITED_MTZ>
-        .mtz file containing perturbed (excited) state data.
-
-    --offmtz <OFF_MTZ>
-        .mtz file containing ground state data.
-
-Optional Arguments
-------------------
-    --use_structure_factors <F_COLUMN> <SIGF_COLUMN>
-        Use French-Wilson scaled structure factors and associated errors.
-
-    --use_intensities <I_COLUMN> <SIGI_COLUMN>
-        Use merged intensities and associated errors.
-
-    --n_samples <N>
-        Number of Monte Carlo samples used to evaluate likelihood.
-        Default: 1e4
-
-    --nproc <P>
-        Number of processors used for multiprocessing speed-ups.
-        Default: system CPU count
-
-    --init_r <R>
-        Initial guess for model correlation parameter r.
-        Default: 0.9
-
-    --init_p <P>
-        Initial guess for model excited-state fraction parameter p.
-        Default: 0.25
-
-    --bounds_r <LOWER_R> <UPPER_R>
-        Bounds for r during optimization.
-        Default: (1e-6, 1 - 1e-6)
-
-    --bounds_p <LOWER_P> <UPPER_P>
-        Bounds for p during optimization.
-        Default: (1e-6, 1 - 1e-6)
-
-    --max_iter <MAX_T>
-        Maximum number of iterations for the optimizer.
-        Default: 50
-
-    --seed <SEED>
-        Random seed for Monte Carlo sampling.
-        Default: 13
-
-    --subset <S>
-        Number of reflections to subsample for faster optimization.
-        Default: None
-
-    --disable_progress_bar
-        Disable tqdm progress bar for likelihood evaluations.
-
-    --out <OUTFILE>
-        Name of output file.
-        Default: results.json
+    - Uses scipy.optimize to minimize negative log likelihood
+    - For more efficient runs, can run optimization on a subset of reflections in the datsets; control this
+    using the --subset flag
 """
 
 
 import argparse
 import json
 import numpy as np
-from tqdm import tqdm
 from scipy.stats import truncnorm, norm
 from scipy import optimize
 import reciprocalspaceship as rs
@@ -88,6 +21,11 @@ from multiprocessing import shared_memory
 from reciprocalspaceship.algorithms.scale_merged_intensities import (
     mean_intensity_by_resolution,
 )
+
+try:                              
+    from tqdm import tqdm         
+except:                           
+    tqdm = iter     
 
 raw_Z_ac_shm = None
 raw_Z_c_shm = None
@@ -241,8 +179,8 @@ def loglike_reflection_I(args):
 
 
 def parse_arguments():
-    p = argparse.ArgumentParser(
-        description="MLE of (r, p) for DW model with parallel Monte Carlo"
+    parser = argparse.ArgumentParser(
+        formatter_class=argparse.RawTextHelpFormatter, description=__doc__
     )
     p.add_argument("--onmtz", required=True, help=".mtz file for perturbed dataset")
     p.add_argument("--offmtz", required=True, help=".mtz file for ground state dataset")
@@ -250,15 +188,15 @@ def parse_arguments():
         "--use_structure_factors",
         "-use_SF",
         nargs=2,
-        metavar=("F_COL", "SIGF_COL"),
-        help="Use FW‑scaled F/SigF columns, e.g., F SigF",
+        metavar=("f_col", "sigf_col"),
+        help="Use structure factors from French-Wilson scaling. Specified as (F, SigF)",
     )
     p.add_argument(
         "--use_intensities",
         "-use_I",
         nargs=2,
-        metavar=("I_COL", "SIGI_COL"),
-        help="Use I/SigI with Normal likelihood, e.g., I SigI",
+        metavar=("i_col", "sigi_col"),
+        help="Use integrated intensities. Specified as (I, SigI)",
     )
     p.add_argument(
         "--nsamples",
@@ -276,10 +214,20 @@ def parse_arguments():
     p.add_argument("--init_r", type=float, default=0.9, help="Initial guess for r")
     p.add_argument("--init_p", type=float, default=0.125, help="Initial guess for p")
     p.add_argument(
-        "--bounds_r", type=float, nargs=2, default=[1e-6, 1 - 1e-6], help="Bounds for r"
+        "--bounds_r", 
+        type=float, 
+        nargs=2, 
+        metavar=("lower_bound", "upper_bound"),
+        default=[1e-6, 1 - 1e-6], 
+        help="Bounds for r"
     )
     p.add_argument(
-        "--bounds_p", type=float, nargs=2, default=[1e-6, 1 - 1e-6], help="Bounds for p"
+        "--bounds_p", 
+        type=float, 
+        nargs=2, 
+        metavar=("lower_bound", "upper_bound"),
+        default=[1e-6, 1 - 1e-6], 
+        help="Bounds for p"
     )
     p.add_argument("--maxiter", type=int, default=50, help="Max optimizer iterations")
     p.add_argument("--seed", type=int, default=13, help="Random seed for MC samples")
