@@ -55,7 +55,6 @@ setup(
         "console_scripts": [
             "rs.extrapolate=rsbooster.esf.extrapolate:main",
             "rs.dw_extrapolate=rsbooster.esf.dw_extrapolator:main",
-            "rs.mle_dw_extrapolate=rsbooster.esf.mle_dw_extrapolator:main",
             "rs.scaleit=rsbooster.scaleit.scaleit:main",
             "rs.internal_diffmap=rsbooster.diffmaps.internaldiffmap:main",
             "rs.ccsym=rsbooster.stats.ccsym:main",
