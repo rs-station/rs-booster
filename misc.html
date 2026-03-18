@@ -57,9 +57,13 @@
 <li class="toctree-l3"><a class="reference internal" href="#notes">Notes</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="#rs-mle-dw-extrapolate">rs.mle_dw_extrapolate</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id2">Notes</a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="#rs-dw-extrapolate">rs.dw_extrapolate</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#id2">Equations</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#id3">Notes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id3">Equations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id4">Notes</a></li>
 </ul>
 </li>
 </ul>
@@ -303,7 +307,7 @@ Nature (2016). In that case, the equation for SigF_{esf} is adjusted to
 use (f-1)**2 for SigF_{off} to avoid double-counting in the error propagation.</p></li>
 <li><p>At most one of F_{ref} and F_{calc} can be specified. If neither is specified, 
 F_{calc} will be set to F_{off}.</p></li>
-<li><p>After computing <a href="#id4"><span class="problematic" id="id5">|F_{esf}|</span></a>, any negative structure factor amplitudes are converted
+<li><p>After computing <a href="#id5"><span class="problematic" id="id6">|F_{esf}|</span></a>, any negative structure factor amplitudes are converted
 to positive values. This is to ensure that they are handled correctly downstream in
 phenix, and because they are technically amplitudes of complex numbers and the phase
 should just be flipped by 180 degrees.</p></li>
@@ -358,15 +362,136 @@ should just be flipped by 180 degrees.</p></li>
 
 </section>
 </section>
+<section id="rs-mle-dw-extrapolate">
+<h2>rs.mle_dw_extrapolate<a class="headerlink" href="#rs-mle-dw-extrapolate" title="Link to this heading"></a></h2>
+<p>Runs maximum likelihood estimation of model parameters (r,p) for DW-Extrapolator.</p>
+<section id="id2">
+<h3>Notes<a class="headerlink" href="#id2" title="Link to this heading"></a></h3>
+<blockquote>
+<div><ul class="simple">
+<li><p>Uses scipy.optimize to minimize negative log likelihood</p></li>
+<li><p>For more efficient runs, can run optimization on a subset of reflections in the datsets; control this</p></li>
+</ul>
+<p>using the –subset flag</p>
+</div></blockquote>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">usage: rs.mle_dw_extrapolate [-h] --onmtz ONMTZ --offmtz OFFMTZ</span>
+<span class="go">                             [--use_structure_factors f_col sigf_col]</span>
+<span class="go">                             [--use_intensities i_col sigi_col]</span>
+<span class="go">                             [--nsamples NSAMPLES] [--nproc NPROC]</span>
+<span class="go">                             [--init_r INIT_R] [--init_p INIT_P]</span>
+<span class="go">                             [--bounds_r lower_bound upper_bound]</span>
+<span class="go">                             [--bounds_p lower_bound upper_bound]</span>
+<span class="go">                             [--maxiter MAXITER] [--seed SEED]</span>
+<span class="go">                             [--subset SUBSET] [--disable_progress_bar]</span>
+<span class="go">                             [--out OUT]</span>
+</pre></div>
+</div>
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-rs.mle_dw_extrapolate-h">
+<span class="sig-name descname"><span class="pre">-h</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--help</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-rs.mle_dw_extrapolate-h" title="Link to this definition"></a></dt>
+<dd><p>show this help message and exit</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-rs.mle_dw_extrapolate-onmtz">
+<span class="sig-name descname"><span class="pre">--onmtz</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;onmtz&gt;</span></span><a class="headerlink" href="#cmdoption-rs.mle_dw_extrapolate-onmtz" title="Link to this definition"></a></dt>
+<dd><p>.mtz file for perturbed dataset</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-rs.mle_dw_extrapolate-offmtz">
+<span class="sig-name descname"><span class="pre">--offmtz</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;offmtz&gt;</span></span><a class="headerlink" href="#cmdoption-rs.mle_dw_extrapolate-offmtz" title="Link to this definition"></a></dt>
+<dd><p>.mtz file for ground state dataset</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-rs.mle_dw_extrapolate-use_structure_factors">
+<span class="sig-name descname"><span class="pre">--use_structure_factors</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;f_col&gt;</span> <span class="pre">&lt;sigf_col&gt;</span></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">-use_SF</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;f_col&gt;</span> <span class="pre">&lt;sigf_col&gt;</span></span><a class="headerlink" href="#cmdoption-rs.mle_dw_extrapolate-use_structure_factors" title="Link to this definition"></a></dt>
+<dd><p>Use structure factors from French-Wilson scaling. Specified as (F, SigF)</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-rs.mle_dw_extrapolate-use_intensities">
+<span class="sig-name descname"><span class="pre">--use_intensities</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;i_col&gt;</span> <span class="pre">&lt;sigi_col&gt;</span></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">-use_I</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;i_col&gt;</span> <span class="pre">&lt;sigi_col&gt;</span></span><a class="headerlink" href="#cmdoption-rs.mle_dw_extrapolate-use_intensities" title="Link to this definition"></a></dt>
+<dd><p>Use integrated intensities. Specified as (I, SigI)</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-rs.mle_dw_extrapolate-nsamples">
+<span class="sig-name descname"><span class="pre">--nsamples</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;nsamples&gt;</span></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">-n</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;nsamples&gt;</span></span><a class="headerlink" href="#cmdoption-rs.mle_dw_extrapolate-nsamples" title="Link to this definition"></a></dt>
+<dd><p>Number of Monte Carlo samples (default 1e4)</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-rs.mle_dw_extrapolate-nproc">
+<span class="sig-name descname"><span class="pre">--nproc</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;nproc&gt;</span></span><a class="headerlink" href="#cmdoption-rs.mle_dw_extrapolate-nproc" title="Link to this definition"></a></dt>
+<dd><p>Number of processes (default: cpu_count)</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-rs.mle_dw_extrapolate-init_r">
+<span class="sig-name descname"><span class="pre">--init_r</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;init_r&gt;</span></span><a class="headerlink" href="#cmdoption-rs.mle_dw_extrapolate-init_r" title="Link to this definition"></a></dt>
+<dd><p>Initial guess for r</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-rs.mle_dw_extrapolate-init_p">
+<span class="sig-name descname"><span class="pre">--init_p</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;init_p&gt;</span></span><a class="headerlink" href="#cmdoption-rs.mle_dw_extrapolate-init_p" title="Link to this definition"></a></dt>
+<dd><p>Initial guess for p</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-rs.mle_dw_extrapolate-bounds_r">
+<span class="sig-name descname"><span class="pre">--bounds_r</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;lower_bound&gt;</span> <span class="pre">&lt;upper_bound&gt;</span></span><a class="headerlink" href="#cmdoption-rs.mle_dw_extrapolate-bounds_r" title="Link to this definition"></a></dt>
+<dd><p>Bounds for r</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-rs.mle_dw_extrapolate-bounds_p">
+<span class="sig-name descname"><span class="pre">--bounds_p</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;lower_bound&gt;</span> <span class="pre">&lt;upper_bound&gt;</span></span><a class="headerlink" href="#cmdoption-rs.mle_dw_extrapolate-bounds_p" title="Link to this definition"></a></dt>
+<dd><p>Bounds for p</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-rs.mle_dw_extrapolate-maxiter">
+<span class="sig-name descname"><span class="pre">--maxiter</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;maxiter&gt;</span></span><a class="headerlink" href="#cmdoption-rs.mle_dw_extrapolate-maxiter" title="Link to this definition"></a></dt>
+<dd><p>Max optimizer iterations</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-rs.mle_dw_extrapolate-seed">
+<span class="sig-name descname"><span class="pre">--seed</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;seed&gt;</span></span><a class="headerlink" href="#cmdoption-rs.mle_dw_extrapolate-seed" title="Link to this definition"></a></dt>
+<dd><p>Random seed for MC samples</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-rs.mle_dw_extrapolate-subset">
+<span class="sig-name descname"><span class="pre">--subset</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;subset&gt;</span></span><a class="headerlink" href="#cmdoption-rs.mle_dw_extrapolate-subset" title="Link to this definition"></a></dt>
+<dd><p>Optional number of reflections to randomly subsample for faster runs</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-rs.mle_dw_extrapolate-disable_progress_bar">
+<span class="sig-name descname"><span class="pre">--disable_progress_bar</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-rs.mle_dw_extrapolate-disable_progress_bar" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-rs.mle_dw_extrapolate-out">
+<span class="sig-name descname"><span class="pre">--out</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;out&gt;</span></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">-o</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;out&gt;</span></span><a class="headerlink" href="#cmdoption-rs.mle_dw_extrapolate-out" title="Link to this definition"></a></dt>
+<dd><p>Where to write JSON results</p>
+</dd></dl>
+
+</section>
+</section>
 <section id="rs-dw-extrapolate">
 <h2>rs.dw_extrapolate<a class="headerlink" href="#rs-dw-extrapolate" title="Link to this heading"></a></h2>
 <p>Runs DW-Extrapolator, a Bayesian inference procedure to infer excited state structure factors in perturbative crystallography datsets.</p>
-<section id="id2">
-<h3>Equations<a class="headerlink" href="#id2" title="Link to this heading"></a></h3>
+<section id="id3">
+<h3>Equations<a class="headerlink" href="#id3" title="Link to this heading"></a></h3>
 <p>The underlying model assumes that ground state (GS) and excited state (ES) structure factors have correlation r and that the observed “on” state structure factors are given by F^{ON} = (1-p)*F^{GS} + p*F&amp;{ES}.</p>
 </section>
-<section id="id3">
-<h3>Notes<a class="headerlink" href="#id3" title="Link to this heading"></a></h3>
+<section id="id4">
+<h3>Notes<a class="headerlink" href="#id4" title="Link to this heading"></a></h3>
 <blockquote>
 <div><ul class="simple">
 <li><p>At minimum, two .mtz’s for the off and on data need to be provided</p></li>
