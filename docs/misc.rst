@@ -20,3 +20,6 @@ Other miscellaneous utilites
 
 .. autoprogram:: rsbooster.esf.mle_dw_extrapolator:parse_arguments()
    :prog: rs.mle_dw_extrapolate
+   
+.. autoprogram:: rsbooster.esf.dw_extrapolator:parse_arguments()
+   :prog: rs.dw_extrapolate
