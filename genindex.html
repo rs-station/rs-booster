@@ -6,8 +6,8 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Index &mdash; rs-booster 0.1.3 documentation</title>
-      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
-      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
 
   
     <link rel="shortcut icon" href="_static/rs-favicon_32x32.png"/>
@@ -80,6 +80,7 @@
  | <a href="#M"><strong>M</strong></a>
  | <a href="#P"><strong>P</strong></a>
  | <a href="#R"><strong>R</strong></a>
+ | <a href="#S"><strong>S</strong></a>
  
 </div>
 <h2 id="Symbols">Symbols</h2>
@@ -120,6 +121,20 @@
 </li>
       </ul></li>
       <li>
+    --default_scan
+
+      <ul>
+        <li><a href="misc.html#cmdoption-rs.dw_extrapolate-default_scan">rs.dw_extrapolate command line option</a>
+</li>
+      </ul></li>
+      <li>
+    --disable-progress-bar
+
+      <ul>
+        <li><a href="misc.html#cmdoption-rs.dw_extrapolate-disable-progress-bar">rs.dw_extrapolate command line option</a>
+</li>
+      </ul></li>
+      <li>
     --distance-cutoff
 
       <ul>
@@ -145,9 +160,18 @@
 </li>
       </ul></li>
       <li>
+    --es-fraction
+
+      <ul>
+        <li><a href="misc.html#cmdoption-rs.dw_extrapolate-p">rs.dw_extrapolate command line option</a>
+</li>
+      </ul></li>
+      <li>
     --factor
 
       <ul>
+        <li><a href="misc.html#cmdoption-rs.dw_extrapolate-f">rs.dw_extrapolate command line option</a>
+</li>
         <li><a href="misc.html#cmdoption-rs.extrapolate-f">rs.extrapolate command line option</a>
 </li>
       </ul></li>
@@ -171,6 +195,8 @@
         <li><a href="CC_plots.html#cmdoption-rs.ccsym-h">rs.ccsym command line option</a>
 </li>
         <li><a href="maps.html#cmdoption-rs.diffmap-h">rs.diffmap command line option</a>
+</li>
+        <li><a href="misc.html#cmdoption-rs.dw_extrapolate-h">rs.dw_extrapolate command line option</a>
 </li>
         <li><a href="misc.html#cmdoption-rs.extrapolate-h">rs.extrapolate command line option</a>
 </li>
@@ -273,10 +299,26 @@
 </li>
       </ul></li>
       <li>
+    --nproc
+
+      <ul>
+        <li><a href="misc.html#cmdoption-rs.dw_extrapolate-nproc">rs.dw_extrapolate command line option</a>
+</li>
+      </ul></li>
+      <li>
+    --nsamples
+
+      <ul>
+        <li><a href="misc.html#cmdoption-rs.dw_extrapolate-n">rs.dw_extrapolate command line option</a>
+</li>
+      </ul></li>
+      <li>
     --offmtz
 
       <ul>
         <li><a href="maps.html#cmdoption-rs.diffmap-off">rs.diffmap command line option</a>
+</li>
+        <li><a href="misc.html#cmdoption-rs.dw_extrapolate-off">rs.dw_extrapolate command line option</a>
 </li>
         <li><a href="misc.html#cmdoption-rs.extrapolate-off">rs.extrapolate command line option</a>
 </li>
@@ -286,6 +328,8 @@
 
       <ul>
         <li><a href="maps.html#cmdoption-rs.diffmap-on">rs.diffmap command line option</a>
+</li>
+        <li><a href="misc.html#cmdoption-rs.dw_extrapolate-on">rs.dw_extrapolate command line option</a>
 </li>
         <li><a href="misc.html#cmdoption-rs.extrapolate-on">rs.extrapolate command line option</a>
 </li>
@@ -302,6 +346,8 @@
 
       <ul>
         <li><a href="maps.html#cmdoption-rs.diffmap-o">rs.diffmap command line option</a>
+</li>
+        <li><a href="misc.html#cmdoption-rs.dw_extrapolate-o">rs.dw_extrapolate command line option</a>
 </li>
         <li><a href="misc.html#cmdoption-rs.extrapolate-o">rs.extrapolate command line option</a>
 </li>
@@ -339,6 +385,13 @@
         <li><a href="maps.html#cmdoption-rs.find_difference_peaks-p">rs.find_difference_peaks command line option</a>
 </li>
         <li><a href="maps.html#cmdoption-rs.find_peaks-p">rs.find_peaks command line option</a>
+</li>
+      </ul></li>
+      <li>
+    --rDW
+
+      <ul>
+        <li><a href="misc.html#cmdoption-rs.dw_extrapolate-r">rs.dw_extrapolate command line option</a>
 </li>
       </ul></li>
       <li>
@@ -381,6 +434,8 @@
     --seed
 
       <ul>
+        <li><a href="misc.html#cmdoption-rs.dw_extrapolate-seed">rs.dw_extrapolate command line option</a>
+</li>
         <li><a href="misc.html#cmdoption-rs.rfree-s">rs.rfree command line option</a>
 </li>
       </ul></li>
@@ -454,6 +509,20 @@
 </li>
       </ul></li>
       <li>
+    --use_intensities
+
+      <ul>
+        <li><a href="misc.html#cmdoption-rs.dw_extrapolate-use_I">rs.dw_extrapolate command line option</a>
+</li>
+      </ul></li>
+      <li>
+    --use_structure_factors
+
+      <ul>
+        <li><a href="misc.html#cmdoption-rs.dw_extrapolate-use_SF">rs.dw_extrapolate command line option</a>
+</li>
+      </ul></li>
+      <li>
     --weight-key
 
       <ul>
@@ -504,6 +573,8 @@
     -f
 
       <ul>
+        <li><a href="misc.html#cmdoption-rs.dw_extrapolate-f">rs.dw_extrapolate command line option</a>
+</li>
         <li><a href="misc.html#cmdoption-rs.extrapolate-f">rs.extrapolate command line option</a>
 </li>
         <li><a href="maps.html#cmdoption-rs.find_difference_peaks-f">rs.find_difference_peaks command line option</a>
@@ -526,6 +597,8 @@
         <li><a href="CC_plots.html#cmdoption-rs.ccsym-h">rs.ccsym command line option</a>
 </li>
         <li><a href="maps.html#cmdoption-rs.diffmap-h">rs.diffmap command line option</a>
+</li>
+        <li><a href="misc.html#cmdoption-rs.dw_extrapolate-h">rs.dw_extrapolate command line option</a>
 </li>
         <li><a href="misc.html#cmdoption-rs.extrapolate-h">rs.extrapolate command line option</a>
 </li>
@@ -573,6 +646,13 @@
 </li>
       </ul></li>
       <li>
+    -n
+
+      <ul>
+        <li><a href="misc.html#cmdoption-rs.dw_extrapolate-n">rs.dw_extrapolate command line option</a>
+</li>
+      </ul></li>
+      <li>
     -o
 
       <ul>
@@ -585,6 +665,8 @@
         <li><a href="CC_plots.html#cmdoption-rs.ccsym-o">rs.ccsym command line option</a>
 </li>
         <li><a href="maps.html#cmdoption-rs.diffmap-o">rs.diffmap command line option</a>
+</li>
+        <li><a href="misc.html#cmdoption-rs.dw_extrapolate-o">rs.dw_extrapolate command line option</a>
 </li>
         <li><a href="misc.html#cmdoption-rs.extrapolate-o">rs.extrapolate command line option</a>
 </li>
@@ -607,6 +689,8 @@
       <ul>
         <li><a href="maps.html#cmdoption-rs.diffmap-off">rs.diffmap command line option</a>
 </li>
+        <li><a href="misc.html#cmdoption-rs.dw_extrapolate-off">rs.dw_extrapolate command line option</a>
+</li>
         <li><a href="misc.html#cmdoption-rs.extrapolate-off">rs.extrapolate command line option</a>
 </li>
       </ul></li>
@@ -615,6 +699,8 @@
 
       <ul>
         <li><a href="maps.html#cmdoption-rs.diffmap-on">rs.diffmap command line option</a>
+</li>
+        <li><a href="misc.html#cmdoption-rs.dw_extrapolate-on">rs.dw_extrapolate command line option</a>
 </li>
         <li><a href="misc.html#cmdoption-rs.extrapolate-on">rs.extrapolate command line option</a>
 </li>
@@ -630,6 +716,8 @@
     -p
 
       <ul>
+        <li><a href="misc.html#cmdoption-rs.dw_extrapolate-p">rs.dw_extrapolate command line option</a>
+</li>
         <li><a href="maps.html#cmdoption-rs.find_difference_peaks-p">rs.find_difference_peaks command line option</a>
 </li>
         <li><a href="maps.html#cmdoption-rs.find_peaks-p">rs.find_peaks command line option</a>
@@ -640,6 +728,8 @@
 
       <ul>
         <li><a href="maps.html#cmdoption-rs.diffmap-r">rs.diffmap command line option</a>
+</li>
+        <li><a href="misc.html#cmdoption-rs.dw_extrapolate-r">rs.dw_extrapolate command line option</a>
 </li>
         <li><a href="maps.html#cmdoption-rs.internal_diffmap-r">rs.internal_diffmap command line option</a>
 </li>
@@ -679,6 +769,20 @@
         <li><a href="maps.html#cmdoption-rs.internal_diffmap-sg">rs.internal_diffmap command line option</a>
 </li>
         <li><a href="misc.html#cmdoption-rs.rfree-sg">rs.rfree command line option</a>
+</li>
+      </ul></li>
+      <li>
+    -use_I
+
+      <ul>
+        <li><a href="misc.html#cmdoption-rs.dw_extrapolate-use_I">rs.dw_extrapolate command line option</a>
+</li>
+      </ul></li>
+      <li>
+    -use_SF
+
+      <ul>
+        <li><a href="misc.html#cmdoption-rs.dw_extrapolate-use_SF">rs.dw_extrapolate command line option</a>
 </li>
       </ul></li>
       <li>
@@ -922,6 +1026,63 @@
 </li>
       </ul></li>
       <li>
+    rs.dw_extrapolate command line option
+
+      <ul>
+        <li><a href="misc.html#cmdoption-rs.dw_extrapolate-default_scan">--default_scan</a>
+</li>
+        <li><a href="misc.html#cmdoption-rs.dw_extrapolate-disable-progress-bar">--disable-progress-bar</a>
+</li>
+        <li><a href="misc.html#cmdoption-rs.dw_extrapolate-p">--es-fraction</a>
+</li>
+        <li><a href="misc.html#cmdoption-rs.dw_extrapolate-f">--factor</a>
+</li>
+        <li><a href="misc.html#cmdoption-rs.dw_extrapolate-h">--help</a>
+</li>
+        <li><a href="misc.html#cmdoption-rs.dw_extrapolate-nproc">--nproc</a>
+</li>
+        <li><a href="misc.html#cmdoption-rs.dw_extrapolate-n">--nsamples</a>
+</li>
+        <li><a href="misc.html#cmdoption-rs.dw_extrapolate-off">--offmtz</a>
+</li>
+        <li><a href="misc.html#cmdoption-rs.dw_extrapolate-on">--onmtz</a>
+</li>
+        <li><a href="misc.html#cmdoption-rs.dw_extrapolate-o">--outfile</a>
+</li>
+        <li><a href="misc.html#cmdoption-rs.dw_extrapolate-r">--rDW</a>
+</li>
+        <li><a href="misc.html#cmdoption-rs.dw_extrapolate-seed">--seed</a>
+</li>
+        <li><a href="misc.html#cmdoption-rs.dw_extrapolate-use_I">--use_intensities</a>
+</li>
+        <li><a href="misc.html#cmdoption-rs.dw_extrapolate-use_SF">--use_structure_factors</a>
+</li>
+        <li><a href="misc.html#cmdoption-rs.dw_extrapolate-f">-f</a>
+</li>
+        <li><a href="misc.html#cmdoption-rs.dw_extrapolate-h">-h</a>
+</li>
+        <li><a href="misc.html#cmdoption-rs.dw_extrapolate-n">-n</a>
+</li>
+        <li><a href="misc.html#cmdoption-rs.dw_extrapolate-o">-o</a>
+</li>
+        <li><a href="misc.html#cmdoption-rs.dw_extrapolate-off">-off</a>
+</li>
+        <li><a href="misc.html#cmdoption-rs.dw_extrapolate-on">-on</a>
+</li>
+        <li><a href="misc.html#cmdoption-rs.dw_extrapolate-p">-p</a>
+</li>
+        <li><a href="misc.html#cmdoption-rs.dw_extrapolate-r">-r</a>
+</li>
+        <li><a href="misc.html#cmdoption-rs.dw_extrapolate-use_I">-use_I</a>
+</li>
+        <li><a href="misc.html#cmdoption-rs.dw_extrapolate-use_SF">-use_SF</a>
+</li>
+        <li><a href="misc.html#cmdoption-rs.dw_extrapolate-use_SF">sigf_col</a>, <a href="misc.html#cmdoption-rs.dw_extrapolate-use_SF">[1]</a>
+</li>
+        <li><a href="misc.html#cmdoption-rs.dw_extrapolate-use_I">sigi_col</a>, <a href="misc.html#cmdoption-rs.dw_extrapolate-use_I">[1]</a>
+</li>
+      </ul></li>
+      <li>
     rs.extrapolate command line option
 
       <ul>
@@ -954,6 +1115,8 @@
         <li><a href="misc.html#cmdoption-rs.extrapolate-ref">-ref</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li>
     rs.find_difference_peaks command line option
 
@@ -1001,8 +1164,6 @@
         <li><a href="maps.html#cmdoption-rs.find_difference_peaks-arg-pdb_file">pdb_file</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li>
     rs.find_peaks command line option
 
@@ -1168,6 +1329,28 @@
         <li><a href="misc.html#cmdoption-rs.scaleit-6">-o</a>, <a href="misc.html#cmdoption-rs.scaleit-o">[1]</a>
 </li>
         <li><a href="misc.html#cmdoption-rs.scaleit-2">-r</a>, <a href="misc.html#cmdoption-rs.scaleit-r">[1]</a>
+</li>
+      </ul></li>
+  </ul></td>
+</tr></table>
+
+<h2 id="S">S</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li>
+    sigf_col
+
+      <ul>
+        <li><a href="misc.html#cmdoption-rs.dw_extrapolate-use_SF">rs.dw_extrapolate command line option</a>, <a href="misc.html#cmdoption-rs.dw_extrapolate-use_SF">[1]</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li>
+    sigi_col
+
+      <ul>
+        <li><a href="misc.html#cmdoption-rs.dw_extrapolate-use_I">rs.dw_extrapolate command line option</a>, <a href="misc.html#cmdoption-rs.dw_extrapolate-use_I">[1]</a>
 </li>
       </ul></li>
   </ul></td>

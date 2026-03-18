@@ -7,8 +7,8 @@
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Other miscellaneous utilites &mdash; rs-booster 0.1.3 documentation</title>
-      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
-      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
 
   
     <link rel="shortcut icon" href="_static/rs-favicon_32x32.png"/>
@@ -55,6 +55,11 @@
 <li class="toctree-l2"><a class="reference internal" href="#rs-extrapolate">rs.extrapolate</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#equations">Equations</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#notes">Notes</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#rs-dw-extrapolate">rs.dw_extrapolate</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id2">Equations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id3">Notes</a></li>
 </ul>
 </li>
 </ul>
@@ -298,7 +303,7 @@ Nature (2016). In that case, the equation for SigF_{esf} is adjusted to
 use (f-1)**2 for SigF_{off} to avoid double-counting in the error propagation.</p></li>
 <li><p>At most one of F_{ref} and F_{calc} can be specified. If neither is specified, 
 F_{calc} will be set to F_{off}.</p></li>
-<li><p>After computing <a href="#id2"><span class="problematic" id="id3">|F_{esf}|</span></a>, any negative structure factor amplitudes are converted
+<li><p>After computing <a href="#id4"><span class="problematic" id="id5">|F_{esf}|</span></a>, any negative structure factor amplitudes are converted
 to positive values. This is to ensure that they are handled correctly downstream in
 phenix, and because they are technically amplitudes of complex numbers and the phase
 should just be flipped by 180 degrees.</p></li>
@@ -349,6 +354,115 @@ should just be flipped by 180 degrees.</p></li>
 <dt class="sig sig-object std" id="cmdoption-rs.extrapolate-o">
 <span class="sig-name descname"><span class="pre">-o</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;outfile&gt;</span></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--outfile</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;outfile&gt;</span></span><a class="headerlink" href="#cmdoption-rs.extrapolate-o" title="Link to this definition"></a></dt>
 <dd><p>Output MTZ filename</p>
+</dd></dl>
+
+</section>
+</section>
+<section id="rs-dw-extrapolate">
+<h2>rs.dw_extrapolate<a class="headerlink" href="#rs-dw-extrapolate" title="Link to this heading"></a></h2>
+<p>Runs DW-Extrapolator, a Bayesian inference procedure to infer excited state structure factors in perturbative crystallography datsets.</p>
+<section id="id2">
+<h3>Equations<a class="headerlink" href="#id2" title="Link to this heading"></a></h3>
+<p>The underlying model assumes that ground state (GS) and excited state (ES) structure factors have correlation r and that the observed “on” state structure factors are given by F^{ON} = (1-p)*F^{GS} + p*F&amp;{ES}.</p>
+</section>
+<section id="id3">
+<h3>Notes<a class="headerlink" href="#id3" title="Link to this heading"></a></h3>
+<blockquote>
+<div><ul class="simple">
+<li><p>At minimum, two .mtz’s for the off and on data need to be provided</p></li>
+<li><p>DW-Extrapolator can be run using French-Wilson scaled structure factors or integrated intensities</p></li>
+</ul>
+</div></blockquote>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">usage: rs.dw_extrapolate [-h] -on ONMTZ [ONMTZ ...] -off OFFMTZ [OFFMTZ ...]</span>
+<span class="go">                         [-use_SF f_col, sigf_col f_col, sigf_col]</span>
+<span class="go">                         [-use_I i_col, sigi_col i_col, sigi_col]</span>
+<span class="go">                         [-n NSAMPLES] [-r RDW] [-p ES_FRACTION] [-f FACTOR]</span>
+<span class="go">                         [-o OUTFILE] [--nproc NPROC] [--default_scan]</span>
+<span class="go">                         [--disable-progress-bar] [--seed SEED]</span>
+</pre></div>
+</div>
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-rs.dw_extrapolate-h">
+<span class="sig-name descname"><span class="pre">-h</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--help</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-rs.dw_extrapolate-h" title="Link to this definition"></a></dt>
+<dd><p>show this help message and exit</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-rs.dw_extrapolate-on">
+<span class="sig-name descname"><span class="pre">-on</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;onmtz&gt;</span></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--onmtz</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;onmtz&gt;</span></span><a class="headerlink" href="#cmdoption-rs.dw_extrapolate-on" title="Link to this definition"></a></dt>
+<dd><p>.mtz file for perturbed dataset</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-rs.dw_extrapolate-off">
+<span class="sig-name descname"><span class="pre">-off</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;offmtz&gt;</span></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--offmtz</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;offmtz&gt;</span></span><a class="headerlink" href="#cmdoption-rs.dw_extrapolate-off" title="Link to this definition"></a></dt>
+<dd><p>.mtz file for ground state dataset</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-rs.dw_extrapolate-use_SF">
+<span class="sig-name descname"><span class="pre">-use_SF</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;f_col</span></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">sigf_col</span></span><span class="sig-prename descclassname"><span class="pre">&gt;</span></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--use_structure_factors</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;f_col</span></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">sigf_col</span></span><span class="sig-prename descclassname"><span class="pre">&gt;</span></span><a class="headerlink" href="#cmdoption-rs.dw_extrapolate-use_SF" title="Link to this definition"></a></dt>
+<dd><p>Use structure factors from French-Wilson scaling. Specified as (F, SigF)</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-rs.dw_extrapolate-use_I">
+<span class="sig-name descname"><span class="pre">-use_I</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;i_col</span></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">sigi_col</span></span><span class="sig-prename descclassname"><span class="pre">&gt;</span></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--use_intensities</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;i_col</span></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">sigi_col</span></span><span class="sig-prename descclassname"><span class="pre">&gt;</span></span><a class="headerlink" href="#cmdoption-rs.dw_extrapolate-use_I" title="Link to this definition"></a></dt>
+<dd><p>Use integrated intensities. Specified as (I, SigI)</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-rs.dw_extrapolate-n">
+<span class="sig-name descname"><span class="pre">-n</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;nsamples&gt;</span></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--nsamples</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;nsamples&gt;</span></span><a class="headerlink" href="#cmdoption-rs.dw_extrapolate-n" title="Link to this definition"></a></dt>
+<dd><p>Number of importance samples</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-rs.dw_extrapolate-r">
+<span class="sig-name descname"><span class="pre">-r</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;rdw&gt;</span></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--rDW</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;rdw&gt;</span></span><a class="headerlink" href="#cmdoption-rs.dw_extrapolate-r" title="Link to this definition"></a></dt>
+<dd><p>Double Wilson r (correlation) parameter</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-rs.dw_extrapolate-p">
+<span class="sig-name descname"><span class="pre">-p</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;es_fraction&gt;</span></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--es-fraction</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;es_fraction&gt;</span></span><a class="headerlink" href="#cmdoption-rs.dw_extrapolate-p" title="Link to this definition"></a></dt>
+<dd><p>Excited state fraction p</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-rs.dw_extrapolate-f">
+<span class="sig-name descname"><span class="pre">-f</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;factor&gt;</span></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--factor</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;factor&gt;</span></span><a class="headerlink" href="#cmdoption-rs.dw_extrapolate-f" title="Link to this definition"></a></dt>
+<dd><p>Extrapolation factor f = 1/p</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-rs.dw_extrapolate-o">
+<span class="sig-name descname"><span class="pre">-o</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;outfile&gt;</span></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--outfile</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;outfile&gt;</span></span><a class="headerlink" href="#cmdoption-rs.dw_extrapolate-o" title="Link to this definition"></a></dt>
+<dd><p>Output file name</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-rs.dw_extrapolate-nproc">
+<span class="sig-name descname"><span class="pre">--nproc</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;nproc&gt;</span></span><a class="headerlink" href="#cmdoption-rs.dw_extrapolate-nproc" title="Link to this definition"></a></dt>
+<dd><p>Number of processors for multiprocessing</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-rs.dw_extrapolate-default_scan">
+<span class="sig-name descname"><span class="pre">--default_scan</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-rs.dw_extrapolate-default_scan" title="Link to this definition"></a></dt>
+<dd><p>Run default scan with r=0.9 and p from 0.05 to 0.5 in steps of 0.05</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-rs.dw_extrapolate-disable-progress-bar">
+<span class="sig-name descname"><span class="pre">--disable-progress-bar</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-rs.dw_extrapolate-disable-progress-bar" title="Link to this definition"></a></dt>
+<dd><p>Disable tqdm progress bar</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-rs.dw_extrapolate-seed">
+<span class="sig-name descname"><span class="pre">--seed</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;seed&gt;</span></span><a class="headerlink" href="#cmdoption-rs.dw_extrapolate-seed" title="Link to this definition"></a></dt>
+<dd><p>Random seed for generating Monte Carlo samples</p>
 </dd></dl>
 
 </section>
