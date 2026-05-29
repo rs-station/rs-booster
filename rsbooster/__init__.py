@@ -1,4 +1,4 @@
-: Version number for reciprocalspaceship
+# Version number for rs-booster
 def getVersionNumber():
     version = None
     try:
