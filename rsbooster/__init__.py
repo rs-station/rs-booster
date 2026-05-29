@@ -1,9 +1,17 @@
-# Version number for rsbooster
+: Version number for reciprocalspaceship
 def getVersionNumber():
-    import pkg_resources
+    version = None
+    try:
+        from setuptools.version import metadata
 
-    version = pkg_resources.require("rs-booster")[0].version
+        version = metadata.version("rs-booster")
+    except ImportError:
+        from setuptools.version import pkg_resources
+
+        version = pkg_resources.require("rs-booster")[0].version
+
     return version
+
 
 
 __version__ = getVersionNumber()
