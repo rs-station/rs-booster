@@ -4,14 +4,13 @@ Runs DW-Extrapolator, a Bayesian inference procedure to infer excited state stru
 
 Equations
 ---------
-The underlying model assumes that ground state (GS) and excited state (ES) structure factors have correlation r and that the observed "on" state structure factors are given by F^{ON} = (1-p)*F^{GS} + p*F&{ES}. 
+The underlying model assumes that ground state (GS) and excited state (ES) structure factors have correlation r and that the observed "on" state structure factors are given by F^{ON} = (1-p)*F^{GS} + p*F&{ES}.
 
 Notes
 -----
     - At minimum, two .mtz's for the off and on data need to be provided
     - DW-Extrapolator can be run using French-Wilson scaled structure factors or integrated intensities
 """
-
 
 import argparse
 import numpy as np
@@ -24,10 +23,10 @@ from reciprocalspaceship.algorithms.scale_merged_intensities import (
     mean_intensity_by_resolution,
 )
 
-try:                              
-    from tqdm import tqdm         
-except:                           
-    tqdm = iter       
+try:
+    from tqdm import tqdm
+except ImportError:
+    tqdm = lambda iterable, **kwargs: iterable
 
 # globals
 GS_ac_shm = ES_ac_shm = GS_c_shm = ES_c_shm = None
@@ -201,6 +200,19 @@ def estimate_reflection_intensity(args):
         return (i, np.nan, np.nan, np.nan, np.nan, ll_i)
 
 
+# Outputs a list of columns and column types present in the .mtz files if any expected column is missing
+def _check_columns(ds, col_names, mtz_path):
+    missing = [c for c in col_names if c not in ds.columns]
+    if not missing:
+        return
+    col_info = ", ".join(f"{c} ({ds[c].dtype})" for c in ds.columns)
+    raise ValueError(
+        f"Column(s) {', '.join(missing)} not found in {mtz_path}.\n"
+        f"Available columns: {col_info}\n"
+        f"Specify the correct column names with -use_SF or -use_I."
+    )
+
+
 def extrapolate_dw(args):
     """Run DW extrapolation given parsed command-line arguments.
 
@@ -280,10 +292,19 @@ def extrapolate_dw(args):
     # Merge and prepare data
 
     if args.use_intensities:  ##I/SigI case
-        I_col, SigI_col = args.use_intensities
-        ds_on = ds_on.rename(columns={I_col: "I", SigI_col: "SigI"})
+        i_args = args.use_intensities
+        if len(i_args) == 2:
+            I_col_off, SigI_col_off = i_args
+            I_col_on, SigI_col_on = i_args
+        elif len(i_args) == 4:
+            I_col_off, SigI_col_off, I_col_on, SigI_col_on = i_args
+        else:
+            raise ValueError("-use_I requires 2 or 4 column names")
+        _check_columns(ds_of, [I_col_off, SigI_col_off], args.offmtz[0])
+        _check_columns(ds_on, [I_col_on, SigI_col_on], args.onmtz[0])
+        ds_on = ds_on.rename(columns={I_col_on: "I", SigI_col_on: "SigI"})
         ds_on = ds_on.dropna(subset=["I", "SigI"], how="any")
-        ds_of = ds_of.rename(columns={I_col: "I", SigI_col: "SigI"})
+        ds_of = ds_of.rename(columns={I_col_off: "I", SigI_col_off: "SigI"})
         ds_of = ds_of.dropna(subset=["I", "SigI"], how="any")
 
         ds_all = ds_of.merge(
@@ -300,10 +321,19 @@ def extrapolate_dw(args):
         multiplicity = ds_all.EPSILON.to_numpy()
         sqrt_eps_arr = np.sqrt(multiplicity)
     elif args.use_structure_factors:  ##Structure Factor case
-        F_col, SigF_col = args.use_structure_factors
-        ds_on = ds_on.rename(columns={F_col: "F", SigF_col: "SigF"})
+        sf_args = args.use_structure_factors
+        if len(sf_args) == 2:
+            F_col_off, SigF_col_off = sf_args
+            F_col_on, SigF_col_on = sf_args
+        elif len(sf_args) == 4:
+            F_col_off, SigF_col_off, F_col_on, SigF_col_on = sf_args
+        else:
+            raise ValueError("-use_SF requires 2 or 4 column names")
+        _check_columns(ds_of, [F_col_off, SigF_col_off], args.offmtz[0])
+        _check_columns(ds_on, [F_col_on, SigF_col_on], args.onmtz[0])
+        ds_on = ds_on.rename(columns={F_col_on: "F", SigF_col_on: "SigF"})
         ds_on = ds_on.dropna(subset=["F", "SigF"], how="any")
-        ds_of = ds_of.rename(columns={F_col: "F", SigF_col: "SigF"})
+        ds_of = ds_of.rename(columns={F_col_off: "F", SigF_col_off: "SigF"})
         ds_of = ds_of.dropna(subset=["F", "SigF"], how="any")
 
         ds_on = reparam(ds_on)
@@ -322,6 +352,8 @@ def extrapolate_dw(args):
         multiplicity = ds_all.EPSILON.to_numpy()
         sqrt_eps_arr = np.sqrt(multiplicity)
     else:
+        _check_columns(ds_of, ["F", "SigF"], args.offmtz[0])
+        _check_columns(ds_on, ["F", "SigF"], args.onmtz[0])
         ds_on = ds_on.dropna(subset=["F", "SigF"], how="any")
         ds_of = ds_of.dropna(subset=["F", "SigF"], how="any")
         ds_all = ds_of.merge(
@@ -538,16 +570,26 @@ def parse_arguments():
     parser.add_argument(
         "-use_SF",
         "--use_structure_factors",
-        nargs=2,
-        metavar=("f_col, sigf_col"),
-        help="Use structure factors from French-Wilson scaling. Specified as (F, SigF)",
+        nargs="+",
+        metavar="COL",
+        help=(
+            "Use structure factors from French-Wilson scaling. "
+            "Provide 2 column names (F_col SigF_col) to use the same columns for both "
+            "on and off MTZs, or 4 column names (F_col_off SigF_col_off F_col_on SigF_col_on) "
+            "to use different columns for each file."
+        ),
     )
     parser.add_argument(
         "-use_I",
         "--use_intensities",
-        nargs=2,
-        metavar=("i_col, sigi_col"),
-        help="Use integrated intensities. Specified as (I, SigI)",
+        nargs="+",
+        metavar="COL",
+        help=(
+            "Use integrated intensities. "
+            "Provide 2 column names (I_col SigI_col) to use the same columns for both "
+            "on and off MTZs, or 4 column names (I_col_off SigI_col_off I_col_on SigI_col_on) "
+            "to use different columns for each file."
+        ),
     )
     parser.add_argument(
         "-n",
@@ -583,7 +625,9 @@ def parse_arguments():
         action="store_true",
         help="Run default scan with r=0.9 and p from 0.05 to 0.5 in steps of 0.05",
     )
-    parser.add_argument("--disable-progress-bar", action="store_true", help="Disable tqdm progress bar")
+    parser.add_argument(
+        "--disable-progress-bar", action="store_true", help="Disable tqdm progress bar"
+    )
     parser.add_argument(
         "--seed",
         type=int,
