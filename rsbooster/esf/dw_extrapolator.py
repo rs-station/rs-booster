@@ -209,7 +209,8 @@ def _check_columns(ds, col_names, mtz_path):
     raise ValueError(
         f"Column(s) {', '.join(missing)} not found in {mtz_path}.\n"
         f"Available columns: {col_info}\n"
-        f"Specify the correct column names with -use_SF or -use_I."
+        f"For MTZ column type reference, see: https://rs-station.github.io/reciprocalspaceship/userguide/mtzdtypes.html\n"
+        f"Run `rs.dw_extrapolate -h` to see column name options, then specify the correct column names with -use_SF or -use_I."
     )
 
 
