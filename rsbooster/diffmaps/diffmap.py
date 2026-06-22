@@ -115,12 +115,16 @@ def main():
     # Useful for PyMOL
     diff["wDF"] = (diff["DF"] * diff["W"]).astype("SFAmplitude")
 
-    if args.dmax is None:
-        diff.write_mtz(args.outfile)
-    else:
+    if args.dmax or args.dmin:
+        if args.dmax is None:
+            args.dmax = 9999
+        if args.dmin is None:
+            args.dmin = 0.01
         dhkl = diff.compute_dHKL()["dHKL"]
-        diff = diff.loc[(dhkl< args.dmax)*(dhkl>args.dmin)]
-        diff.write_mtz(args.outfile)
+        diff = diff.loc[(dhkl < args.dmax) * (dhkl > args.dmin)]
+    
+    diff.write_mtz(args.outfile)
+
 
 
 if __name__ == "__main__":
