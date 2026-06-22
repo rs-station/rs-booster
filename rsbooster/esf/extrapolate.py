@@ -34,6 +34,7 @@ import argparse
 import numpy as np
 
 import reciprocalspaceship as rs
+from rsbooster.diffmaps.weights import compute_weights
 
 
 def parse_arguments():
@@ -47,7 +48,7 @@ def parse_arguments():
         "-on",
         "--onmtz",
         nargs=3,
-        metavar=("mtz", "f_col", "sig_col"),
+        metavar=("mtz", "data_col", "sig_col"),
         required=True,
         help="MTZ to be used as `on` data. Specified as (filename, F, SigF)",
     )
@@ -82,6 +83,9 @@ def parse_arguments():
     )
     parser.add_argument(
         "-o", "--outfile", default="esf.mtz", help="Output MTZ filename"
+    )
+    parser.add_argument(
+        "-a", "--alpha", type=float, default=None, help="alpha factor for weighting"
     )
 
     return parser#.parse_args()
@@ -132,7 +136,20 @@ def main():
 
     # Compute F_esf and SigF_esf
     factor = args.factor
-    joined["F_esf"] = factor * (joined["F_on"] - joined["F_off"]) + joined["F_calc"]
+    joined["DF"] = joined["F_on"] - joined["F_off"]
+    joined["SigDF"] = np.sqrt((joined["SigF_on"] ** 2) + (joined["SigF_off"] ** 2))
+
+    #from IPython import embed;embed()
+    
+    #k-weighting (where args.alpha stands in for k)
+    if args.alpha is not None:
+        print(f"Applying weights with alpha = {args.alpha}")
+        joined["W"] = compute_weights(joined["DF"], joined["SigDF"], alpha=args.alpha)
+        joined["W"] = joined["W"].astype("Weight")
+    else:
+        joined["W"] = 1
+    joined["F_esf"] = factor *joined["W"]/np.mean(joined["W"])*(joined["DF"]) + joined["F_calc"]
+    
     if np.array_equal(joined["F_off"].to_numpy(), joined["F_calc"].to_numpy()):
         print("F_off == F_calc... changing error propagation accordingly.")
         joined["SigF_esf"] = np.sqrt(
@@ -151,7 +168,12 @@ def main():
         )
 
     # Handle any negative values of |F_esf|
-    joined["F_esf"] = np.abs(joined["F_esf"])
+    
+    # relu
+    joined["F_esf"] = (joined["F_esf"]*(joined["F_esf"]>0).astype("float")).astype("SFAmplitude")
+    
+    # absolute value
+    #joined["F_esf"] = np.abs(joined["F_esf"]).astype("SFAmplitude")
 
     joined.infer_mtz_dtypes(inplace=True)
     joined.write_mtz(args.outfile)

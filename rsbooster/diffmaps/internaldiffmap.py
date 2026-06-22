@@ -100,7 +100,6 @@ def main():
     # Parse commandline arguments
     args = parse_arguments().parse_args()
     refmtz, phi_col = args.refmtz
-
     # Read MTZ files
     mtz = subset_to_FSigF(
         *args.inputmtz, {args.inputmtz[1]: "F", args.inputmtz[2]: "SigF"}
@@ -126,11 +125,17 @@ def main():
         op = gemmi.Operation(args.symop)
         
     transformed_op = gemmi.Op(args.cb_op).inverse()*op*gemmi.Op(args.cb_op) 
-    print(transformed_op)
+    
+    #some hardcoding going on here
+    mtz.merged = True
+    mtz = mtz.hkl_to_asu()
+    
+    big_mtz = mtz.expand_to_p1().expand_anomalous()
     new_mtz = mtz.expand_to_p1().expand_anomalous().apply_symop(transformed_op)
-    internal = mtz.merge(
-        mtz.apply_symop(op).hkl_to_asu(), on=["H", "K", "L"], suffixes=("1", "2")
+    internal = big_mtz.merge(
+        new_mtz, on=["H", "K", "L"], suffixes=("1", "2")
     )
+
     internal["DF"] = internal["F1"] - internal["F2"]
     internal["SigDF"] = np.sqrt((internal["SigF1"] ** 2) + (internal["SigF2"] ** 2))
 
@@ -140,6 +145,7 @@ def main():
 
     # Join with phases and write map
     common = internal.index.intersection(ref.index).sort_values()
+    print(common)
     internal = internal.loc[common]
     internal["Phi"] = ref.loc[common, "Phi"]
     internal.infer_mtz_dtypes(inplace=True)
@@ -147,12 +153,15 @@ def main():
     # Useful for PyMOL
     internal["wDF"] = (internal["DF"] * internal["W"]).astype("SFAmplitude")
 
-    if args.dmax is None:
-        internal.write_mtz(args.outfile)
-    else:
+    if args.dmax or args.dmin:
+        if args.dmax is None:
+            args.dmax = 9999
+        if args.dmin is None:
+            args.dmin = 0.01
         dhkl = internal.compute_dHKL()["dHKL"]
         internal = internal.loc[(dhkl < args.dmax) * (dhkl > args.dmin)]
-        internal.write_mtz(args.outfile)
+    
+    internal.write_mtz(args.outfile)
 
 
 if __name__ == "__main__":
