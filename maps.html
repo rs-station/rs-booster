@@ -95,8 +95,8 @@
 <h3>rs.internal_diffmap<a class="headerlink" href="#rs-internal-diffmap" title="Link to this heading"></a></h3>
 <p>Make an internal difference map using the given symmetry operation</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">usage: rs.internal_diffmap [-h] -i mtz data_col sig_col -r ref phi_col -op</span>
-<span class="go">                           SYMOP [-a ALPHA] [-d DMAX] [-sg SPACEGROUP]</span>
-<span class="go">                           [-o OUTFILE]</span>
+<span class="go">                           SYMOP [-c CB_OP] [-a ALPHA] [-d DMAX] [-m DMIN]</span>
+<span class="go">                           [-sg SPACEGROUP] [-o OUTFILE]</span>
 </pre></div>
 </div>
 <dl class="std option">
@@ -124,6 +124,12 @@
 </dd></dl>
 
 <dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-rs.internal_diffmap-c">
+<span class="sig-name descname"><span class="pre">-c</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;cb_op&gt;</span></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--cb_op</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;cb_op&gt;</span></span><a class="headerlink" href="#cmdoption-rs.internal_diffmap-c" title="Link to this definition"></a></dt>
+<dd><p>Change-of-basis operation from high- to low-symmetry spacegroup</p>
+</dd></dl>
+
+<dl class="std option">
 <dt class="sig sig-object std" id="cmdoption-rs.internal_diffmap-a">
 <span class="sig-name descname"><span class="pre">-a</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;alpha&gt;</span></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--alpha</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;alpha&gt;</span></span><a class="headerlink" href="#cmdoption-rs.internal_diffmap-a" title="Link to this definition"></a></dt>
 <dd><p>alpha value for computing difference map weights (default=0.0)</p>
@@ -133,6 +139,12 @@
 <dt class="sig sig-object std" id="cmdoption-rs.internal_diffmap-d">
 <span class="sig-name descname"><span class="pre">-d</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;dmax&gt;</span></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--dmax</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;dmax&gt;</span></span><a class="headerlink" href="#cmdoption-rs.internal_diffmap-d" title="Link to this definition"></a></dt>
 <dd><p>If set, dmax to truncate difference map</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-rs.internal_diffmap-m">
+<span class="sig-name descname"><span class="pre">-m</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;dmin&gt;</span></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--dmin</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;dmin&gt;</span></span><a class="headerlink" href="#cmdoption-rs.internal_diffmap-m" title="Link to this definition"></a></dt>
+<dd><p>If set, dmin to truncate difference map</p>
 </dd></dl>
 
 <dl class="std option">
@@ -154,7 +166,7 @@
 <p>The naming convention chosen for inputs is <cite>on</cite> and <cite>off</cite>, such
 that the generated differrence map will be <cite>|F_on| - |F_off|</cite>.</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">usage: rs.diffmap [-h] -on mtz data_col sig_col -off mtz data_col sig_col -r</span>
-<span class="go">                  ref phi_col [-a ALPHA] [-d DMAX] [-o OUTFILE]</span>
+<span class="go">                  ref phi_col [-a ALPHA] [-d DMAX] [-m DMIN] [-o OUTFILE]</span>
 </pre></div>
 </div>
 <dl class="std option">
@@ -191,6 +203,12 @@ that the generated differrence map will be <cite>|F_on| - |F_off|</cite>.</p>
 <dt class="sig sig-object std" id="cmdoption-rs.diffmap-d">
 <span class="sig-name descname"><span class="pre">-d</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;dmax&gt;</span></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--dmax</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;dmax&gt;</span></span><a class="headerlink" href="#cmdoption-rs.diffmap-d" title="Link to this definition"></a></dt>
 <dd><p>If set, dmax to truncate difference map</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-rs.diffmap-m">
+<span class="sig-name descname"><span class="pre">-m</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;dmin&gt;</span></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--dmin</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;dmin&gt;</span></span><a class="headerlink" href="#cmdoption-rs.diffmap-m" title="Link to this definition"></a></dt>
+<dd><p>If set, dmin to truncate difference map</p>
 </dd></dl>
 
 <dl class="std option">

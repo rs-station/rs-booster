@@ -313,9 +313,9 @@ phenix, and because they are technically amplitudes of complex numbers and the p
 should just be flipped by 180 degrees.</p></li>
 </ul>
 </div></blockquote>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">usage: rs.extrapolate [-h] -on mtz f_col sig_col -off mtz data_col sig_col</span>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">usage: rs.extrapolate [-h] -on mtz data_col sig_col -off mtz data_col sig_col</span>
 <span class="go">                      [-calc mtz data_col] [-ref mtz data_col sig_col]</span>
-<span class="go">                      [-f FACTOR] [-o OUTFILE]</span>
+<span class="go">                      [-f FACTOR] [-o OUTFILE] [-a ALPHA]</span>
 </pre></div>
 </div>
 <dl class="std option">
@@ -326,7 +326,7 @@ should just be flipped by 180 degrees.</p></li>
 
 <dl class="std option">
 <dt class="sig sig-object std" id="cmdoption-rs.extrapolate-on">
-<span class="sig-name descname"><span class="pre">-on</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;mtz&gt;</span> <span class="pre">&lt;f_col&gt;</span> <span class="pre">&lt;sig_col&gt;</span></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--onmtz</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;mtz&gt;</span> <span class="pre">&lt;f_col&gt;</span> <span class="pre">&lt;sig_col&gt;</span></span><a class="headerlink" href="#cmdoption-rs.extrapolate-on" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">-on</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;mtz&gt;</span> <span class="pre">&lt;data_col&gt;</span> <span class="pre">&lt;sig_col&gt;</span></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--onmtz</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;mtz&gt;</span> <span class="pre">&lt;data_col&gt;</span> <span class="pre">&lt;sig_col&gt;</span></span><a class="headerlink" href="#cmdoption-rs.extrapolate-on" title="Link to this definition"></a></dt>
 <dd><p>MTZ to be used as <cite>on</cite> data. Specified as (filename, F, SigF)</p>
 </dd></dl>
 
@@ -358,6 +358,12 @@ should just be flipped by 180 degrees.</p></li>
 <dt class="sig sig-object std" id="cmdoption-rs.extrapolate-o">
 <span class="sig-name descname"><span class="pre">-o</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;outfile&gt;</span></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--outfile</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;outfile&gt;</span></span><a class="headerlink" href="#cmdoption-rs.extrapolate-o" title="Link to this definition"></a></dt>
 <dd><p>Output MTZ filename</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-rs.extrapolate-a">
+<span class="sig-name descname"><span class="pre">-a</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;alpha&gt;</span></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--alpha</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;alpha&gt;</span></span><a class="headerlink" href="#cmdoption-rs.extrapolate-a" title="Link to this definition"></a></dt>
+<dd><p>alpha factor for weighting</p>
 </dd></dl>
 
 </section>
